@@ -1,0 +1,2 @@
+# LowbrainEconomy
+Spigot economy plugin
