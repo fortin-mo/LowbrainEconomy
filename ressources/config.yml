@@ -1,0 +1,63 @@
+# time (seconds) to confirm and purchase or a sale
+# using command => /lbeconn confirm or cancel
+# settings this value to zero or bellow will use the default value (20)
+# default value = 20
+time_to_confirm: 20
+
+# after the plugin is initialize for the first time, this value will be set automaticallly to false
+# if you want to reset, set this value to true and restart the server / plugin
+# you can also use the command => /lbeconn reset
+startup_reset: true
+
+# the initial amount of currency in the bank at first initialisation
+# this value will be use when first initializing the bank
+# default value = 5000
+initial_bank_amount: 5000
+
+# current bank data
+# used by the plugins
+# default value = 0
+current_bank_amount: 0
+
+# minimum amount of currency in the bank
+# players won't be able to sell items if the bank as not enought currency to buy the items
+# settings this value bellow 0 will allow the bank be bankrupted
+# default value = 0
+min_bank_amount: 0
+
+# maximum amount of currency the bank can hold
+# players won't be able to buy items from the bank if it can't hold it
+# settings this value bellow zero means the bank can hold infinite
+# default value = -1
+max_bank_amount: -1
+
+# the price of an item is dropped every time a players sells one
+# this value is used if it is not overriding in the bank.yml file for a specific item
+# default value = 1
+default_price_drop: 1
+
+# the price of an item is increase every time a players buys one
+# this value is used if it is not overriding in the bank.yml file for a specific item
+# default value = 1
+default_price_increase: 1
+
+# this is the minimum time difference between the current time and the last time an item was bought before
+# its start losing value
+# for example, if an item hasn't been bought for a long time, its value will start decreasing
+# this value can be overridden in the bank.yml file for a specific item
+# this value is in minutes
+# default value = 1440 (24 hours)
+time_diff_drop: 1440
+
+# this is the amount by which the value of an item is decrease  overtime
+# this value can be overridden in the bank.yml file for a specific item
+# default value = 1
+diff_price_drop: 1
+
+# time interval at which the task to check item's price is ran
+# if the time difference between the current time and the last time an item was bought is higher than (time_diff_drop)
+# it's value will drop on every interval
+# this value is also in minutes
+# this value can not be overridden by a specific items for proclamation purpose
+# default value = 720 (12 hours)
+diff_drop_interval: 720

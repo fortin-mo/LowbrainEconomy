@@ -1,0 +1,25 @@
+main: lowbrain.economy.main.LowbrainEconomy
+name: LowbrainEconomy
+version: 0.0.1
+author: Lowbrain
+description: Bank economy API
+permission:
+ lbeconn.reload:
+  description: reload plugin
+ lbeconn.reset:
+  description: reset prices and bank status
+ lbeconn.buy:
+  description: buy items from the bank
+ lbeconn.sell:
+  description: sell items to the bank
+ lbeconn.set-item
+  description: set price / min / max / etc.. of an items
+commands:
+   lbeconn:
+      usage: |
+                  Use /help lbeconn [subcommand] for more information
+                  /lbeconn check <material> - see the current price of an item
+                  /lbeconn buy <material> <amount> - buy an item from the brank
+                  /lbeconn sell <material> <amount> - sell an item to the bank
+                  /lbeconn reload - reload plugin
+                  /lbeconn reset - reset prices and bank status

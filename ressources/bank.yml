@@ -1,0 +1,48 @@
+# this files contains the saved data for the bank
+
+# here you can override values for each material
+# the DEFAULT will be used if a material is not listed
+
+DEFAULT:
+ # initial value
+ # default value = 10
+ initial_value: 10
+
+ # last_sold ==> saves the last time the item was sold
+ # last_bought ==> saves the last time the item was bought
+
+ # current item value
+ # data saved by plugin
+ # if not set, will be set to initial_value
+ current_value: 10
+
+ # minimum value, value will not decrease bellow this
+ # it can not be set lower than 0.0000001
+ # default value = 1
+ min_value: 1
+
+ # maximum value, value will not increase higher than this
+ # bellow zero means infinite maximum double value
+ # default value = -1
+ max_value: -1
+
+ # current quantity in the bank
+ # default value = 500
+ current_quantity: 500
+
+ # maximum quantity that the bank can hold
+ # player won't be able to sell pass that
+ # negative value means infinite
+ # default value = 100 000
+ max_quantity: 100000
+
+ # minimum quantity the bank has to hold
+ # players won't be able to buy bellow this
+ # negative value means infinite
+ # settings both max and min quantity to infinite just means to not take in account the bank quantity att all
+ # default value = 0
+ min_quantity: 0
+ # time_diff_drop: 1440 ==> you can override this value for any specific item
+ # diff_price_drop: 1 ==> you can override this value for any specific item
+ # price_drop: 1 ==> settings this parameters will override default_price_drop from config.yml
+ # price_increase: 1 ==> settings this parameters will override default_price_increase from config.yml

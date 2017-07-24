@@ -2,6 +2,7 @@ package lowbrain.economy.main;
 
 import com.mysql.fabric.xmlrpc.base.Array;
 import lowbrain.economy.events.PlayerBuyEvent;
+import lowbrain.economy.events.PlayerEconEvent;
 import lowbrain.economy.events.PlayerSellEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,16 +11,23 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class CommandHandler implements CommandExecutor {
 
     private final LowbrainEconomy plugin;
+    private HashMap<UUID, PlayerEconEvent> confirmations;
 
     public CommandHandler(LowbrainEconomy plugin) {
         this.plugin = plugin;
+        this.confirmations = new HashMap<>();
+
+
     }
 
     @Override
@@ -42,9 +50,48 @@ public class CommandHandler implements CommandExecutor {
                 return onCheck(who, args);
             case "buy":
                 return onBuy(who, args);
+            case "confirm":
+            case "yes":
+                return onConfirm(who);
+            case "cancel":
+            case "no":
+                return onCancel(who);
         }
 
         return false;
+    }
+
+    private boolean onConfirm(Player who) {
+        if (!confirmations.containsKey(who.getUniqueId())) {
+            who.sendMessage(ChatColor.RED + "You have nothing to confirm yet !");
+            return true;
+        }
+
+        PlayerEconEvent event = confirmations.get(who.getUniqueId());
+        confirmations.remove(event); // remove from confirmation
+
+        Bukkit.getServer().getPluginManager().callEvent(event);
+
+        if (event.isCancelled())
+            event.setCancelled(true);
+        // else
+            // update data
+
+        return true;
+    }
+
+    private boolean onCancel(Player who) {
+        if (!confirmations.containsKey(who.getUniqueId())) {
+            who.sendMessage(ChatColor.RED + "You have nothing to cancel yet !");
+            return true;
+        }
+
+        PlayerEconEvent event = confirmations.get(who.getUniqueId());
+        confirmations.remove(event); // remove from confirmation
+
+        who.sendMessage("Your sell/buy was cancelled !");
+
+        return true;
     }
 
     private boolean onCheck(Player who, String[] args) {
@@ -64,24 +111,34 @@ public class CommandHandler implements CommandExecutor {
         if (args.length < 3)
             return false; // /lbeconn sell material amount
 
+        if (confirmations.containsKey(who.getUniqueId())) {
+            who.sendMessage(ChatColor.RED + "You must first confirm or cancel your current sell/buy !!");
+            return true;
+        }
+
         ArrayList<ItemStack> items = getItems(args);
 
         if (items.isEmpty())
-            return false;
+            return true;
 
         Double price = getPrice(items);
 
         if (price == null)
-            return false;
+            return true;
 
         PlayerSellEvent event = new PlayerSellEvent(who, items, price);
 
-        Bukkit.getServer().getPluginManager().callEvent(event);
+        confirmations.put(who.getUniqueId(), event);
 
-        if (event.isCancelled())
-            event.setCancelled(true);
-        // else
-            //update
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (confirmations.containsKey(who.getUniqueId())) {
+                    confirmations.remove(event);
+                    who.sendMessage("You did not confirm your sale. So it's been cancelled !");
+                }
+            }
+        }.runTaskLater(plugin, 20 * 20); // 20 seconds to confirm before its cancelled
 
         return true;
     }
@@ -93,24 +150,34 @@ public class CommandHandler implements CommandExecutor {
         if (args.length < 3)
             return false; // /lbeconn sell material amount
 
+        if (confirmations.containsKey(who.getUniqueId())) {
+            who.sendMessage(ChatColor.RED + "You must first confirm or cancel your current sell/buy !!");
+            return true;
+        }
+
         ArrayList<ItemStack> items = getItems(args);
 
         if (items.isEmpty())
-            return false;
+            return true;
 
         Double price = getPrice(items);
 
         if (price == null)
-            return false;
+            return true;
 
         PlayerBuyEvent event = new PlayerBuyEvent(who, items, price);
 
-        Bukkit.getServer().getPluginManager().callEvent(event);
+        confirmations.put(who.getUniqueId(), event);
 
-        if (event.isCancelled())
-            event.setCancelled(true);
-        // else
-            //update
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (confirmations.containsKey(who.getUniqueId())) {
+                    confirmations.remove(event);
+                    who.sendMessage("You did not confirm your purchase. So it's been cancelled !");
+                }
+            }
+        }.runTaskLater(plugin, 20 * 20); // 20 seconds to confirm before its cancelled
 
         return true;
     }
