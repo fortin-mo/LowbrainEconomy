@@ -16,11 +16,11 @@ initial_bank_amount: 5000
 
 # current bank data
 # used by the plugins
-# default value = 0
-current_bank_amount: 0
+# default value = 5000 = to initial value
+current_bank_amount: 5000
 
 # minimum amount of currency in the bank
-# players won't be able to sell items if the bank as not enought currency to buy the items
+# players won't be able to sell items if the bank as not enough currency to buy the items
 # settings this value bellow 0 will allow the bank be bankrupted
 # default value = 0
 min_bank_amount: 0
@@ -34,12 +34,12 @@ max_bank_amount: -1
 # the price of an item is dropped every time a players sells one
 # this value is used if it is not overriding in the bank.yml file for a specific item
 # default value = 1
-default_price_drop: 1
+default_price_drop: 0.01
 
 # the price of an item is increase every time a players buys one
 # this value is used if it is not overriding in the bank.yml file for a specific item
 # default value = 1
-default_price_increase: 1
+default_price_increase: 0.01
 
 # this is the minimum time difference between the current time and the last time an item was bought before
 # its start losing value
@@ -51,8 +51,8 @@ time_diff_drop: 1440
 
 # this is the amount by which the value of an item is decrease  overtime
 # this value can be overridden in the bank.yml file for a specific item
-# default value = 1
-diff_price_drop: 1
+# default value = 0.01
+diff_price_drop: 0.01
 
 # time interval at which the task to check item's price is ran
 # if the time difference between the current time and the last time an item was bought is higher than (time_diff_drop)

@@ -6,8 +6,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class LowbrainEconomy extends JavaPlugin {
+
+    public final static DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy mm:ss");
 
     private static LowbrainEconomy instance;
 
@@ -24,7 +28,7 @@ public class LowbrainEconomy extends JavaPlugin {
 
         this.getCommand("lbeconn").setExecutor(new CommandHandler(this));
 
-        new TaskHandler(this).runTaskTimer(this, 0, config.getInt("diff_drop_interval", 720));
+        new TaskHandler(this).startNow( config.getInt("diff_drop_interval", 720));
 
         this.getLogger().info("[LowbrainEconomy] " + getDescription().getVersion() + " enabled!");
     }

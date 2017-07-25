@@ -3,10 +3,6 @@ package lowbrain.economy.main;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BankData {
@@ -40,18 +36,46 @@ public class BankData {
     private int priceDrop;
     private int priceIncrease;
 
-    private DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy mm:ss");
-
     public BankData(Material material) {
         this(material.getData().getName());
     }
 
     public BankData(String name) {
         this.name = name.toUpperCase();
-        load();
+        load(false);
     }
 
-    private void load() {
+    public BankData(String name, boolean minLoad) {
+        this.name = name.toUpperCase();
+        load(minLoad);
+    }
+
+    /**
+     * save data to file
+     * saves => current_value, current_quantity, last_bought and last sold
+     * @return true if succeed
+     */
+    public boolean save() {
+        FileConfiguration bankFile = LowbrainEconomy.getInstance().getBankConfig();
+
+        ConfigurationSection saveTo = bankFile.getConfigurationSection(this.name);
+
+        if (saveTo == null)
+            saveTo = bankFile.createSection(this.name);
+
+        saveTo.set("current_value", this.currentValue);
+        saveTo.set("current_quantity", this.currentQuantity);
+        saveTo.set("last_bought", LowbrainEconomy.DATE_FORMAT.format(this.lastBought));
+        saveTo.set("last_sold", LowbrainEconomy.DATE_FORMAT.format(this.lastSold));
+
+        return true;
+    }
+
+    /**
+     * load data from file
+     * @param minLoad load only minimum data (min, max, current, init)
+     */
+    private void load(boolean minLoad) {
         FileConfiguration bankFile = LowbrainEconomy.getInstance().getBankConfig();
         FileConfiguration configFile = LowbrainEconomy.getInstance().getConfig();
 
@@ -81,6 +105,9 @@ public class BankData {
         if (maxValue < 0)
             maxValue = Double.MAX_VALUE; // set to infinite.. kind of
 
+        if (minLoad)
+            return;
+
         currentQuantity = itemSec.getInt(CURRENT_QUANTITY, defSec.getInt(CURRENT_QUANTITY, 500));
         maxQuantity = itemSec.getInt(MAX_QUANTITY, defSec.getInt(MAX_QUANTITY, 100000));
 
@@ -93,13 +120,13 @@ public class BankData {
             minQuantity = Integer.MIN_VALUE; // set to minus infinite.. kind of
 
         try {
-            lastBought = dateFormat.parse(itemSec.getString(LAST_BOUGHT));
+            lastBought = LowbrainEconomy.DATE_FORMAT.parse(itemSec.getString(LAST_BOUGHT));
         } catch (Exception e) {
             lastBought = null;
         }
 
         try {
-            lastSold = dateFormat.parse(itemSec.getString(LAST_SOLD));
+            lastSold = LowbrainEconomy.DATE_FORMAT.parse(itemSec.getString(LAST_SOLD));
         } catch (Exception e) {
             lastSold = null;
         }
@@ -110,22 +137,9 @@ public class BankData {
         if (diffPriceDrop < 0)
             diffPriceDrop = 1; // cannot be lower than zero
 
-        priceDrop = itemSec.getInt(PRICE_DROP, configFile.getInt("default_" + PRICE_DROP, 1));
-
-        if (priceDrop < 0)
-            priceDrop = Math.abs(priceDrop);
-
-        priceIncrease = itemSec.getInt(PRICE_INCREASE, configFile.getInt("default_" + PRICE_INCREASE, 1));
-
-        if (priceIncrease < 0)
-            priceIncrease = Math.abs(priceDrop);
-
+        priceDrop = Math.abs(itemSec.getInt(PRICE_DROP, configFile.getInt("default_" + PRICE_DROP, 1)));
+        priceIncrease = Math.abs(itemSec.getInt(PRICE_INCREASE, configFile.getInt("default_" + PRICE_INCREASE, 1)));
     }
-
-    private void save(FileConfiguration bankFile) {
-
-    }
-
 
     public String getName() {
         return name;
@@ -149,6 +163,10 @@ public class BankData {
 
     public void setCurrentValue(double currentValue) {
         this.currentValue = currentValue;
+        if (this.currentValue < this.minValue)
+            this.currentValue = this.minValue;
+        else if (this.currentValue > this.maxValue)
+            this.currentValue = this.maxValue;
     }
 
     public double getMinValue() {
@@ -173,6 +191,10 @@ public class BankData {
 
     public void setCurrentQuantity(int currentQuantity) {
         this.currentQuantity = currentQuantity;
+        if (this.currentQuantity < this.minQuantity)
+            this.currentQuantity = this.minQuantity;
+        else if (this.currentQuantity > this.maxQuantity)
+            this.currentQuantity = this.maxQuantity;
     }
 
     public int getMaxQuantity() {

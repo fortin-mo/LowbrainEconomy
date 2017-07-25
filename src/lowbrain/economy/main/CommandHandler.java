@@ -1,8 +1,7 @@
 package lowbrain.economy.main;
 
-import com.mysql.fabric.xmlrpc.base.Array;
 import lowbrain.economy.events.PlayerBuyEvent;
-import lowbrain.economy.events.PlayerEconEvent;
+import lowbrain.economy.events.PlayerTransactionEvent;
 import lowbrain.economy.events.PlayerSellEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,13 +19,15 @@ import java.util.UUID;
 public class CommandHandler implements CommandExecutor {
 
     private final LowbrainEconomy plugin;
-    private HashMap<UUID, PlayerEconEvent> confirmations;
+    private HashMap<UUID, PlayerTransactionEvent> confirmations;
 
+    /**
+     * constructor
+     * @param plugin
+     */
     public CommandHandler(LowbrainEconomy plugin) {
         this.plugin = plugin;
         this.confirmations = new HashMap<>();
-
-
     }
 
     @Override
@@ -61,32 +61,44 @@ public class CommandHandler implements CommandExecutor {
         return false;
     }
 
+    /**
+     * on confirm command
+     * confirm transaction
+     * @param who player
+     * @return true if succeed
+     */
     private boolean onConfirm(Player who) {
         if (!confirmations.containsKey(who.getUniqueId())) {
             who.sendMessage(ChatColor.RED + "You have nothing to confirm yet !");
             return true;
         }
 
-        PlayerEconEvent event = confirmations.get(who.getUniqueId());
+        PlayerTransactionEvent event = confirmations.get(who.getUniqueId());
         confirmations.remove(event); // remove from confirmation
 
         Bukkit.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled())
             event.setCancelled(true);
-        // else
-            // update data
+        else
+            updateBank(event);
 
         return true;
     }
 
+    /**
+     * on cancel command
+     * cancel transaction
+     * @param who player
+     * @return true if succeed
+     */
     private boolean onCancel(Player who) {
         if (!confirmations.containsKey(who.getUniqueId())) {
             who.sendMessage(ChatColor.RED + "You have nothing to cancel yet !");
             return true;
         }
 
-        PlayerEconEvent event = confirmations.get(who.getUniqueId());
+        PlayerTransactionEvent event = confirmations.get(who.getUniqueId());
         confirmations.remove(event); // remove from confirmation
 
         who.sendMessage("Your sell/buy was cancelled !");
@@ -94,6 +106,13 @@ public class CommandHandler implements CommandExecutor {
         return true;
     }
 
+    /**
+     * on check command
+     * check the price of an item
+     * @param who player
+     * @param args args
+     * @return true if succeed
+     */
     private boolean onCheck(Player who, String[] args) {
         if (!checkPermission(who, "lbeconn.check"))
             return false;
@@ -104,6 +123,13 @@ public class CommandHandler implements CommandExecutor {
         return true;
     }
 
+    /**
+     * on sell command
+     * perform a sell transaction
+     * @param who player
+     * @param args args
+     * @return true if succeed
+     */
     private boolean onSell(Player who, String[] args) {
         if (!checkPermission(who, "lbeconn.sell"))
             return false;
@@ -143,6 +169,13 @@ public class CommandHandler implements CommandExecutor {
         return true;
     }
 
+    /**
+     * on buy command
+     * perform a buy transaction
+     * @param who player
+     * @param args args
+     * @return true if succeed
+     */
     private boolean onBuy(Player who, String[] args) {
         if (!checkPermission(who, "lbeconn.buy"))
             return false;
@@ -182,6 +215,11 @@ public class CommandHandler implements CommandExecutor {
         return true;
     }
 
+    /**
+     * generate list of item stack based on material and quantity
+     * @param args arguments from command
+     * @return item stacks
+     */
     private ArrayList<ItemStack> getItems(String[] args) {
         ArrayList<ItemStack> items = new ArrayList<>();
 
@@ -214,10 +252,29 @@ public class CommandHandler implements CommandExecutor {
         return items;
     }
 
+    /**
+     * compute the total price base on itemStacks
+     * @param items list of items => itemStacks
+     * @return price
+     */
     private Double getPrice(ArrayList<ItemStack> items) {
-        return 100.0;
+        double total = 0.0;
+        BankData data = new BankData(items.get(0).getType().name(), true);
+
+        for (ItemStack item :
+                items) {
+            total += (item.getAmount() * data.getCurrentValue());
+        }
+
+        return total;
     }
 
+    /**
+     * check user permission
+     * @param sender player
+     * @param permission permission
+     * @return access
+     */
     private boolean checkPermission(CommandSender sender, String permission) {
         if(sender.isOp())
             return true;
@@ -227,5 +284,71 @@ public class CommandHandler implements CommandExecutor {
 
         sender.sendMessage(ChatColor.RED + "Insufficient permission !!");
         return false;
+    }
+
+    /**
+     * update data from transaction event
+     * @param e PlayerTransactionEvent
+     */
+    private void updateBank(PlayerTransactionEvent e) {
+        if (e.getItemStacks().isEmpty())
+            return;
+
+        if (e instanceof PlayerBuyEvent)
+            updateBuy((PlayerBuyEvent) e);
+        else if (e instanceof PlayerSellEvent)
+            updateSell((PlayerSellEvent) e);
+    }
+
+    /**
+     * update data from sell event
+     * @param e PlayerSellEvent
+     */
+    private void updateSell(PlayerSellEvent e) {
+        BankData data = new BankData(e.getItemStacks().get(0).getType());
+
+        int qty = e.getQuantity();
+
+        if (e.check(true) && !e.isBypass()) {
+            e.getPlayer().sendMessage(ChatColor.YELLOW + "Your transaction has been cancelled !");
+            return;
+        }
+
+        BankInfo bank = new BankInfo();
+
+        // update data
+        data.setCurrentQuantity(data.getCurrentQuantity() + e.getQuantity());
+        data.setCurrentValue(data.getCurrentValue() - qty * data.getPriceDrop());
+        bank.setCurrentAmount(bank.getCurrentAmount() - e.getPrice());
+
+        // save data
+        data.save();
+        bank.save();
+    }
+
+    /**
+     * update data from buy event
+     * @param e PlayerBuyEvent
+     */
+    private void updateBuy(PlayerBuyEvent e) {
+        BankData data = new BankData(e.getItemStacks().get(0).getType());
+
+        int qty = e.getQuantity();
+
+        if (e.check(true) && !e.isBypass()) {
+            e.getPlayer().sendMessage(ChatColor.YELLOW + "Your transaction has been cancelled !");
+            return;
+        }
+
+        BankInfo bank = new BankInfo();
+
+        // update data
+        data.setCurrentValue(data.getCurrentValue() + qty * data.getPriceIncrease());
+        data.setCurrentQuantity(data.getCurrentQuantity() + qty);
+        bank.setCurrentAmount(bank.getCurrentAmount() + e.getPrice());
+
+        // save data
+        data.save();
+        bank.save();
     }
 }
