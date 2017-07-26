@@ -1,8 +1,6 @@
 package lowbrain.economy.main;
 
-import lowbrain.economy.events.PlayerBuyEvent;
-import lowbrain.economy.events.PlayerTransactionEvent;
-import lowbrain.economy.events.PlayerSellEvent;
+import lowbrain.economy.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,7 +17,7 @@ import java.util.UUID;
 public class CommandHandler implements CommandExecutor {
 
     private final LowbrainEconomy plugin;
-    private HashMap<UUID, PlayerTransactionEvent> confirmations;
+    private HashMap<UUID, PlayerBeginTransactionEvent> confirmations;
 
     /**
      * constructor
@@ -73,7 +71,7 @@ public class CommandHandler implements CommandExecutor {
             return true;
         }
 
-        PlayerTransactionEvent event = confirmations.get(who.getUniqueId());
+        PlayerBeginTransactionEvent event = confirmations.get(who.getUniqueId());
         confirmations.remove(event); // remove from confirmation
 
         Bukkit.getServer().getPluginManager().callEvent(event);
@@ -98,7 +96,7 @@ public class CommandHandler implements CommandExecutor {
             return true;
         }
 
-        PlayerTransactionEvent event = confirmations.get(who.getUniqueId());
+        PlayerBeginTransactionEvent event = confirmations.get(who.getUniqueId());
         confirmations.remove(event); // remove from confirmation
 
         who.sendMessage("Your sell/buy was cancelled !");
@@ -120,6 +118,21 @@ public class CommandHandler implements CommandExecutor {
         if (args.length < 2)
             return false; // /lbeconn check diamond
 
+        String material = args[1].toUpperCase();
+
+        if (plugin.getDataHandler().getBlacklist().containsKey(material)) {
+            who.sendMessage(ChatColor.RED + "This item cannot be sold neither bought !");
+            return true;
+        }
+
+        BankData data = plugin.getDataHandler().getData().get(material);
+
+        if (data == null) {
+            who.sendMessage(ChatColor.RED + "This item is not available !");
+            return true;
+        }
+
+        who.sendMessage(material + "is currently valued at " + data.getCurrentValue() + "$ and there is " + data.getCurrentQuantity() + " left in the bank");
         return true;
     }
 
@@ -142,7 +155,16 @@ public class CommandHandler implements CommandExecutor {
             return true;
         }
 
-        ArrayList<ItemStack> items = getItems(args);
+        String material = args[1].toUpperCase();
+        String qty = args[2];
+
+        if (plugin.getDataHandler().getBlacklist().containsKey(material)) {
+            who.sendMessage(ChatColor.RED + "This item cannot be sold neither bought !");
+            return true;
+        }
+
+
+        ArrayList<ItemStack> items = getItems(material, qty);
 
         if (items.isEmpty())
             return true;
@@ -188,7 +210,15 @@ public class CommandHandler implements CommandExecutor {
             return true;
         }
 
-        ArrayList<ItemStack> items = getItems(args);
+        String material = args[1].toUpperCase();
+        String qty = args[2];
+
+        if (plugin.getDataHandler().getBlacklist().containsKey(material)) {
+            who.sendMessage(ChatColor.RED + "This item cannot be sold neither bought !");
+            return true;
+        }
+
+        ArrayList<ItemStack> items = getItems(material, qty);
 
         if (items.isEmpty())
             return true;
@@ -217,17 +247,18 @@ public class CommandHandler implements CommandExecutor {
 
     /**
      * generate list of item stack based on material and quantity
-     * @param args arguments from command
+     * @param mat string material name
+     * @param qty string quantity
      * @return item stacks
      */
-    private ArrayList<ItemStack> getItems(String[] args) {
+    private ArrayList<ItemStack> getItems(String mat, String qty) {
         ArrayList<ItemStack> items = new ArrayList<>();
 
-        String material = args[1].toUpperCase();
+
         int quantity = 0;
 
         try {
-            quantity = Integer.parseInt(args[1]);
+            quantity = Integer.parseInt(qty);
         } catch (Exception e) {
             return items;
         }
@@ -235,18 +266,18 @@ public class CommandHandler implements CommandExecutor {
         if (quantity <= 0)
             return items;
 
-        Material mat = Material.getMaterial(material);
+        Material matariel = Material.getMaterial(mat);
 
         if (mat == null)
             return items;
 
         while(quantity > 0) {
             int amount = quantity;
-            if (amount > mat.getMaxStackSize()) {
-                quantity -= mat.getMaxStackSize();
-                amount = mat.getMaxStackSize();
+            if (amount > matariel.getMaxStackSize()) {
+                quantity -= matariel.getMaxStackSize();
+                amount = matariel.getMaxStackSize();
             }
-            items.add(new ItemStack(mat, amount));
+            items.add(new ItemStack(matariel, amount));
         }
 
         return items;
@@ -259,7 +290,7 @@ public class CommandHandler implements CommandExecutor {
      */
     private Double getPrice(ArrayList<ItemStack> items) {
         double total = 0.0;
-        BankData data = new BankData(items.get(0).getType().name(), true);
+        BankData data = plugin.getDataHandler().getData().get(items.get(0).getType().name());
 
         for (ItemStack item :
                 items) {
@@ -288,9 +319,9 @@ public class CommandHandler implements CommandExecutor {
 
     /**
      * update data from transaction event
-     * @param e PlayerTransactionEvent
+     * @param e PlayerBeginTransactionEvent
      */
-    private void updateBank(PlayerTransactionEvent e) {
+    private void updateBank(PlayerBeginTransactionEvent e) {
         if (e.getItemStacks().isEmpty())
             return;
 
@@ -305,7 +336,7 @@ public class CommandHandler implements CommandExecutor {
      * @param e PlayerSellEvent
      */
     private void updateSell(PlayerSellEvent e) {
-        BankData data = new BankData(e.getItemStacks().get(0).getType());
+        BankData data = plugin.getDataHandler().getData().get(e.getItemStacks().get(0).getType().name());
 
         int qty = e.getQuantity();
 
@@ -314,7 +345,7 @@ public class CommandHandler implements CommandExecutor {
             return;
         }
 
-        BankInfo bank = new BankInfo();
+        BankInfo bank = plugin.getDataHandler().getBank();
 
         // update data
         data.setCurrentQuantity(data.getCurrentQuantity() + e.getQuantity());
@@ -324,6 +355,13 @@ public class CommandHandler implements CommandExecutor {
         // save data
         data.save();
         bank.save();
+
+        PlayerCompleteTransactionEvent completed = new PlayerCompleteSellEvent(e);
+
+        Bukkit.getServer().getPluginManager().callEvent(completed);
+
+        if (!completed.isCancelled())
+            completed.getItemStacks().forEach(itemStack -> completed.getPlayer().getInventory().addItem(itemStack));
     }
 
     /**
@@ -331,7 +369,7 @@ public class CommandHandler implements CommandExecutor {
      * @param e PlayerBuyEvent
      */
     private void updateBuy(PlayerBuyEvent e) {
-        BankData data = new BankData(e.getItemStacks().get(0).getType());
+        BankData data = plugin.getDataHandler().getData().get(e.getItemStacks().get(0).getType().name());
 
         int qty = e.getQuantity();
 
@@ -340,7 +378,7 @@ public class CommandHandler implements CommandExecutor {
             return;
         }
 
-        BankInfo bank = new BankInfo();
+        BankInfo bank = plugin.getDataHandler().getBank();
 
         // update data
         data.setCurrentValue(data.getCurrentValue() + qty * data.getPriceIncrease());
@@ -350,5 +388,12 @@ public class CommandHandler implements CommandExecutor {
         // save data
         data.save();
         bank.save();
+
+        PlayerCompleteTransactionEvent completed = new PlayerCompleteBuyEvent(e);
+
+        Bukkit.getServer().getPluginManager().callEvent(completed);
+
+        if (!completed.isCancelled())
+            completed.getItemStacks().forEach(itemStack -> completed.getPlayer().getInventory().addItem(itemStack));
     }
 }

@@ -1,34 +1,31 @@
 package lowbrain.economy.events;
 
-import lowbrain.economy.main.BankData;
-import lowbrain.economy.main.BankInfo;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 
-public abstract class PlayerTransactionEvent extends PlayerEvent implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
-    private boolean cancel = false;
-    private boolean valid = true;
-    private boolean bypass = false;
-    private double price = 0.0;
-    private ArrayList<ItemStack> itemStacks = new ArrayList<>();
-    private PlayerSellEvent.EventType method;
+public abstract class PlayerTransactionEvent  extends PlayerEvent implements Cancellable {
+
+    protected static final HandlerList handlers = new HandlerList();
+    protected boolean cancel = false;
+    protected boolean valid = true;
+    protected boolean bypass = false;
+    protected double price = 0.0;
+    protected ArrayList<ItemStack> itemStacks = new ArrayList<>();
+    protected TransactionType method;
 
     /**
-     * constructor for PlayerTransactionEvent
+     * constructor for PlayerBeginTransactionEvent
      * @param who the player who bought or selled items
      * @param itemStacks list of items
      * @param price total price (combines all items together)
      * @param method buying or selling
      */
-    public PlayerTransactionEvent(final Player who, ArrayList<ItemStack> itemStacks, double price, EventType method){
+    public PlayerTransactionEvent(final Player who, ArrayList<ItemStack> itemStacks, double price, TransactionType method){
         super(who);
 
         this.itemStacks = itemStacks;
@@ -46,22 +43,9 @@ public abstract class PlayerTransactionEvent extends PlayerEvent implements Canc
         cancel = true;
     }
 
-    @Contract(pure = true)
     @Override
     public HandlerList getHandlers() {
         return handlers;
-    }
-
-    public void setItemStacks(ArrayList<ItemStack> itemStacks) {
-        this.itemStacks = itemStacks;
-    }
-
-    /**
-     * set the price of the transaction
-     * @param price price
-     */
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     /**
@@ -102,7 +86,7 @@ public abstract class PlayerTransactionEvent extends PlayerEvent implements Canc
      * get transaction method (BUYING OR SELLING)
      * @return method
      */
-    public EventType getMethod() {
+    public TransactionType getMethod() {
         return method;
     }
 
@@ -115,50 +99,10 @@ public abstract class PlayerTransactionEvent extends PlayerEvent implements Canc
     }
 
     /**
-     * check if the bank can complete the transaction
-     * if not, valid is set to false
-     * @return check(true)
-     */
-    public boolean check() {
-        return this.check(false);
-    }
-
-    /**
-     * check if the bank can complete the transaction
-     * if not, valid is set to false
-     * @param log send message to user
-     * @return isValid()
-     */
-    abstract public boolean check(boolean log);
-
-    /**
-     * set transaction valid property
-     * @param valid true or false
-     */
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
-
-    /**
      * is transaction validation bypassed
      * @return bypass
      */
     public boolean isBypass() {
         return bypass;
-    }
-
-    /**
-     * set transaction bypass property
-     * if bypass is true, when transaction is confirm, validation will be bypassed
-     * and data will still be saved
-     * @param bypass bypass or not
-     */
-    public void setBypass(boolean bypass) {
-        this.bypass = bypass;
-    }
-
-    public enum EventType {
-        SELLING,
-        BUYING
     }
 }

@@ -1,5 +1,6 @@
 package lowbrain.economy.main;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -8,15 +9,16 @@ import org.jetbrains.annotations.Contract;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 public class LowbrainEconomy extends JavaPlugin {
 
     public final static DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy mm:ss");
 
     private static LowbrainEconomy instance;
-
     private FileConfiguration config;
     private FileConfiguration bankConfig;
+    private DataHandler dataHandler;
 
     @Override
     public void onEnable()
@@ -25,6 +27,9 @@ public class LowbrainEconomy extends JavaPlugin {
         instance = this;
 
         loadConfig();
+
+        this.dataHandler = new DataHandler(this);
+        dataHandler.load();
 
         this.getCommand("lbeconn").setExecutor(new CommandHandler(this));
 
@@ -50,6 +55,10 @@ public class LowbrainEconomy extends JavaPlugin {
 
     public FileConfiguration getBankConfig() {
         return bankConfig;
+    }
+
+    public DataHandler getDataHandler() {
+        return dataHandler;
     }
 
     private void loadConfig() {

@@ -9,10 +9,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 
 
-public final class PlayerSellEvent extends PlayerTransactionEvent {
+public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
     public PlayerSellEvent(Player who, ArrayList<ItemStack> itemStacks, double price) {
-        super(who, itemStacks, price, EventType.SELLING);
+        super(who, itemStacks, price, TransactionType.SELLING);
     }
 
     @Override

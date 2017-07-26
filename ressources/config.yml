@@ -61,3 +61,9 @@ diff_price_drop: 0.01
 # this value can not be overridden by a specific items for proclamation purpose
 # default value = 720 (12 hours)
 diff_drop_interval: 720
+
+# list of items that cannot be sold or bought through the bank system
+blacklisted:
+  # - DIAMOND
+  # - EMERAULD
+  # - ETC
