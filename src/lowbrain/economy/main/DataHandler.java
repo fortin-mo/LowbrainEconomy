@@ -2,8 +2,7 @@ package lowbrain.economy.main;
 
 import org.bukkit.Material;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class DataHandler {
     private LowbrainEconomy plugin;
@@ -28,6 +27,42 @@ public class DataHandler {
     public void save() {
         this.saveBank();
         this.saveData();
+    }
+
+    public List<BankData> cheapest () {
+        Comparator<BankData> comparator = new Comparator<BankData>() {
+            @Override
+            public int compare(BankData a, BankData b) {
+                double va = a.getCurrentValue();
+                double vb = b.getCurrentValue();
+
+                return va == vb ? 0 : va > vb ? 1 : -1;
+            }
+        };
+
+        List<BankData> values = new ArrayList<BankData>(getData().values());
+
+        Collections.sort(values, comparator);
+
+        return values;
+    }
+
+    public List<BankData> pricey () {
+        Comparator<BankData> comparator = new Comparator<BankData>() {
+            @Override
+            public int compare(BankData a, BankData b) {
+                double va = a.getCurrentValue();
+                double vb = b.getCurrentValue();
+
+                return va == vb ? 0 : va < vb ? 1 : -1;
+            }
+        };
+
+        List<BankData> values = new ArrayList<BankData>(getData().values());
+
+        Collections.sort(values, comparator);
+
+        return values;
     }
 
     public void saveData() {
