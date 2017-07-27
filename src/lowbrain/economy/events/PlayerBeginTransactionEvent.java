@@ -38,15 +38,6 @@ public abstract class PlayerBeginTransactionEvent extends PlayerTransactionEvent
         this.price = price;
     }
 
-
-    /**
-     * set transaction valid property
-     * @param valid true or false
-     */
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
-
     /**
      * set transaction bypass property
      * if bypass is true, when transaction is confirm, validation will be bypassed

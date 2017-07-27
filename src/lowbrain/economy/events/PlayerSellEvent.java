@@ -2,6 +2,7 @@ package lowbrain.economy.events;
 
 import lowbrain.economy.main.BankData;
 import lowbrain.economy.main.BankInfo;
+import lowbrain.economy.main.LowbrainEconomy;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,25 +18,30 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
     @Override
     public boolean check(boolean log) {
-        BankData data = new BankData(this.getItemStacks().get(0).getType());
+        BankData data = LowbrainEconomy.getInstance().getDataHandler().getSingle(this.getItemStacks().get(0).getType().name());
+
+        if (data == null) {
+            this.status = TransactionStatus.INVALID_DATA;
+            return isValid();
+        }
 
         int qty = this.getQuantity();
 
         if (data.getCurrentQuantity() + qty > data.getMaxQuantity()) {
             if (log)
-                this.getPlayer().sendMessage(ChatColor.YELLOW + "The bank can no longer accept sells for this item !");
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "The bank can no longer purchase this item !");
 
-            setValid(false);
+            this.status = TransactionStatus.BANK_STOCK_MAXED;
             return isValid();
         }
 
-        BankInfo bank = new BankInfo();
+        BankInfo bank = LowbrainEconomy.getInstance().getDataHandler().getBank();
 
-        if (bank.getCurrentAmount() + this.getPrice() > bank.getMaxAmount()) {
+        if (bank.getCurrentAmount() - this.getPrice() < bank.getMinAmount()) {
             if (log)
-                this.getPlayer().sendMessage(ChatColor.YELLOW + "The bank doesn't have enough coin to buy this amount of product!");
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "The bank as reach is minimum capacity of coin !");
 
-            setValid(false);
+            this.status = TransactionStatus.BANK_CAPACITY_LOW;
             return isValid();
         }
 

@@ -12,11 +12,11 @@ public abstract class PlayerTransactionEvent  extends PlayerEvent implements Can
 
     protected static final HandlerList handlers = new HandlerList();
     protected boolean cancel = false;
-    protected boolean valid = true;
     protected boolean bypass = false;
     protected double price = 0.0;
     protected ArrayList<ItemStack> itemStacks = new ArrayList<>();
-    protected TransactionType method;
+    protected TransactionType type;
+    protected TransactionStatus status = TransactionStatus.VALID;
 
     /**
      * constructor for PlayerBeginTransactionEvent
@@ -30,7 +30,7 @@ public abstract class PlayerTransactionEvent  extends PlayerEvent implements Can
 
         this.itemStacks = itemStacks;
         this.price = price;
-        this.method = method;
+        this.type = method;
     }
 
     @Override
@@ -83,11 +83,11 @@ public abstract class PlayerTransactionEvent  extends PlayerEvent implements Can
     }
 
     /**
-     * get transaction method (BUYING OR SELLING)
-     * @return method
+     * get transaction type (BUYING OR SELLING)
+     * @return type
      */
-    public TransactionType getMethod() {
-        return method;
+    public TransactionType getType() {
+        return type;
     }
 
     /**
@@ -95,7 +95,7 @@ public abstract class PlayerTransactionEvent  extends PlayerEvent implements Can
      * @return valid
      */
     public boolean isValid() {
-        return valid;
+        return this.status == TransactionStatus.VALID;
     }
 
     /**

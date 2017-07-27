@@ -42,7 +42,16 @@ DEFAULT:
  # settings both max and min quantity to infinite just means to not take in account the bank quantity att all
  # default value = 0
  min_quantity: 0
+
+ # limit the quantity per transaction
+ # for example, setting this to 32 will limit the quantity of each transaction (buy or sell) for this item at 32
+ # meaning, a player wont be able to buy or sell more then 32 of this item per transaction
+ # you should consider this because the value is adjusted after a whole transaction
+ # for example, if the price_drop is at 0.01, current_value at 10.0, if you buy 32 of this item, current_value will now equal 10.0 + 32 * 0.01 = 10.32
+ # settings it to a value bellow zero means there is no limit.
+ transaction_limit: -1
+
  # time_diff_drop: 1440 ==> you can override this value for any specific item
- # diff_price_drop: 1 ==> you can override this value for any specific item
- # price_drop: 1 ==> settings this parameters will override default_price_drop from config.yml
- # price_increase: 1 ==> settings this parameters will override default_price_increase from config.yml
+ # diff_price_drop: 0.01 ==> you can override this value for any specific item
+ # price_drop: 0.01 ==> settings this parameters will override default_price_drop from config.yml
+ # price_increase: 0.01 ==> settings this parameters will override default_price_increase from config.yml

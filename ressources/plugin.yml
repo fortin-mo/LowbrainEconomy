@@ -10,6 +10,10 @@ permission:
   description: reset prices and bank status
  lbeconn.buy:
   description: buy items from the bank
+ lbeconn.pricey:
+  description: get the list of the pricey items
+ lbeconn.cheapest:
+  description: get the list of the cheapest items
  lbeconn.sell:
   description: sell items to the bank
  lbeconn.set-item
@@ -23,3 +27,5 @@ commands:
                   /lbeconn sell <material> <amount> - sell an item to the bank
                   /lbeconn reload - reload plugin
                   /lbeconn reset - reset prices and bank status
+                  /lbeconn pricey - get the list of the most pricey items
+                  /lbconne cheapest - get the list of the most cheapest items

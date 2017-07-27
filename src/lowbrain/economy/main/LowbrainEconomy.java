@@ -1,19 +1,24 @@
 package lowbrain.economy.main;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 public class LowbrainEconomy extends JavaPlugin {
 
     public final static DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy mm:ss");
+    public final static NumberFormat DECIMAL_FORMAT = new DecimalFormat("#0.00");
 
     private static LowbrainEconomy instance;
     private FileConfiguration config;
@@ -84,5 +89,15 @@ public class LowbrainEconomy extends JavaPlugin {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void sendTo(Player who, String msg) {
+        if (who == null || msg == null || msg.isEmpty())
+            return;
+
+        String fmt = ChatColor.GOLD + "[LowbrainEconomy] " + ChatColor.GREEN;
+        fmt += msg;
+
+        who.sendMessage(fmt);
     }
 }

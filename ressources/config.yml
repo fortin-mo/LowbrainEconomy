@@ -58,7 +58,7 @@ diff_price_drop: 0.01
 # if the time difference between the current time and the last time an item was bought is higher than (time_diff_drop)
 # it's value will drop on every interval
 # this value is also in minutes
-# this value can not be overridden by a specific items for proclamation purpose
+# this value can not be overridden by a specific items for programmatic purpose
 # default value = 720 (12 hours)
 diff_drop_interval: 720
 

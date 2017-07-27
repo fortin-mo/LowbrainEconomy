@@ -20,6 +20,7 @@ public class BankData {
     private static final String PRICE_INCREASE = "price_increase";
     private static final String LAST_SOLD = "last_sold";
     private static final String LAST_BOUGHT = "last_bought";
+    private static final String TRANSACTION_LIMIT = "transaction_limit";
 
     private String name;
     private double initialValue;
@@ -35,6 +36,7 @@ public class BankData {
     private int diffPriceDrop;
     private int priceDrop;
     private int priceIncrease;
+    private int transactionLimit;
 
     public BankData(Material material) {
         this(material.getData().getName());
@@ -139,14 +141,14 @@ public class BankData {
 
         priceDrop = Math.abs(itemSec.getInt(PRICE_DROP, configFile.getInt("default_" + PRICE_DROP, 1)));
         priceIncrease = Math.abs(itemSec.getInt(PRICE_INCREASE, configFile.getInt("default_" + PRICE_INCREASE, 1)));
+
+        transactionLimit = itemSec.getInt(TRANSACTION_LIMIT, defSec.getInt(TRANSACTION_LIMIT, -1));
+        if (transactionLimit < 0)
+            transactionLimit = Integer.MAX_VALUE;
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getInitialValue() {
@@ -239,6 +241,24 @@ public class BankData {
 
     public int getDiffPriceDrop() {
         return diffPriceDrop;
+    }
+
+    public void increaseValueBy (double v) {
+        v = Math.abs(v);
+        this.setCurrentValue(this.currentValue + v);
+    }
+
+    public void decreaseValueBy (double v) {
+        v = Math.abs(v);
+        this.setCurrentValue(this.currentValue - v);
+    }
+
+    public void increaseValue() {
+        this.setCurrentValue(this.currentValue + this.priceIncrease);
+    }
+
+    public void decreaseValue() {
+        this.setCurrentValue(this.currentValue - this.priceDrop);
     }
 
     public void setDiffPriceDrop(int diffPriceDrop) {

@@ -1,6 +1,8 @@
 package lowbrain.economy.main;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -8,6 +10,7 @@ public class DataHandler {
     private LowbrainEconomy plugin;
 
     private HashMap<String, BankData> data = new HashMap<>();
+    private HashMap<String, ExternalData> externalData = new HashMap<>();
     private HashMap<String, String> blacklist = new HashMap<>();
 
     private BankInfo bank;
@@ -40,7 +43,7 @@ public class DataHandler {
             }
         };
 
-        List<BankData> values = new ArrayList<BankData>(getData().values());
+        List<BankData> values = plugin.getDataHandler().getAllAsList();
 
         Collections.sort(values, comparator);
 
@@ -58,7 +61,7 @@ public class DataHandler {
             }
         };
 
-        List<BankData> values = new ArrayList<BankData>(getData().values());
+        List<BankData> values = plugin.getDataHandler().getAllAsList();
 
         Collections.sort(values, comparator);
 
@@ -67,6 +70,7 @@ public class DataHandler {
 
     public void saveData() {
         getData().values().forEach(bankData -> bankData.save());
+        getExternalData().values().forEach(bankData -> bankData.getBankData().save());
     }
 
     public void saveBank() {
@@ -109,5 +113,66 @@ public class DataHandler {
 
     public HashMap<String, BankData> getData() {
         return data;
+    }
+
+    public BankData getSingle(String n) {
+        ExternalData x = getExternalData().get(n);
+        BankData d = null;
+
+        if (x == null)
+            d = getData().get(n);
+        else
+            d = x.getBankData();
+
+        return d;
+    }
+
+    public HashMap<String, BankData> getAll() {
+        HashMap<String, BankData> all = new HashMap<>();
+
+        getData().values().forEach(d -> all.put(d.getName(), d));
+        getExternalData().values().forEach(d -> all.put(d.getName(), d.getBankData()));
+
+        return all;
+    }
+
+    public List<BankData> getAllAsList() {
+        return new ArrayList<BankData>(getAll().values());
+    }
+
+    public HashMap<String, ExternalData> getExternalData() {
+        return externalData;
+    }
+
+    public void addExternal(String name, ItemStack i) {
+        if (name == null || name.isEmpty() || i == null)
+            throw new NullArgumentException("Name and ItemStack must not be null !");
+
+        getExternalData().put(name, new ExternalData(name, i));
+    }
+
+    public class ExternalData {
+        private BankData bankData;
+        private String name;
+        private ItemStack itemStack;
+
+        public ExternalData(String name, ItemStack i) {
+            this.bankData = new BankData(name);
+            this.itemStack = i;
+            this.itemStack.setAmount(1);
+            this.name = name;
+        }
+
+        public BankData getBankData() {
+            return bankData;
+        }
+
+        public ItemStack getItemStack() {
+            return itemStack;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }
