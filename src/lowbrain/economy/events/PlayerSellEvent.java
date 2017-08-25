@@ -6,6 +6,7 @@ import lowbrain.economy.main.LowbrainEconomy;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,55 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
             return isValid();
         }
 
+        if (!playerHasItems(this.getPlayer(), this.getItemStacks().get(0), qty)) {
+            if (log)
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "Necessary items are missing from your inventory !");
+
+            this.status = TransactionStatus.PLAYER_MISSING_INVENTORY;
+            return isValid();
+        }
+
         return isValid();
+    }
+
+    public static boolean playerHasItems(Player player, ItemStack itemSold, int quantity) {
+        if (quantity <= 0)
+            return true;
+
+        int pQty = 0;
+
+        ItemMeta itemMeta = itemSold.getItemMeta();
+
+        String itemName = itemMeta != null ? itemMeta.getDisplayName() : null;
+
+        if (itemName != null && itemName.trim().length() != 0)
+            itemName = ChatColor.stripColor(itemName);
+
+        for (ItemStack itemStack : player.getInventory()) {
+
+            if (pQty >= quantity) // no need for further process
+                break;
+
+            if (itemStack.getType() != itemSold.getType())
+                continue;
+
+            int c = 0;
+
+            if (itemName != null) { // check custom item
+                ItemMeta iMeta = itemStack.getItemMeta();
+
+                String iName = iMeta != null ? iMeta.getDisplayName() : null;
+
+                if (iName != null && ChatColor.stripColor(iName) == itemName)
+                    c = itemStack.getAmount();
+
+            } else {
+                c = itemStack.getAmount();
+            }
+
+            pQty += c;
+        }
+
+        return pQty >= quantity;
     }
 }

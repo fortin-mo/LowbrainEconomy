@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -145,7 +146,7 @@ public class CommandHandler implements CommandExecutor {
         if (event.isCancelled())
             event.setCancelled(true);
         else
-            updateBank(event);
+            completeTransaction(event);
 
         return true;
     }
@@ -230,7 +231,6 @@ public class CommandHandler implements CommandExecutor {
             return true;
         }
 
-
         ArrayList<ItemStack> items = getItems(material, qty);
 
         if (items.isEmpty())
@@ -241,11 +241,16 @@ public class CommandHandler implements CommandExecutor {
         if (price == null)
             return true;
 
+        if (!PlayerSellEvent.playerHasItems(who, items.get(0), Integer.parseInt(qty))) {
+            plugin.sendTo(who, "Necessary items are missing from your inventory !");
+            return true;
+        }
+
         PlayerSellEvent event = new PlayerSellEvent(who, items, price);
 
         confirmations.put(who.getUniqueId(), event);
 
-        plugin.sendTo(event.getPlayer(), "You can now confirm your sell of " + event.getQuantity() + " x " + material + " for a total of " + LowbrainEconomy.DECIMAL_FORMAT.format(event.getPrice()) + "$");
+        plugin.sendTo(event.getPlayer(), "You can now confirm your transaction (sell) of " + event.getQuantity() + " x " + material + " for a total of " + LowbrainEconomy.DECIMAL_FORMAT.format(event.getPrice()) + "$");
 
         new BukkitRunnable() {
             @Override
@@ -392,21 +397,21 @@ public class CommandHandler implements CommandExecutor {
      * update data from transaction event
      * @param e PlayerBeginTransactionEvent
      */
-    private void updateBank(PlayerBeginTransactionEvent e) {
+    private void completeTransaction(PlayerBeginTransactionEvent e) {
         if (e.getItemStacks().isEmpty())
             return;
 
         if (e instanceof PlayerBuyEvent)
-            updateBuy((PlayerBuyEvent) e);
+            completeBuy((PlayerBuyEvent) e);
         else if (e instanceof PlayerSellEvent)
-            updateSell((PlayerSellEvent) e);
+            completeSell((PlayerSellEvent) e);
     }
 
     /**
      * update data from sell event
      * @param e PlayerSellEvent
      */
-    private void updateSell(PlayerSellEvent e) {
+    private void completeSell(PlayerSellEvent e) {
         BankData data = plugin.getDataHandler().getSingle(e.getItemStacks().get(0).getType().name());
 
         int qty = e.getQuantity();
@@ -427,19 +432,62 @@ public class CommandHandler implements CommandExecutor {
         data.save();
         bank.save();
 
+        int removed = 0;
+        ItemStack itemSold = e.getItemStacks().get(0);
+
+        ItemMeta itemMeta = itemSold.getItemMeta();
+
+        String itemName = itemMeta != null ? itemMeta.getDisplayName() : null;
+
+        if (itemName != null && itemName.trim().length() != 0)
+            itemName = ChatColor.stripColor(itemName);
+
+        // remove item from player's inventory
+        for (ItemStack itemStack : e.getPlayer().getInventory()) {
+
+            if (removed >= qty) // no need for further process
+                break;
+
+            if (itemStack.getType() != itemSold.getType())
+                continue;
+
+            int c = 0;
+
+            if (itemName != null) { // check custom item
+                ItemMeta iMeta = itemStack.getItemMeta();
+
+                String iName = iMeta != null ? iMeta.getDisplayName() : null;
+
+                if (iName != null && ChatColor.stripColor(iName) == itemName)
+                    c = itemStack.getAmount();
+
+            } else {
+                c = itemStack.getAmount();
+            }
+
+            if (c <= 0)
+                continue;
+
+            if (c > qty) {
+                c = qty;
+                itemStack.setAmount(itemStack.getAmount() - c);
+            } else {
+                e.getPlayer().getInventory().remove(itemStack);
+            }
+
+            removed += c;
+        }
+
         PlayerCompleteTransactionEvent completed = new PlayerCompleteSellEvent(e);
 
         Bukkit.getServer().getPluginManager().callEvent(completed);
-
-        if (!completed.isCancelled())
-            completed.getItemStacks().forEach(itemStack -> completed.getPlayer().getInventory().addItem(itemStack));
     }
 
     /**
      * update data from buy event
      * @param e PlayerBuyEvent
      */
-    private void updateBuy(PlayerBuyEvent e) {
+    private void completeBuy(PlayerBuyEvent e) {
         BankData data = plugin.getDataHandler().getSingle(e.getItemStacks().get(0).getType().name());
 
         int qty = e.getQuantity();
@@ -462,9 +510,8 @@ public class CommandHandler implements CommandExecutor {
 
         PlayerCompleteTransactionEvent completed = new PlayerCompleteBuyEvent(e);
 
-        Bukkit.getServer().getPluginManager().callEvent(completed);
+        completed.getItemStacks().forEach(itemStack -> completed.getPlayer().getInventory().addItem(itemStack));
 
-        if (!completed.isCancelled())
-            completed.getItemStacks().forEach(itemStack -> completed.getPlayer().getInventory().addItem(itemStack));
+        Bukkit.getServer().getPluginManager().callEvent(completed);
     }
 }
