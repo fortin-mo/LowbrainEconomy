@@ -1,5 +1,7 @@
 package lowbrain.economy.main;
 
+import lowbrain.economy.bank.BankData;
+import lowbrain.economy.bank.BankInfo;
 import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

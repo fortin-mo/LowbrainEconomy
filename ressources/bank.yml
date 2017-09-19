@@ -4,6 +4,11 @@
 # the DEFAULT will be used if a material is not listed
 
 DEFAULT:
+ # profit determines the value at which the bank will buy an item.
+ # for example, if the value of diamond is at  500$, the bank will only pay players 450$ for it
+ # but players will pay full price.
+ # profit: 0.10
+
  # initial value
  # default value = 10
  initial_value: 10

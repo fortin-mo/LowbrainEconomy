@@ -1,10 +1,12 @@
 package lowbrain.economy.main;
 
+import lowbrain.library.config.YamlConfig;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 
@@ -13,7 +15,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 
 public class LowbrainEconomy extends JavaPlugin {
 
@@ -21,9 +22,10 @@ public class LowbrainEconomy extends JavaPlugin {
     public final static NumberFormat DECIMAL_FORMAT = new DecimalFormat("#0.00");
 
     private static LowbrainEconomy instance;
-    private FileConfiguration config;
-    private FileConfiguration bankConfig;
+    private YamlConfig config;
+    private YamlConfig bankConfig;
     private DataHandler dataHandler;
+    private Economy economy;
 
     @Override
     public void onEnable()
@@ -33,14 +35,32 @@ public class LowbrainEconomy extends JavaPlugin {
 
         loadConfig();
 
+        if (!setupEconomy() ) {
+            this.getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         this.dataHandler = new DataHandler(this);
         dataHandler.load();
 
         this.getCommand("lbeconn").setExecutor(new CommandHandler(this));
 
-        new TaskHandler(this).startNow( config.getInt("diff_drop_interval", 720));
+        new TaskHandler(this).startNow( config.getInt("overtime_drop_interval", 720));
 
-        this.getLogger().info("[LowbrainEconomy] " + getDescription().getVersion() + " enabled!");
+        this.getLogger().info(getDescription().getVersion() + " enabled!");
+    }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        economy = rsp.getProvider();
+        return economy != null;
     }
 
     @Override
@@ -67,28 +87,8 @@ public class LowbrainEconomy extends JavaPlugin {
     }
 
     private void loadConfig() {
-        File configFile = new File(this.getDataFolder(),"config.yml");
-        File staffFile = new File(this.getDataFolder(),"bank.yml");
-
-        if (!configFile.exists()) {
-            configFile.getParentFile().mkdirs();
-            saveResource("config.yml", false);
-        }
-
-        if (!staffFile.exists()) {
-            staffFile.getParentFile().mkdirs();
-            saveResource("bank.yml", false);
-        }
-
-        config = new YamlConfiguration();
-        bankConfig = new YamlConfiguration();
-
-        try {
-            config.load(configFile);
-            bankConfig.load(staffFile);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        this.config = new YamlConfig("config.yml", this);
+        this.bankConfig = new YamlConfig("bank.yml", this);
     }
 
     public void sendTo(Player who, String msg) {
@@ -99,5 +99,9 @@ public class LowbrainEconomy extends JavaPlugin {
         fmt += msg;
 
         who.sendMessage(fmt);
+    }
+
+    public Economy getEconomy() {
+        return economy;
     }
 }

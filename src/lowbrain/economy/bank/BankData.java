@@ -1,5 +1,6 @@
-package lowbrain.economy.main;
+package lowbrain.economy.bank;
 
+import lowbrain.economy.main.LowbrainEconomy;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,13 +15,14 @@ public class BankData {
     private static final String CURRENT_QUANTITY = "current_quantity";
     private static final String MAX_QUANTITY = "max_quantity";
     private static final String MIN_QUANTITY = "min_quantity";
-    private static final String TIME_DIFF_DROP = "time_diff_drop";
-    private static final String DIFF_PRICE_DROP = "diff_price_drop";
+    private static final String OVERTIME_DIFF_DROP = "overtime_diff_drop";
+    private static final String OVERTIME_PRICE_DROP = "overtime_price_drop";
     private static final String PRICE_DROP = "price_drop";
     private static final String PRICE_INCREASE = "price_increase";
     private static final String LAST_SOLD = "last_sold";
     private static final String LAST_BOUGHT = "last_bought";
     private static final String TRANSACTION_LIMIT = "transaction_limit";
+    private static final String PROFIT = "profit";
 
     private String name;
     private double initialValue;
@@ -32,11 +34,12 @@ public class BankData {
     private int minQuantity;
     private Date lastSold;
     private Date lastBought;
-    private int timeDiffDrop;
-    private int diffPriceDrop;
+    private int overtimeDiffDrop;
+    private int overtimePriceDrop;
     private int priceDrop;
     private int priceIncrease;
     private int transactionLimit;
+    private double profit;
 
     public BankData(Material material) {
         this(material.getData().getName());
@@ -107,6 +110,8 @@ public class BankData {
         if (maxValue < 0)
             maxValue = Double.MAX_VALUE; // set to infinite.. kind of
 
+        profit = itemSec.getDouble(PROFIT, defSec.getDouble(PROFIT, configFile.getDouble(PROFIT, 0.10)));
+
         if (minLoad)
             return;
 
@@ -133,11 +138,11 @@ public class BankData {
             lastSold = null;
         }
 
-        timeDiffDrop = itemSec.getInt(TIME_DIFF_DROP, configFile.getInt(TIME_DIFF_DROP, 1440));
-        diffPriceDrop = itemSec.getInt(DIFF_PRICE_DROP, configFile.getInt(DIFF_PRICE_DROP, 1));
+        overtimeDiffDrop = itemSec.getInt(OVERTIME_DIFF_DROP, configFile.getInt(OVERTIME_DIFF_DROP, 1440));
+        overtimePriceDrop = itemSec.getInt(OVERTIME_PRICE_DROP, configFile.getInt(OVERTIME_PRICE_DROP, 1));
 
-        if (diffPriceDrop < 0)
-            diffPriceDrop = 1; // cannot be lower than zero
+        if (overtimePriceDrop < 0)
+            overtimePriceDrop = 1; // cannot be lower than zero
 
         priceDrop = Math.abs(itemSec.getInt(PRICE_DROP, configFile.getInt("default_" + PRICE_DROP, 1)));
         priceIncrease = Math.abs(itemSec.getInt(PRICE_INCREASE, configFile.getInt("default_" + PRICE_INCREASE, 1)));
@@ -231,16 +236,16 @@ public class BankData {
         this.lastBought = lastBought;
     }
 
-    public int getTimeDiffDrop() {
-        return timeDiffDrop;
+    public int getOvertimeDiffDrop() {
+        return overtimeDiffDrop;
     }
 
-    public void setTimeDiffDrop(int timeDiffDrop) {
-        this.timeDiffDrop = timeDiffDrop;
+    public void setOvertimeDiffDrop(int overtimeDiffDrop) {
+        this.overtimeDiffDrop = overtimeDiffDrop;
     }
 
-    public int getDiffPriceDrop() {
-        return diffPriceDrop;
+    public int getOvertimePriceDrop() {
+        return overtimePriceDrop;
     }
 
     public void increaseValueBy (double v) {
@@ -261,8 +266,8 @@ public class BankData {
         this.setCurrentValue(this.currentValue - this.priceDrop);
     }
 
-    public void setDiffPriceDrop(int diffPriceDrop) {
-        this.diffPriceDrop = diffPriceDrop;
+    public void setOvertimePriceDrop(int overtimePriceDrop) {
+        this.overtimePriceDrop = overtimePriceDrop;
     }
 
     public int getPriceDrop() {
@@ -279,5 +284,9 @@ public class BankData {
 
     public void setPriceIncrease(int priceIncrease) {
         this.priceIncrease = priceIncrease;
+    }
+
+    public double getProfit() {
+        return profit;
     }
 }

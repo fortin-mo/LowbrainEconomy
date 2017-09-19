@@ -1,8 +1,9 @@
 package lowbrain.economy.events;
 
-import lowbrain.economy.main.BankData;
-import lowbrain.economy.main.BankInfo;
+import lowbrain.economy.bank.BankData;
+import lowbrain.economy.bank.BankInfo;
 import lowbrain.economy.main.LowbrainEconomy;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -36,11 +37,19 @@ public final class PlayerBuyEvent extends PlayerBeginTransactionEvent {
 
         BankInfo bank = LowbrainEconomy.getInstance().getDataHandler().getBank();
 
-        if (bank.getCurrentAmount() + this.getPrice() > bank.getMaxAmount()) {
+        if (bank.getCurrentBalance() + this.getPrice() > bank.getMaxBalance()) {
             if (log)
                 LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "The bank as reach is maximum capacity of coin !");
 
-            this.status = TransactionStatus.BANK_CAPACITY_MAXED;
+            this.status = TransactionStatus.BANK_BALANCE_MAXED;
+            return isValid();
+        }
+
+        if (!LowbrainEconomy.getInstance().getEconomy().has(Bukkit.getOfflinePlayer(getPlayer().getUniqueId()), price)) {
+            if (log)
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "Insufficient funds !");
+
+            this.status = TransactionStatus.PLAYER_INSUFFICIENT_FUNDS;
             return isValid();
         }
 

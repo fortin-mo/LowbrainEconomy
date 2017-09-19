@@ -1,7 +1,7 @@
 package lowbrain.economy.events;
 
-import lowbrain.economy.main.BankData;
-import lowbrain.economy.main.BankInfo;
+import lowbrain.economy.bank.BankData;
+import lowbrain.economy.bank.BankInfo;
 import lowbrain.economy.main.LowbrainEconomy;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -38,11 +38,11 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
         BankInfo bank = LowbrainEconomy.getInstance().getDataHandler().getBank();
 
-        if (bank.getCurrentAmount() - this.getPrice() < bank.getMinAmount()) {
+        if (bank.getCurrentBalance() - this.getPrice() < bank.getMinBalance()) {
             if (log)
                 LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "The bank as reach is minimum capacity of coin !");
 
-            this.status = TransactionStatus.BANK_CAPACITY_LOW;
+            this.status = TransactionStatus.BANK_BALANCE_LOW;
             return isValid();
         }
 

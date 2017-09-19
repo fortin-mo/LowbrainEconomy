@@ -2,6 +2,7 @@ main: lowbrain.economy.main.LowbrainEconomy
 name: LowbrainEconomy
 version: 0.0.1
 author: Lowbrain
+depend: [LowbrainLibrary]
 description: Bank economy API
 permission:
  lbeconn.reload:

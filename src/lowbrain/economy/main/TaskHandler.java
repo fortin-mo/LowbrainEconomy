@@ -22,7 +22,7 @@ public class TaskHandler extends BukkitRunnable {
         FileConfiguration config = plugin.getConfig();
 
         // minutes to miliseconds
-        long mili = config.getInt("time_diff_drop",1440) * 60 * 1000;
+        long mili = config.getInt("overtime_diff_drop",1440) * 60 * 1000;
 
         long today = (new Date()).getTime();
 
@@ -32,7 +32,7 @@ public class TaskHandler extends BukkitRunnable {
             long time = date != null ? date.getTime() : Long.MIN_VALUE;
 
             if (time < today - mili)
-                d.decreaseValueBy(d.getDiffPriceDrop());
+                d.decreaseValueBy(d.getOvertimePriceDrop());
         });
 
         // for external data
@@ -41,7 +41,7 @@ public class TaskHandler extends BukkitRunnable {
             long time = date != null ? date.getTime() : Long.MIN_VALUE;
 
             if (time < today - mili)
-                d.getBankData().decreaseValueBy(d.getBankData().getDiffPriceDrop());
+                d.getBankData().decreaseValueBy(d.getBankData().getOvertimePriceDrop());
         });
 
         plugin.getDataHandler().save();

@@ -1,6 +1,10 @@
 package lowbrain.economy.main;
 
+import lowbrain.economy.Common.FN;
+import lowbrain.economy.bank.BankData;
+import lowbrain.economy.bank.BankInfo;
 import lowbrain.economy.events.*;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -89,7 +93,10 @@ public class CommandHandler implements CommandExecutor {
 
         plugin.sendTo(who, "---- Pricey items (limit: " + limit + ") ----");
         list.forEach(d -> {
-            plugin.sendTo(who, d.getName() + " valued at " + LowbrainEconomy.DECIMAL_FORMAT.format(d.getCurrentValue()) + "$ with " + d.getCurrentQuantity() + " left in stock!");
+            plugin.sendTo(who, d.getName()
+                    + " valued at " + LowbrainEconomy.DECIMAL_FORMAT.format(d.getCurrentValue())
+                    + "$ with " + d.getCurrentQuantity()
+                    + " left in stock!");
         });
         plugin.sendTo(who, "---------------------------------------------");
 
@@ -120,7 +127,10 @@ public class CommandHandler implements CommandExecutor {
 
         plugin.sendTo(who, "---- Cheapest items (limit: " + limit + ") ----");
         list.forEach(d -> {
-            plugin.sendTo(who, d.getName() + " valued at " + LowbrainEconomy.DECIMAL_FORMAT.format(d.getCurrentValue()) + "$ with " + d.getCurrentQuantity() + " left in stock!");
+            plugin.sendTo(who, d.getName()
+                    + " valued @ " + FN.toMoney(d.getCurrentValue())
+                    + " [selling @ " + FN.toMoney(d.getCurrentValue() * (1 - d.getProfit())) + "]"
+                    + "$ with " + d.getCurrentQuantity() + " left in stock!");
         });
         plugin.sendTo(who, "---------------------------------------------");
 
@@ -141,7 +151,7 @@ public class CommandHandler implements CommandExecutor {
         PlayerBeginTransactionEvent event = confirmations.get(who.getUniqueId());
         confirmations.remove(event); // remove from confirmation
 
-        Bukkit.getServer().getPluginManager().callEvent(event);
+        // Bukkit.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled())
             event.setCancelled(true);
@@ -199,7 +209,11 @@ public class CommandHandler implements CommandExecutor {
             return true;
         }
 
-        plugin.sendTo(who,material + "is currently valued at " + data.getCurrentValue() + "$ and there is " + data.getCurrentQuantity() + " left in the bank");
+        plugin.sendTo(who,material
+                + "is currently valued at "
+                + FN.toMoney(data.getCurrentValue())
+                + "$ [selling @: "+ FN.toMoney(data.getCurrentValue() * (1 - data.getProfit())) + "] and there is "
+                + data.getCurrentQuantity() + " left in the bank");
 
         return true;
     }
@@ -236,7 +250,7 @@ public class CommandHandler implements CommandExecutor {
         if (items.isEmpty())
             return true;
 
-        Double price = getPrice(items);
+        Double price = getPrice(items, false);
 
         if (price == null)
             return true;
@@ -250,7 +264,10 @@ public class CommandHandler implements CommandExecutor {
 
         confirmations.put(who.getUniqueId(), event);
 
-        plugin.sendTo(event.getPlayer(), "You can now confirm your transaction (sell) of " + event.getQuantity() + " x " + material + " for a total of " + LowbrainEconomy.DECIMAL_FORMAT.format(event.getPrice()) + "$");
+        plugin.sendTo(event.getPlayer(),
+                "You can now confirm your transaction (sell) of "
+                        + event.getQuantity() + " x " + material
+                        + " for a total of " + LowbrainEconomy.DECIMAL_FORMAT.format(event.getPrice()) + "$");
 
         new BukkitRunnable() {
             @Override
@@ -297,16 +314,25 @@ public class CommandHandler implements CommandExecutor {
         if (items.isEmpty())
             return true;
 
-        Double price = getPrice(items);
+        Double price = getPrice(items, true);
 
         if (price == null)
             return true;
+
+        if (!plugin.getEconomy().has(Bukkit.getOfflinePlayer(who.getUniqueId()), price)) {
+            plugin.sendTo(who, "Insufficient founds");
+            return true;
+        }
 
         PlayerBuyEvent event = new PlayerBuyEvent(who, items, price);
 
         confirmations.put(who.getUniqueId(), event);
 
-        plugin.sendTo(event.getPlayer(), "You can now confirm your purchase of " + event.getQuantity() + " x " + material + " for a total of " + LowbrainEconomy.DECIMAL_FORMAT.format(event.getPrice()) + "$");
+        plugin.sendTo(event.getPlayer(),
+                "You can now confirm your purchase of "
+                        + event.getQuantity() + " x " + material
+                        + " for a total of "
+                        + LowbrainEconomy.DECIMAL_FORMAT.format(event.getPrice()) + "$");
 
         new BukkitRunnable() {
             @Override
@@ -364,13 +390,13 @@ public class CommandHandler implements CommandExecutor {
      * @param items list of items => itemStacks
      * @return price
      */
-    private Double getPrice(ArrayList<ItemStack> items) {
+    private Double getPrice(ArrayList<ItemStack> items, boolean isBuying) {
         double total = 0.0;
         BankData data = plugin.getDataHandler().getSingle(items.get(0).getType().name());
 
-        for (ItemStack item :
-                items) {
-            total += (item.getAmount() * data.getCurrentValue());
+        for (ItemStack item : items) {
+            double m = !isBuying ? 1 - data.getProfit() : 1;
+            total += (item.getAmount() * data.getCurrentValue() * m);
         }
 
         return total;
@@ -423,10 +449,18 @@ public class CommandHandler implements CommandExecutor {
 
         BankInfo bank = plugin.getDataHandler().getBank();
 
+        EconomyResponse resp = plugin.getEconomy().depositPlayer(Bukkit.getOfflinePlayer(e.getPlayer().getUniqueId()), e.getPrice());
+
+        if (!resp.transactionSuccess()) {
+            plugin.sendTo(e.getPlayer(), ChatColor.YELLOW + "Unable to deposit amount to your account !");
+            plugin.sendTo(e.getPlayer(), ChatColor.YELLOW + "Your transaction has been cancelled !");
+            return;
+        }
+
         // update data
         data.setCurrentQuantity(data.getCurrentQuantity() + e.getQuantity());
         data.decreaseValueBy(qty * data.getPriceDrop());
-        bank.setCurrentAmount(bank.getCurrentAmount() - e.getPrice());
+        bank.withdraw(e.getPrice());
 
         // save data
         data.save();
@@ -499,10 +533,19 @@ public class CommandHandler implements CommandExecutor {
 
         BankInfo bank = plugin.getDataHandler().getBank();
 
+        EconomyResponse resp = plugin.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(e.getPlayer().getUniqueId()), e.getPrice());
+
+        if (!resp.transactionSuccess()) {
+            plugin.sendTo(e.getPlayer(), ChatColor.YELLOW + "Unable to withdraw amount from your account !");
+            plugin.sendTo(e.getPlayer(), ChatColor.YELLOW + "Your transaction has been cancelled !");
+            return;
+        }
+
+
         // update data
         data.increaseValueBy(qty * data.getPriceIncrease());
         data.setCurrentQuantity(data.getCurrentQuantity() + qty);
-        bank.setCurrentAmount(bank.getCurrentAmount() + e.getPrice());
+        bank.deposit(e.getPrice());
 
         // save data
         data.save();
