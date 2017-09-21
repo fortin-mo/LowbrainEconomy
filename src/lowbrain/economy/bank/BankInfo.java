@@ -1,7 +1,9 @@
 package lowbrain.economy.bank;
 
 import lowbrain.economy.main.LowbrainEconomy;
+import lowbrain.library.config.YamlConfig;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.yaml.snakeyaml.Yaml;
 
 public class BankInfo {
 
@@ -33,9 +35,10 @@ public class BankInfo {
      * @return true if succeed
      */
     public boolean save() {
-        FileConfiguration infoFile = LowbrainEconomy.getInstance().getConfig();
+        YamlConfig infoFile = LowbrainEconomy.getInstance().getConfig();
+        infoFile.set("current_bank_balance", this.currentBalance);
 
-        infoFile.set("current_bank_amount", this.currentBalance);
+        infoFile.save();
 
         return true;
     }
@@ -61,11 +64,11 @@ public class BankInfo {
     }
 
     public void withdraw(double amount) {
-        setCurrentBalance(this.getCurrentBalance() - +amount);
+        setCurrentBalance(this.getCurrentBalance() - (+amount));
     }
 
     public void deposit(double amount) {
-        setCurrentBalance(this.getCurrentBalance() + +amount);
+        setCurrentBalance(this.getCurrentBalance() + (+amount));
     }
 
     public void setCurrentBalance(double currentBalance) {

@@ -1,16 +1,18 @@
 package lowbrain.economy.main;
 
+import lowbrain.economy.handlers.CommandHandler;
+import lowbrain.economy.handlers.DataHandler;
+import lowbrain.economy.handlers.TaskHandler;
+import lowbrain.economy.handlers.economy.EconHandler;
 import lowbrain.library.config.YamlConfig;
-import net.milkbowl.vault.economy.Economy;
+import lowbrain.library.config.YamlLocalize;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -24,8 +26,10 @@ public class LowbrainEconomy extends JavaPlugin {
     private static LowbrainEconomy instance;
     private YamlConfig config;
     private YamlConfig bankConfig;
+    private YamlLocalize localize;
     private DataHandler dataHandler;
-    private Economy economy;
+    private EconHandler econHandler;
+    private CommandHandler commandHandler;
 
     @Override
     public void onEnable()
@@ -33,10 +37,12 @@ public class LowbrainEconomy extends JavaPlugin {
         this.getLogger().info("Loading LowbrainEconomy ...");
         instance = this;
 
-        loadConfig();
+        this.config = new YamlConfig("config.yml", this);
+        this.bankConfig = new YamlConfig("bank.yml", this);
+        this.localize = new YamlLocalize("localization.yml", this);
 
         if (!setupEconomy() ) {
-            this.getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            this.getLogger().severe(String.format("[%s] - Failed to setup any supported Economy system", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -44,7 +50,7 @@ public class LowbrainEconomy extends JavaPlugin {
         this.dataHandler = new DataHandler(this);
         dataHandler.load();
 
-        this.getCommand("lbeconn").setExecutor(new CommandHandler(this));
+        this.commandHandler = new CommandHandler(this);
 
         new TaskHandler(this).startNow( config.getInt("overtime_drop_interval", 720));
 
@@ -52,20 +58,14 @@ public class LowbrainEconomy extends JavaPlugin {
     }
 
     private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        economy = rsp.getProvider();
-        return economy != null;
+        econHandler = new EconHandler(this);
+        return econHandler.setup();
     }
 
     @Override
     public void onDisable() {
         this.getLogger().info("Unloading LowbrainEconomy ...");
+        this.getDataHandler().save();
     }
 
     @Contract(pure = true)
@@ -74,11 +74,11 @@ public class LowbrainEconomy extends JavaPlugin {
     }
 
     @Override
-    public FileConfiguration getConfig() {
+    public YamlConfig getConfig() {
         return config;
     }
 
-    public FileConfiguration getBankConfig() {
+    public YamlConfig getBankConfig() {
         return bankConfig;
     }
 
@@ -86,9 +86,8 @@ public class LowbrainEconomy extends JavaPlugin {
         return dataHandler;
     }
 
-    private void loadConfig() {
-        this.config = new YamlConfig("config.yml", this);
-        this.bankConfig = new YamlConfig("bank.yml", this);
+    public YamlLocalize getLocalize() {
+        return localize;
     }
 
     public void sendTo(Player who, String msg) {
@@ -101,7 +100,7 @@ public class LowbrainEconomy extends JavaPlugin {
         who.sendMessage(fmt);
     }
 
-    public Economy getEconomy() {
-        return economy;
+    public EconHandler getEconHandler() {
+        return econHandler;
     }
 }

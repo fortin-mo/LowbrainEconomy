@@ -29,7 +29,7 @@ public final class PlayerBuyEvent extends PlayerBeginTransactionEvent {
 
         if (data.getCurrentQuantity() - qty < data.getMinQuantity()) {
             if (log)
-                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "The bank can no longer sell this item !");
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("bank_cant_sell"));
 
             this.status = TransactionStatus.BANK_STOCK_LOW;
             return isValid();
@@ -39,15 +39,16 @@ public final class PlayerBuyEvent extends PlayerBeginTransactionEvent {
 
         if (bank.getCurrentBalance() + this.getPrice() > bank.getMaxBalance()) {
             if (log)
-                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "The bank as reach is maximum capacity of coin !");
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(),
+                        LowbrainEconomy.getInstance().getLocalize().format("bank_topped_balance", bank.getMaxBalance()));
 
             this.status = TransactionStatus.BANK_BALANCE_MAXED;
             return isValid();
         }
 
-        if (!LowbrainEconomy.getInstance().getEconomy().has(Bukkit.getOfflinePlayer(getPlayer().getUniqueId()), price)) {
+        if (!LowbrainEconomy.getInstance().getEconHandler().get().hasEnough(this.getPlayer(), price)) {
             if (log)
-                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "Insufficient funds !");
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("insufficient_funds"));
 
             this.status = TransactionStatus.PLAYER_INSUFFICIENT_FUNDS;
             return isValid();

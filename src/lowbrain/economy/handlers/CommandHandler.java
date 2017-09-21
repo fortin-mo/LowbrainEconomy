@@ -1,14 +1,16 @@
-package lowbrain.economy.main;
+package lowbrain.economy.handlers;
 
-import lowbrain.economy.Common.FN;
 import lowbrain.economy.bank.BankData;
 import lowbrain.economy.bank.BankInfo;
 import lowbrain.economy.events.*;
+import lowbrain.economy.main.LowbrainEconomy;
+import lowbrain.library.command.Command;
+import lowbrain.library.fn;
+import lowbrain.library.main.LowbrainLibrary;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,53 +22,120 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class CommandHandler implements CommandExecutor {
+public class CommandHandler extends Command {
 
     private final LowbrainEconomy plugin;
     private HashMap<UUID, PlayerBeginTransactionEvent> confirmations;
+    // commands
+    private Command onPricey;
+    private Command onCheapest;
+    private Command onConfirm;
+    private Command onCancel;
+    private Command onCheck;
+    private Command onSell;
+    private Command onBuy;
+    private Command onSave;
+
 
     /**
      * constructor
      * @param plugin
      */
     public CommandHandler(LowbrainEconomy plugin) {
+        super("econ");
         this.plugin = plugin;
         this.confirmations = new HashMap<>();
+        this.onlyPlayer(true);
+        LowbrainLibrary.getInstance().getBaseCmdHandler().register("econ", this);
+        this.subbing();
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
-        if (!cmd.getName().equalsIgnoreCase("lbeconn"))
-            return false;
+    public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+        String msg = ChatColor.WHITE + "/lb econ <cmd> <...args>";
+        msg += "\n/lb econ buy <item> <quantity> : buy item form bank";
+        msg += "\n/lb econ sell <item> <quantity> : sell item to bank";
+        msg += "\n/lb econ confirm : confirm current transaction";
+        msg += "\n/lb econ cancel : cancel current transaction";
+        msg += "\n/lb econ pricey [<limit>] : list pricey items";
+        msg += "\n/lb econ cheapest [<limit>] : list cheapest items";
+        msg += "\n/lb econ check <item> : check item current value";
+        who.sendMessage(msg);
+        return CommandStatus.VALID;
+    }
 
-        if (!(sender instanceof Player))
-            return false;
+    private void subbing() {
+        // register pricey command
+        this.register("pricey", onPricey = new Command("pricey") {
+            @Override
+            public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+                return onPricey((Player)who, args) ? CommandStatus.VALID : CommandStatus.INVALID;
+            }
+        });
+        onPricey.addPermission("lb.econ.cheapest");
 
-        if (args.length <= 0)
-            return false;
+        // register cheapest command
+        this.register("cheapest", onCheapest = new Command("cheapest") {
+            @Override
+            public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+                return onCheapest((Player)who, args) ? CommandStatus.VALID : CommandStatus.INVALID;
+            }
+        });
+        onCheapest.addPermission("lb.econ.cheapest");
 
-        Player who = (Player)sender;
+        // register confirm command
+        this.register("confirm", onConfirm = new Command("confirm") {
+            @Override
+            public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+                return onConfirm((Player)who) ? CommandStatus.VALID : CommandStatus.INVALID;
+            }
+        });
+        onConfirm.addPermission("lb.econ.confirm");
 
-        switch (args[0].toLowerCase()) {
-            case "sell":
-                return onSell(who, args);
-            case "check":
-                return onCheck(who, args);
-            case "buy":
-                return onBuy(who, args);
-            case "confirm":
-            case "yes":
-                return onConfirm(who);
-            case "cancel":
-            case "no":
-                return onCancel(who);
-            case "pricey":
-                return onPricey(who, args);
-            case "cheapest":
-                return onCheapest(who, args);
-        }
+        // register cancel command
+        this.register("cancel", onCancel = new Command("cancel") {
+            @Override
+            public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+                return onCancel((Player)who) ? CommandStatus.VALID : CommandStatus.INVALID;
+            }
+        });
+        onCancel.addPermission("lb.econ.cancel");
 
-        return false;
+        // register check command
+        this.register("check", onCheck = new Command("check") {
+            @Override
+            public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+                return onCheck((Player)who, args) ? CommandStatus.VALID : CommandStatus.INVALID;
+            }
+        });
+        onCheck.addPermission("lb.econ.check");
+
+        // register sell command
+        this.register("sell", onSell = new Command("sell") {
+            @Override
+            public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+                return onSell((Player)who, args) ? CommandStatus.VALID : CommandStatus.INVALID;
+            }
+        });
+        onSell.addPermission("lb.econ.sell");
+
+        // register buy command
+        this.register("buy", onBuy = new Command("buy") {
+            @Override
+            public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+                return onBuy((Player)who, args) ? CommandStatus.VALID : CommandStatus.INVALID;
+            }
+        });
+        onBuy.addPermission("lb.econ.buy");
+
+        this.register("save", onSave = new Command("save") {
+            @Override
+            public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+                plugin.getDataHandler().save();
+                return CommandStatus.VALID;
+            }
+        });
+        onSave.addPermission("lb.econ.save");
     }
 
     /**
@@ -76,29 +145,23 @@ public class CommandHandler implements CommandExecutor {
      * @return true if succeed
      */
     private boolean onPricey(Player who, String[] args) {
-        if (!checkPermission(who, "lbeconn.pricey"))
-            return true;
-
         int limit = 10;
 
-        if (args.length >= 2) {
-            try {
-                limit = Integer.parseInt(args[1]);
-            } catch (Exception e) {
-                limit = 10;
-            }
-        }
+        if (args.length > 0)
+            limit = fn.toInteger(args[0], 10);
 
         List<BankData> list = plugin.getDataHandler().pricey();
 
-        plugin.sendTo(who, "---- Pricey items (limit: " + limit + ") ----");
+        plugin.sendTo(who, plugin.getLocalize().format("pricey_list_header", limit));
         list.forEach(d -> {
-            plugin.sendTo(who, d.getName()
-                    + " valued at " + LowbrainEconomy.DECIMAL_FORMAT.format(d.getCurrentValue())
-                    + "$ with " + d.getCurrentQuantity()
-                    + " left in stock!");
+            plugin.sendTo(who, plugin.getLocalize().format("pricey_list_item", new Object[]{
+                    d.getName(),
+                    fn.toMoney(d.getCurrentValue()),
+                    fn.toMoney(d.getCurrentValue() * (1 - d.getProfit())),
+                    d.getCurrentQuantity(),
+            }));
         });
-        plugin.sendTo(who, "---------------------------------------------");
+        plugin.sendTo(who, plugin.getLocalize().format("pricey_list_footer"));
 
         return true;
     }
@@ -110,29 +173,23 @@ public class CommandHandler implements CommandExecutor {
      * @return true if succeed
      */
     private boolean onCheapest(Player who, String[] args) {
-        if (!checkPermission(who, "lbeconn.cheapest"))
-            return true;
-
         int limit = 10;
 
-        if (args.length >= 2) {
-            try {
-                limit = Integer.parseInt(args[1]);
-            } catch (Exception e) {
-                limit = 10;
-            }
-        }
+        if (args.length > 0)
+            limit = fn.toInteger(args[0], 10);
 
         List<BankData> list = plugin.getDataHandler().cheapest();
 
-        plugin.sendTo(who, "---- Cheapest items (limit: " + limit + ") ----");
+        plugin.sendTo(who, plugin.getLocalize().format("cheapest_list_header", limit));
         list.forEach(d -> {
-            plugin.sendTo(who, d.getName()
-                    + " valued @ " + FN.toMoney(d.getCurrentValue())
-                    + " [selling @ " + FN.toMoney(d.getCurrentValue() * (1 - d.getProfit())) + "]"
-                    + "$ with " + d.getCurrentQuantity() + " left in stock!");
+            plugin.sendTo(who, plugin.getLocalize().format("cheapest_list_item", new Object[]{
+                    d.getName(),
+                    fn.toMoney(d.getCurrentValue()),
+                    fn.toMoney(d.getCurrentValue() * (1 - d.getProfit())),
+                    d.getCurrentQuantity(),
+            }));
         });
-        plugin.sendTo(who, "---------------------------------------------");
+        plugin.sendTo(who, plugin.getLocalize().format("cheapest_list_footer"));
 
         return true;
     }
@@ -144,12 +201,12 @@ public class CommandHandler implements CommandExecutor {
      */
     private boolean onConfirm(Player who) {
         if (!confirmations.containsKey(who.getUniqueId())) {
-            plugin.sendTo(who, ChatColor.RED + "You have nothing to confirm yet !");
+            plugin.sendTo(who, plugin.getLocalize().format("nothing_to_confirm"));
             return true;
         }
 
         PlayerBeginTransactionEvent event = confirmations.get(who.getUniqueId());
-        confirmations.remove(event); // remove from confirmation
+        confirmations.remove(who.getUniqueId()); // remove from confirmation
 
         // Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -169,14 +226,14 @@ public class CommandHandler implements CommandExecutor {
      */
     private boolean onCancel(Player who) {
         if (!confirmations.containsKey(who.getUniqueId())) {
-            plugin.sendTo(who, ChatColor.RED + "You have nothing to cancel yet !");
+            plugin.sendTo(who, plugin.getLocalize().format("nothing_to_cancel"));
             return true;
         }
 
         PlayerBeginTransactionEvent event = confirmations.get(who.getUniqueId());
-        confirmations.remove(event); // remove from confirmation
+        confirmations.remove(who.getUniqueId()); // remove from confirmation
 
-        plugin.sendTo(who, "Your transaction was cancelled !");
+        plugin.sendTo(who, plugin.getLocalize().format("transaction_cancelled"));
 
         return true;
     }
@@ -189,31 +246,29 @@ public class CommandHandler implements CommandExecutor {
      * @return true if succeed
      */
     private boolean onCheck(Player who, String[] args) {
-        if (!checkPermission(who, "lbeconn.check"))
+        if (args.length < 1)
             return false;
 
-        if (args.length < 2)
-            return false; // /lbeconn check diamond
-
-        String material = args[1].toUpperCase();
+        String material = args[0].toUpperCase();
 
         if (plugin.getDataHandler().getBlacklist().containsKey(material)) {
-            plugin.sendTo(who, ChatColor.RED + "This item cannot be sold neither bought !");
+            plugin.sendTo(who, plugin.getLocalize().format("item_blacklisted", material));
             return true;
         }
 
         BankData data = plugin.getDataHandler().getSingle(material);
 
         if (data == null) {
-            plugin.sendTo(who, ChatColor.RED + "This item is not available !");
+            plugin.sendTo(who, plugin.getLocalize().format("item_not_available"));
             return true;
         }
 
-        plugin.sendTo(who,material
-                + "is currently valued at "
-                + FN.toMoney(data.getCurrentValue())
-                + "$ [selling @: "+ FN.toMoney(data.getCurrentValue() * (1 - data.getProfit())) + "] and there is "
-                + data.getCurrentQuantity() + " left in the bank");
+        plugin.sendTo(who, plugin.getLocalize().format("check_item_value", new Object[]{
+                material,
+                fn.toMoney(data.getCurrentValue()),
+                fn.toMoney(data.getCurrentValue() * (1 - data.getProfit())),
+                data.getCurrentQuantity(),
+        }));
 
         return true;
     }
@@ -226,22 +281,19 @@ public class CommandHandler implements CommandExecutor {
      * @return true if succeed
      */
     private boolean onSell(Player who, String[] args) {
-        if (!checkPermission(who, "lbeconn.sell"))
-            return false;
-
-        if (args.length < 3)
-            return false; // /lbeconn sell material amount
+        if (args.length < 2)
+            return false; // /lb econ sell material amount
 
         if (confirmations.containsKey(who.getUniqueId())) {
-            plugin.sendTo(who,ChatColor.RED + "You must first confirm or cancel your current transaction !!");
+            plugin.sendTo(who,plugin.getLocalize().format("confirm_cancel_first"));
             return true;
         }
 
-        String material = args[1].toUpperCase();
-        String qty = args[2];
+        String material = args[0].toUpperCase();
+        int qty = fn.toInteger(args[1], -1);
 
         if (plugin.getDataHandler().getBlacklist().containsKey(material)) {
-            plugin.sendTo(who,ChatColor.RED + "This item cannot be sold neither bought !");
+            plugin.sendTo(who,plugin.getLocalize().format("item_blacklisted", material));
             return true;
         }
 
@@ -255,8 +307,8 @@ public class CommandHandler implements CommandExecutor {
         if (price == null)
             return true;
 
-        if (!PlayerSellEvent.playerHasItems(who, items.get(0), Integer.parseInt(qty))) {
-            plugin.sendTo(who, "Necessary items are missing from your inventory !");
+        if (!PlayerSellEvent.playerHasItems(who, items.get(0), qty)) {
+            plugin.sendTo(who, plugin.getLocalize().format("missing_from_inventory"));
             return true;
         }
 
@@ -264,17 +316,18 @@ public class CommandHandler implements CommandExecutor {
 
         confirmations.put(who.getUniqueId(), event);
 
-        plugin.sendTo(event.getPlayer(),
-                "You can now confirm your transaction (sell) of "
-                        + event.getQuantity() + " x " + material
-                        + " for a total of " + LowbrainEconomy.DECIMAL_FORMAT.format(event.getPrice()) + "$");
+        plugin.sendTo(event.getPlayer(), plugin.getLocalize().format("confirm_sell_now", new Object[]{
+                material,
+                event.getQuantity(),
+                fn.toMoney(event.getPrice())
+        }));
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (confirmations.containsKey(who.getUniqueId())) {
                     confirmations.remove(event);
-                    plugin.sendTo(who,"You did not confirm your transaction. So it's been cancelled !");
+                    plugin.sendTo(who,plugin.getLocalize().format("did_not_confirm"));
                 }
             }
         }.runTaskLater(plugin, 20 * 20); // 20 seconds to confirm before its cancelled
@@ -290,22 +343,19 @@ public class CommandHandler implements CommandExecutor {
      * @return true if succeed
      */
     private boolean onBuy(Player who, String[] args) {
-        if (!checkPermission(who, "lbeconn.buy"))
-            return false;
-
-        if (args.length < 3)
-            return false; // /lbeconn sell material amount
+        if (args.length < 2)
+            return false; // /lb econ buy material amount
 
         if (confirmations.containsKey(who.getUniqueId())) {
-            plugin.sendTo(who,ChatColor.RED + "You must first confirm or cancel your current sell/buy !!");
+            plugin.sendTo(who, plugin.getLocalize().format("confirm_cancel_first"));
             return true;
         }
 
-        String material = args[1].toUpperCase();
-        String qty = args[2];
+        String material = args[0].toUpperCase();
+        int qty = fn.toInteger(args[1], -1);
 
         if (plugin.getDataHandler().getBlacklist().containsKey(material)) {
-            plugin.sendTo(who,ChatColor.RED + "This item cannot be sold neither bought !");
+            plugin.sendTo(who, plugin.getLocalize().format("item_blacklisted", material));
             return true;
         }
 
@@ -319,7 +369,7 @@ public class CommandHandler implements CommandExecutor {
         if (price == null)
             return true;
 
-        if (!plugin.getEconomy().has(Bukkit.getOfflinePlayer(who.getUniqueId()), price)) {
+        if (!plugin.getEconHandler().get().hasEnough(who, price)) {
             plugin.sendTo(who, "Insufficient founds");
             return true;
         }
@@ -328,18 +378,18 @@ public class CommandHandler implements CommandExecutor {
 
         confirmations.put(who.getUniqueId(), event);
 
-        plugin.sendTo(event.getPlayer(),
-                "You can now confirm your purchase of "
-                        + event.getQuantity() + " x " + material
-                        + " for a total of "
-                        + LowbrainEconomy.DECIMAL_FORMAT.format(event.getPrice()) + "$");
+        plugin.sendTo(event.getPlayer(), plugin.getLocalize().format("confirm_purchase_now", new Object[]{
+                material,
+                event.getQuantity(),
+                fn.toMoney(event.getPrice())
+        }));
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (confirmations.containsKey(who.getUniqueId())) {
-                    confirmations.remove(event);
-                    plugin.sendTo(who,"You did not confirm your purchase. So it's been cancelled !");
+                    confirmations.remove(who.getUniqueId());
+                    plugin.sendTo(who,plugin.getLocalize().format("did_not_confirm"));
                 }
             }
         }.runTaskLater(plugin, 20 * 20); // 20 seconds to confirm before its cancelled
@@ -353,33 +403,26 @@ public class CommandHandler implements CommandExecutor {
      * @param qty string quantity
      * @return item stacks
      */
-    private ArrayList<ItemStack> getItems(String mat, String qty) {
+    private ArrayList<ItemStack> getItems(String mat, int qty) {
         ArrayList<ItemStack> items = new ArrayList<>();
 
-
-        int quantity = 0;
-
-        try {
-            quantity = Integer.parseInt(qty);
-        } catch (Exception e) {
-            return items;
-        }
+        int quantity = qty;
 
         if (quantity <= 0)
             return items;
 
-        Material matariel = Material.getMaterial(mat);
+        Material materiel = Material.getMaterial(mat);
 
         if (mat == null)
             return items;
 
         while(quantity > 0) {
             int amount = quantity;
-            if (amount > matariel.getMaxStackSize()) {
-                quantity -= matariel.getMaxStackSize();
-                amount = matariel.getMaxStackSize();
-            }
-            items.add(new ItemStack(matariel, amount));
+            if (amount > materiel.getMaxStackSize())
+                amount = materiel.getMaxStackSize();
+
+            quantity -= amount;
+            items.add(new ItemStack(materiel, amount));
         }
 
         return items;
@@ -400,23 +443,6 @@ public class CommandHandler implements CommandExecutor {
         }
 
         return total;
-    }
-
-    /**
-     * check user permission
-     * @param who player
-     * @param permission permission
-     * @return access
-     */
-    private boolean checkPermission(Player who, String permission) {
-        if(who.isOp())
-            return true;
-
-        if(who.hasPermission(permission))
-            return true;
-
-        plugin.sendTo(who, ChatColor.RED + "Insufficient permission !!");
-        return false;
     }
 
     /**
@@ -442,18 +468,18 @@ public class CommandHandler implements CommandExecutor {
 
         int qty = e.getQuantity();
 
-        if (e.check(true) && !e.isBypass()) {
-            plugin.sendTo(e.getPlayer(), ChatColor.YELLOW + "Your transaction has been cancelled !");
+        if (!e.check(true) && !e.isBypass()) {
+            plugin.sendTo(e.getPlayer(), plugin.getLocalize().format("transaction_cancelled"));
             return;
         }
 
         BankInfo bank = plugin.getDataHandler().getBank();
 
-        EconomyResponse resp = plugin.getEconomy().depositPlayer(Bukkit.getOfflinePlayer(e.getPlayer().getUniqueId()), e.getPrice());
+        boolean success = plugin.getEconHandler().get().deposit(e.getPlayer(), e.getPrice());
 
-        if (!resp.transactionSuccess()) {
-            plugin.sendTo(e.getPlayer(), ChatColor.YELLOW + "Unable to deposit amount to your account !");
-            plugin.sendTo(e.getPlayer(), ChatColor.YELLOW + "Your transaction has been cancelled !");
+        if (!success) {
+            plugin.sendTo(e.getPlayer(), plugin.getLocalize().format("unable_to_deposit", e.getPrice()));
+            plugin.sendTo(e.getPlayer(), plugin.getLocalize().format("transaction_cancelled"));
             return;
         }
 
@@ -515,6 +541,7 @@ public class CommandHandler implements CommandExecutor {
         PlayerCompleteTransactionEvent completed = new PlayerCompleteSellEvent(e);
 
         Bukkit.getServer().getPluginManager().callEvent(completed);
+        plugin.sendTo(e.getPlayer(), plugin.getLocalize().format("transaction_completed"));
     }
 
     /**
@@ -526,18 +553,18 @@ public class CommandHandler implements CommandExecutor {
 
         int qty = e.getQuantity();
 
-        if (e.check(true) && !e.isBypass()) {
-            plugin.sendTo(e.getPlayer(), ChatColor.YELLOW + "Your transaction has been cancelled !");
+        if (!e.check(true) && !e.isBypass()) {
+            plugin.sendTo(e.getPlayer(), plugin.getLocalize().format("transaction_cancelled"));
             return;
         }
 
         BankInfo bank = plugin.getDataHandler().getBank();
 
-        EconomyResponse resp = plugin.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(e.getPlayer().getUniqueId()), e.getPrice());
+        boolean success = plugin.getEconHandler().get().withdraw(e.getPlayer(), e.getPrice());
 
-        if (!resp.transactionSuccess()) {
-            plugin.sendTo(e.getPlayer(), ChatColor.YELLOW + "Unable to withdraw amount from your account !");
-            plugin.sendTo(e.getPlayer(), ChatColor.YELLOW + "Your transaction has been cancelled !");
+        if (!success) {
+            plugin.sendTo(e.getPlayer(), plugin.getLocalize().format("unable_to_withdraw", e.getPrice()));
+            plugin.sendTo(e.getPlayer(), plugin.getLocalize().format("transaction_cancelled"));
             return;
         }
 
@@ -554,7 +581,9 @@ public class CommandHandler implements CommandExecutor {
         PlayerCompleteTransactionEvent completed = new PlayerCompleteBuyEvent(e);
 
         completed.getItemStacks().forEach(itemStack -> completed.getPlayer().getInventory().addItem(itemStack));
+        completed.getPlayer().updateInventory();
 
         Bukkit.getServer().getPluginManager().callEvent(completed);
+        plugin.sendTo(e.getPlayer(), plugin.getLocalize().format("transaction_completed"));
     }
 }

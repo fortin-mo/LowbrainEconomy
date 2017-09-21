@@ -30,7 +30,7 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
         if (data.getCurrentQuantity() + qty > data.getMaxQuantity()) {
             if (log)
-                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "The bank can no longer purchase this item !");
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("bank_cant_buy"));
 
             this.status = TransactionStatus.BANK_STOCK_MAXED;
             return isValid();
@@ -40,7 +40,7 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
         if (bank.getCurrentBalance() - this.getPrice() < bank.getMinBalance()) {
             if (log)
-                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "The bank as reach is minimum capacity of coin !");
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("bank_topped_balance"));
 
             this.status = TransactionStatus.BANK_BALANCE_LOW;
             return isValid();
@@ -48,7 +48,7 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
         if (!playerHasItems(this.getPlayer(), this.getItemStacks().get(0), qty)) {
             if (log)
-                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), ChatColor.YELLOW + "Necessary items are missing from your inventory !");
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("missing_from_inventory"));
 
             this.status = TransactionStatus.PLAYER_MISSING_INVENTORY;
             return isValid();

@@ -1,0 +1,44 @@
+main: lowbrain.economy.main.LowbrainEconomy
+name: LowbrainEconomy
+version: 0.0.1
+author: Lowbrain
+depend: [LowbrainLibrary]
+softdepend: [Essentials, Vault, MineWallet]
+description: Bank economy API
+permission:
+ lb.econ.save:
+  description: save files manually
+  default: op
+ lb.econ.reload:
+  description: reload plugin
+  default: op
+ lb.econ.reset:
+  description: reset prices and bank status
+  default: op
+ lb.econ.buy:
+  description: buy items from the bank
+  default: op
+ lb.econ.pricey:
+  description: get the list of the pricey items
+  default: op
+ lb.econ.cheapest:
+  description: get the list of the cheapest items
+  default: op
+ lb.econ.sell:
+  description: sell items to the bank
+  default: op
+ lb.econ.set-item:
+  description: set price , min , max , etc of an items
+  default: op
+ lb.econ.bank.balance:
+  description: check bank balance
+  default: op
+ lb.econ.bank.set-balance:
+  description: set bank balance
+  default: op
+ lb.econ.bank.deposit:
+  description: add cash to bank
+  default: op
+ lb.econ.bank.withdraw:
+  description: remove cash from bank
+  default: op

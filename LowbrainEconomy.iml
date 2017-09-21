@@ -16,10 +16,11 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="spigot-1.12.1" level="project" />
     <orderEntry type="library" name="craftconomy3-3.3.1" level="project" />
     <orderEntry type="library" name="MineWallet" level="project" />
     <orderEntry type="library" name="Vault" level="project" />
     <orderEntry type="module" module-name="LowbrainLibrary" />
+    <orderEntry type="library" name="spigot-1.12.2" level="project" />
+    <orderEntry type="library" name="EssentialsX-2.0.1" level="project" />
   </component>
 </module>

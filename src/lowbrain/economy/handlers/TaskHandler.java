@@ -1,5 +1,6 @@
-package lowbrain.economy.main;
+package lowbrain.economy.handlers;
 
+import lowbrain.economy.main.LowbrainEconomy;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -49,9 +50,10 @@ public class TaskHandler extends BukkitRunnable {
 
     /**
      * runTaskTimer right away (delay set to zero)
-     * @param interval interval
+     * @param interval interval in minutes
      */
     public void startNow(int interval) {
-        this.runTaskTimer(plugin, 0, interval);
+        int ticks = interval * 60 * 20;
+        this.runTaskTimer(plugin, ticks, ticks);
     }
 }

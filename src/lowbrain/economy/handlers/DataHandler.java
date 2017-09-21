@@ -1,7 +1,9 @@
-package lowbrain.economy.main;
+package lowbrain.economy.handlers;
 
 import lowbrain.economy.bank.BankData;
 import lowbrain.economy.bank.BankInfo;
+import lowbrain.economy.main.LowbrainEconomy;
+import lowbrain.library.config.YamlConfig;
 import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -71,8 +73,10 @@ public class DataHandler {
     }
 
     public void saveData() {
-        getData().values().forEach(bankData -> bankData.save());
-        getExternalData().values().forEach(bankData -> bankData.getBankData().save());
+        getData().values().forEach(bankData -> bankData.save(false));
+        getExternalData().values().forEach(bankData -> bankData.getBankData().save(false));
+
+        plugin.getBankConfig().save();
     }
 
     public void saveBank() {

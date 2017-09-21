@@ -1,12 +1,15 @@
 package lowbrain.economy.bank;
 
 import lowbrain.economy.main.LowbrainEconomy;
+import lowbrain.library.config.YamlConfig;
+import lowbrain.library.fn;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.Date;
 
 public class BankData {
+    public final static String DEFAULT = "DEFAULT";
 
     private static final String INITIAL_VALUE = "initial_value";
     private static final String CURRENT_VALUE = "current_value";
@@ -34,15 +37,15 @@ public class BankData {
     private int minQuantity;
     private Date lastSold;
     private Date lastBought;
-    private int overtimeDiffDrop;
-    private int overtimePriceDrop;
-    private int priceDrop;
-    private int priceIncrease;
+    private double overtimeDiffDrop;
+    private double overtimePriceDrop;
+    private double priceDrop;
+    private double priceIncrease;
     private int transactionLimit;
     private double profit;
 
     public BankData(Material material) {
-        this(material.getData().getName());
+        this(material.name());
     }
 
     public BankData(String name) {
@@ -61,7 +64,11 @@ public class BankData {
      * @return true if succeed
      */
     public boolean save() {
-        FileConfiguration bankFile = LowbrainEconomy.getInstance().getBankConfig();
+        return this.save(true);
+    }
+
+    public boolean save(boolean saveToFile) {
+        YamlConfig bankFile = LowbrainEconomy.getInstance().getBankConfig();
 
         ConfigurationSection saveTo = bankFile.getConfigurationSection(this.name);
 
@@ -70,8 +77,15 @@ public class BankData {
 
         saveTo.set("current_value", this.currentValue);
         saveTo.set("current_quantity", this.currentQuantity);
-        saveTo.set("last_bought", LowbrainEconomy.DATE_FORMAT.format(this.lastBought));
-        saveTo.set("last_sold", LowbrainEconomy.DATE_FORMAT.format(this.lastSold));
+        saveTo.set("last_bought",
+                this.lastBought == null ? "" :
+                        LowbrainEconomy.DATE_FORMAT.format(this.lastBought));
+        saveTo.set("last_sold",
+                this.lastSold == null ? "" :
+                        LowbrainEconomy.DATE_FORMAT.format(this.lastSold));
+
+        if (saveToFile)
+            bankFile.save();
 
         return true;
     }
@@ -89,7 +103,7 @@ public class BankData {
 
         Material mat = Material.getMaterial(this.name);
 
-        if (mat == null)
+        if (mat == null && this.name != DEFAULT)
             throw new Error("Material does not exists !");
 
         if (itemSec == null && defSec == null)
@@ -138,14 +152,14 @@ public class BankData {
             lastSold = null;
         }
 
-        overtimeDiffDrop = itemSec.getInt(OVERTIME_DIFF_DROP, configFile.getInt(OVERTIME_DIFF_DROP, 1440));
-        overtimePriceDrop = itemSec.getInt(OVERTIME_PRICE_DROP, configFile.getInt(OVERTIME_PRICE_DROP, 1));
+        overtimeDiffDrop = itemSec.getDouble(OVERTIME_DIFF_DROP, configFile.getDouble(OVERTIME_DIFF_DROP, 1440));
+        overtimePriceDrop = itemSec.getDouble(OVERTIME_PRICE_DROP, configFile.getDouble(OVERTIME_PRICE_DROP, 1));
 
         if (overtimePriceDrop < 0)
             overtimePriceDrop = 1; // cannot be lower than zero
 
-        priceDrop = Math.abs(itemSec.getInt(PRICE_DROP, configFile.getInt("default_" + PRICE_DROP, 1)));
-        priceIncrease = Math.abs(itemSec.getInt(PRICE_INCREASE, configFile.getInt("default_" + PRICE_INCREASE, 1)));
+        priceDrop = Math.abs(itemSec.getDouble(PRICE_DROP, configFile.getDouble("default_" + PRICE_DROP, 1)));
+        priceIncrease = Math.abs(itemSec.getDouble(PRICE_INCREASE, configFile.getDouble("default_" + PRICE_INCREASE, 1)));
 
         transactionLimit = itemSec.getInt(TRANSACTION_LIMIT, defSec.getInt(TRANSACTION_LIMIT, -1));
         if (transactionLimit < 0)
@@ -236,7 +250,7 @@ public class BankData {
         this.lastBought = lastBought;
     }
 
-    public int getOvertimeDiffDrop() {
+    public double getOvertimeDiffDrop() {
         return overtimeDiffDrop;
     }
 
@@ -244,7 +258,7 @@ public class BankData {
         this.overtimeDiffDrop = overtimeDiffDrop;
     }
 
-    public int getOvertimePriceDrop() {
+    public double getOvertimePriceDrop() {
         return overtimePriceDrop;
     }
 
@@ -270,7 +284,7 @@ public class BankData {
         this.overtimePriceDrop = overtimePriceDrop;
     }
 
-    public int getPriceDrop() {
+    public double getPriceDrop() {
         return priceDrop;
     }
 
@@ -278,7 +292,7 @@ public class BankData {
         this.priceDrop = priceDrop;
     }
 
-    public int getPriceIncrease() {
+    public double getPriceIncrease() {
         return priceIncrease;
     }
 
