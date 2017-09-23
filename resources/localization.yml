@@ -1,46 +1,47 @@
-transaction_cancelled: &EYour transaction has been cancelled !
-transaction_completed: &2Your transaction has been completed !
+transaction_cancelled: '§eYour transaction has been cancelled !'
+transaction_completed: '§2Your transaction has been completed !'
 
 # amount
-unable_to_withdraw: &EUnable to withdraw amount to your account : {0} !
+unable_to_withdraw: '§eUnable to withdraw amount to your account : {0} !'
 
 # amount
-unable_to_deposit: &EUnable to deposit amount to your account : {0} !
-confirm_cancel_first: &EYou must first confirm or cancel your current sell/buy !!
-did_not_confirm: &EYou did not confirm your transaction. So it's been cancelled !
+unable_to_deposit: '§eUnable to deposit amount to your account : {0} !'
+confirm_cancel_first: '§eYou must first confirm or cancel your current sell/buy !'
+did_not_confirm: '§eYou did not confirm your transaction. So its been cancelled !'
 
 # item, quantity, total
-confirm_sell_now: &2You can now confirm your transaction (sell) of {1} x {0} for a total of {2}$
+confirm_sell_now: '§2You can now confirm your transaction (sell) of {1} x {0} for a total of {2}$'
 
 # item, quantity, total
-confirm_purchase_now: &2You can now confirm your purchase of {1} x {0} for a total of {2}$
+confirm_purchase_now: '§2You can now confirm your purchase of {1} x {0} for a total of {2}$'
 
 # item
-item_blacklisted: &EThis item cannot be sold neither bought !
-missing_from_inventory: &ENecessary items are missing from your inventory !
-nothing_to_cancel: &EYou have nothing to cancel yet !
-nothing_to_confirm: &EYou have nothing to confirm yet !
+item_blacklisted: '§eThis item cannot be sold neither bought !'
+missing_from_inventory: '§eNecessary items are missing from your inventory !'
+nothing_to_cancel: '§eYou have nothing to cancel yet !'
+nothing_to_confirm: '§eYou have nothing to confirm yet !'
 
 # limit
-pricey_list_header: &2---- Pricey items (limit: &F{0}&2) ----
+pricey_list_header: '§2---- Pricey items (limit: §f{0}§2) ----'
 # item, value, selling at,  quantity left
-pricey_list_item: &2{0} valued @ &6{1}$ &2[selling @ &6{2}&2] with {3} left in stock!
-pricey_list_footer: &2---------------------------------------------
+pricey_list_item: '§2{0} valued @ §6{1}$ §2[§6selling @ {2}§2] with §f{3} §2left in stock!'
+pricey_list_footer: '§2---------------------------------------------'
 
 # limit
-cheapest_list_header: &2---- Cheapest items (limit: &F{0}&2) ----
+cheapest_list_header: '§2---- Cheapest items (limit: §f{0}§2) ----'
 # item, value, selling at,  quantity left
-cheapest_list_item: &2{0} valued @ &6{1}$ &2[&6selling @ {2}&2] with &F{3} &2left in stock!
-cheapest_list_footer: &2---------------------------------------------
+cheapest_list_item: '§2{0} valued @ §6{1}$ §2[§6selling @ {2}§2] with §f{3} §2left in stock!'
+cheapest_list_footer: '§2---------------------------------------------'
 
 # item
-bank_cant_sell_item: &EThe bank can no longer sell this item !
+bank_cant_sell_item: '§eThe bank can no longer sell this item !'
 # item
-bank_cant_buy_item: &EThe bank can no longer purchase this item !
+bank_cant_buy_item: '§eThe bank can no longer purchase this item !'
 # maximum balance
-bank_topped_balance: &EThe bank as reach is maximum capacity of coin !
-insuficient_funds: &EInsufficient funds !
-item_not_available: This item is not available
+bank_topped_balance: '§eThe bank as reach is maximum capacity of coin !'
+# money needed for transaction
+insuficient_funds: '§eInsufficient funds ! requires {0}$'
+item_not_available: 'This item is not available'
 
 # item, value, selling at, quantity left
-check_item_value: &2{0} valued @ &6{1}$ &2[&6selling @ {2}&2] with &F{3} &2left in stock!
+check_item_value: '§2{0} valued @ §6{1}$ §2[§6selling @ {2}§2] with §f{3} §2left in stock!'

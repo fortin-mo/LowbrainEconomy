@@ -26,6 +26,7 @@ public class LowbrainEconomy extends JavaPlugin {
     private static LowbrainEconomy instance;
     private YamlConfig config;
     private YamlConfig bankConfig;
+    private YamlConfig defaultConfig;
     private YamlLocalize localize;
     private DataHandler dataHandler;
     private EconHandler econHandler;
@@ -38,7 +39,8 @@ public class LowbrainEconomy extends JavaPlugin {
         instance = this;
 
         this.config = new YamlConfig("config.yml", this);
-        this.bankConfig = new YamlConfig("bank.yml", this);
+        this.bankConfig = new YamlConfig("bank-data.yml", this);
+        this.defaultConfig = new YamlConfig("default.yml", this);
         this.localize = new YamlLocalize("localization.yml", this);
 
         if (!setupEconomy() ) {
@@ -82,6 +84,10 @@ public class LowbrainEconomy extends JavaPlugin {
         return bankConfig;
     }
 
+    public YamlConfig getDefaultConfig() {
+        return defaultConfig;
+    }
+
     public DataHandler getDataHandler() {
         return dataHandler;
     }
@@ -94,7 +100,7 @@ public class LowbrainEconomy extends JavaPlugin {
         if (who == null || msg == null || msg.isEmpty())
             return;
 
-        String fmt = ChatColor.GOLD + "[LowbrainEconomy] " + ChatColor.GREEN;
+        String fmt = ChatColor.AQUA + "[LowbrainEconomy] " + ChatColor.GREEN;
         fmt += msg;
 
         who.sendMessage(fmt);

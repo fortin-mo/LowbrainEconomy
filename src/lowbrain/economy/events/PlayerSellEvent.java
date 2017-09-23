@@ -2,7 +2,9 @@ package lowbrain.economy.events;
 
 import lowbrain.economy.bank.BankData;
 import lowbrain.economy.bank.BankInfo;
+import lowbrain.economy.handlers.DataHandler;
 import lowbrain.economy.main.LowbrainEconomy;
+import lowbrain.library.fn;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +21,7 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
     @Override
     public boolean check(boolean log) {
-        BankData data = LowbrainEconomy.getInstance().getDataHandler().getSingle(this.getItemStacks().get(0).getType().name());
+        BankData data = LowbrainEconomy.getInstance().getDataHandler().getSingle(this.getItemStacks().get(0));
 
         if (data == null) {
             this.status = TransactionStatus.INVALID_DATA;
@@ -63,36 +65,22 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
         int pQty = 0;
 
-        ItemMeta itemMeta = itemSold.getItemMeta();
-
-        String itemName = itemMeta != null ? itemMeta.getDisplayName() : null;
-
-        if (itemName != null && itemName.trim().length() != 0)
-            itemName = ChatColor.stripColor(itemName);
+        String name = DataHandler.getNameFrom(itemSold);
 
         for (ItemStack itemStack : player.getInventory()) {
-
             if (pQty >= quantity) // no need for further process
                 break;
 
-            if (itemStack.getType() != itemSold.getType())
+            // itemStack can be null if slot is empty
+            if (itemStack == null || itemStack.getType() != itemSold.getType())
                 continue;
 
             int c = 0;
 
-            if (itemName != null) { // check custom item
-                ItemMeta iMeta = itemStack.getItemMeta();
+            String compare = DataHandler.getNameFrom(itemStack);
 
-                String iName = iMeta != null ? iMeta.getDisplayName() : null;
-
-                if (iName != null && ChatColor.stripColor(iName) == itemName)
-                    c = itemStack.getAmount();
-
-            } else {
-                c = itemStack.getAmount();
-            }
-
-            pQty += c;
+            if (name.equals(compare))
+                pQty += itemStack.getAmount();
         }
 
         return pQty >= quantity;

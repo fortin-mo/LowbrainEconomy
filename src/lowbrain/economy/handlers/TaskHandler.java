@@ -36,15 +36,6 @@ public class TaskHandler extends BukkitRunnable {
                 d.decreaseValueBy(d.getOvertimePriceDrop());
         });
 
-        // for external data
-        plugin.getDataHandler().getExternalData().values().forEach(d -> {
-            Date date = d.getBankData().getLastBought();
-            long time = date != null ? date.getTime() : Long.MIN_VALUE;
-
-            if (time < today - mili)
-                d.getBankData().decreaseValueBy(d.getBankData().getOvertimePriceDrop());
-        });
-
         plugin.getDataHandler().save();
     }
 

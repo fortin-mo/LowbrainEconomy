@@ -4,9 +4,18 @@ import lowbrain.economy.bank.BankData;
 import lowbrain.economy.bank.BankInfo;
 import lowbrain.economy.main.LowbrainEconomy;
 import lowbrain.library.config.YamlConfig;
+import lowbrain.library.fn;
+import net.milkbowl.vault.chat.Chat;
 import org.apache.commons.lang.NullArgumentException;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.TreeSpecies;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Tree;
+import org.bukkit.material.Wood;
+import org.bukkit.material.WoodenStep;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 
@@ -14,7 +23,6 @@ public class DataHandler {
     private LowbrainEconomy plugin;
 
     private HashMap<String, BankData> data = new HashMap<>();
-    private HashMap<String, ExternalData> externalData = new HashMap<>();
     private HashMap<String, String> blacklist = new HashMap<>();
 
     private BankInfo bank;
@@ -24,11 +32,11 @@ public class DataHandler {
     }
 
     public void load() {
-        plugin.getLogger().info("[LowbrainEconomy] loading data infos");
+        plugin.getLogger().info("loading data info's");
         this.loadBlacklist();
         this.loadBank();
         this.loadData();
-        plugin.getLogger().info("[LowbrainEconomy] loading complete");
+        plugin.getLogger().info("loading complete");
     }
 
     public void save() {
@@ -74,8 +82,6 @@ public class DataHandler {
 
     public void saveData() {
         getData().values().forEach(bankData -> bankData.save(false));
-        getExternalData().values().forEach(bankData -> bankData.getBankData().save(false));
-
         plugin.getBankConfig().save();
     }
 
@@ -103,6 +109,35 @@ public class DataHandler {
 
             data.put(mat.name(), new BankData(mat));
         }
+
+        for (TreeSpecies ts : TreeSpecies.values()) {
+            if (ts.equals(TreeSpecies.GENERIC))
+                continue;
+
+
+            String plankName = ts.name() + "_" + Material.WOOD.name();
+            String logName = ts.name() + "_" + Material.LOG.name();
+            String stepName = ts.name() + "_" + Material.WOOD_STEP.name();
+
+            Wood plank = new Wood(Material.WOOD, ts);
+            Tree log = new Tree(Material.LOG, ts);
+            WoodenStep step = new WoodenStep(ts);
+
+            ItemStack iPlank = new ItemStack(Material.WOOD, 1);
+            iPlank.setData(plank);
+            // iPlank.getItemMeta().setDisplayName(plankName);
+
+            ItemStack iLog = new ItemStack(Material.LOG, 1);
+            iLog.setData(log);
+
+            ItemStack iStep = new ItemStack(Material.WOOD_STEP, 1);
+            iStep.setData(step);
+            // iLog.getItemMeta().setDisplayName(logName);
+
+            this.add(plankName, iPlank);
+            this.add(logName, iLog);
+            this.add(stepName, iStep);
+        }
     }
 
     public void loadBank() {
@@ -121,64 +156,67 @@ public class DataHandler {
         return data;
     }
 
-    public BankData getSingle(String n) {
-        ExternalData x = getExternalData().get(n);
-        BankData d = null;
+    public BankData getSingle(ItemStack i) {
+        if (i == null)
+            return null;
 
-        if (x == null)
-            d = getData().get(n);
-        else
-            d = x.getBankData();
+        String name = i.hasItemMeta() && !fn.StringIsNullOrEmpty(i.getItemMeta().getDisplayName())
+                ? i.getItemMeta().getDisplayName()
+                : i.getType().name();
 
-        return d;
+        return getData().get(name);
     }
 
-    public HashMap<String, BankData> getAll() {
-        HashMap<String, BankData> all = new HashMap<>();
-
-        getData().values().forEach(d -> all.put(d.getName(), d));
-        getExternalData().values().forEach(d -> all.put(d.getName(), d.getBankData()));
-
-        return all;
+    public BankData getSingle(String n) {
+        n = ChatColor.stripColor(n);
+        return getData().get(n);
     }
 
     public List<BankData> getAllAsList() {
-        return new ArrayList<BankData>(getAll().values());
+        return new ArrayList<BankData>(getData().values());
     }
 
-    public HashMap<String, ExternalData> getExternalData() {
-        return externalData;
+    public void add(String name, ItemStack itemStack) {
+        if (fn.StringIsNullOrEmpty(name))
+            throw new NullArgumentException("name");
+        if (itemStack == null)
+            throw new NullArgumentException("itemStack");
+
+        name = ChatColor.stripColor(name.toUpperCase());
+
+        getData().put(name, new BankData(name, itemStack));
     }
 
-    public void addExternal(String name, ItemStack i) {
-        if (name == null || name.isEmpty() || i == null)
-            throw new NullArgumentException("Name and ItemStack must not be null !");
+    @Contract(value = "null -> null", pure = true)
+    public static String getNameFrom(ItemStack itemStack) {
+        if (itemStack == null || itemStack.getType() == Material.AIR)
+            return null;
 
-        getExternalData().put(name, new ExternalData(name, i));
-    }
+        String item = "";
 
-    public class ExternalData {
-        private BankData bankData;
-        private String name;
-        private ItemStack itemStack;
-
-        public ExternalData(String name, ItemStack i) {
-            this.bankData = new BankData(name);
-            this.itemStack = i;
-            this.itemStack.setAmount(1);
-            this.name = name;
+        // try to use custom item name
+        if (itemStack.hasItemMeta() && !fn.StringIsNullOrEmpty(itemStack.getItemMeta().getDisplayName())) {
+            item = itemStack.getItemMeta().getDisplayName();
+        } else if (itemStack.getType() == Material.WOOD_STEP && itemStack.getData() instanceof WoodenStep) {
+            String suffix = ((Wood)itemStack.getData()).getItemType().name();
+            String prefix = ((WoodenStep) itemStack.getData()).getSpecies() == TreeSpecies.GENERIC ? "" : ((Wood) itemStack.getData()).getSpecies().name();
+            item = prefix + suffix;
+        } else if (itemStack.getType() == Material.WOOD_DOUBLE_STEP && itemStack.getData() instanceof WoodenStep) {
+            String suffix = ((Wood)itemStack.getData()).getItemType().name();
+            String prefix = ((WoodenStep) itemStack.getData()).getSpecies() == TreeSpecies.GENERIC ? "" : ((Wood) itemStack.getData()).getSpecies().name();
+            item = prefix + suffix;
+        } else if (itemStack.getType() == Material.LOG && itemStack.getData() instanceof Tree) {
+            String suffix = ((Wood)itemStack.getData()).getItemType().name();
+            String prefix = ((Tree) itemStack.getData()).getSpecies() == TreeSpecies.GENERIC ? "" : ((Wood) itemStack.getData()).getSpecies().name();
+            item = prefix + suffix;
+        } else if (itemStack.getType() == Material.WOOD && itemStack.getData() instanceof Wood){
+            String suffix = ((Wood)itemStack.getData()).getItemType().name();
+            String prefix = ((Wood)itemStack.getData()).getSpecies() == TreeSpecies.GENERIC ? "" : (((Wood) itemStack.getData()).getSpecies().name()) + "_";
+            item = prefix + suffix;
+        } else { // regular item
+            item = itemStack.getType().name();
         }
 
-        public BankData getBankData() {
-            return bankData;
-        }
-
-        public ItemStack getItemStack() {
-            return itemStack;
-        }
-
-        public String getName() {
-            return name;
-        }
+        return ChatColor.stripColor(item.toUpperCase());
     }
 }

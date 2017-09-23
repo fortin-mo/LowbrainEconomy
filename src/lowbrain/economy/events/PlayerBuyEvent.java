@@ -18,7 +18,7 @@ public final class PlayerBuyEvent extends PlayerBeginTransactionEvent {
 
     @Override
     public boolean check(boolean log) {
-        BankData data = LowbrainEconomy.getInstance().getDataHandler().getSingle(this.getItemStacks().get(0).getType().name());
+        BankData data = LowbrainEconomy.getInstance().getDataHandler().getSingle(this.getItemStacks().get(0));
 
         if (data == null) {
             this.status = TransactionStatus.INVALID_DATA;

@@ -7,14 +7,18 @@ import lowbrain.economy.main.LowbrainEconomy;
 import lowbrain.library.command.Command;
 import lowbrain.library.fn;
 import lowbrain.library.main.LowbrainLibrary;
+import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.TreeSpecies;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Tree;
+import org.bukkit.material.Wood;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -249,14 +253,14 @@ public class CommandHandler extends Command {
         if (args.length < 1)
             return false;
 
-        String material = args[0].toUpperCase();
+        String item = args[0].toUpperCase();
 
-        if (plugin.getDataHandler().getBlacklist().containsKey(material)) {
-            plugin.sendTo(who, plugin.getLocalize().format("item_blacklisted", material));
+        if (plugin.getDataHandler().getBlacklist().containsKey(item)) {
+            plugin.sendTo(who, plugin.getLocalize().format("item_blacklisted", item));
             return true;
         }
 
-        BankData data = plugin.getDataHandler().getSingle(material);
+        BankData data = plugin.getDataHandler().getSingle(item);
 
         if (data == null) {
             plugin.sendTo(who, plugin.getLocalize().format("item_not_available"));
@@ -264,7 +268,7 @@ public class CommandHandler extends Command {
         }
 
         plugin.sendTo(who, plugin.getLocalize().format("check_item_value", new Object[]{
-                material,
+                item,
                 fn.toMoney(data.getCurrentValue()),
                 fn.toMoney(data.getCurrentValue() * (1 - data.getProfit())),
                 data.getCurrentQuantity(),
@@ -281,25 +285,42 @@ public class CommandHandler extends Command {
      * @return true if succeed
      */
     private boolean onSell(Player who, String[] args) {
-        if (args.length < 2)
-            return false; // /lb econ sell material amount
+        int qty = -1;
+        String item = null;
+
+        switch (args.length) {
+            case 0: // sell all item in hand
+            case 1: // sell <qty> item in hand
+                ItemStack inHand = who.getInventory().getItemInMainHand();
+                if (inHand == null || inHand.getType() == Material.AIR)
+                    return true;
+
+                item = DataHandler.getNameFrom(inHand);
+
+                qty = item != null ? args.length == 0 ? inHand.getAmount() : fn.toInteger(args[0], -1) : -1;
+                break;
+            case 2: // sell specific item : lb econ sell item qty
+                item = args[0].toUpperCase();
+                qty = fn.toInteger(args[1], -1);
+                break;
+        }
+
+        if (fn.StringIsNullOrEmpty(item) || qty < 1)
+            return false;
 
         if (confirmations.containsKey(who.getUniqueId())) {
             plugin.sendTo(who,plugin.getLocalize().format("confirm_cancel_first"));
             return true;
         }
 
-        String material = args[0].toUpperCase();
-        int qty = fn.toInteger(args[1], -1);
-
-        if (plugin.getDataHandler().getBlacklist().containsKey(material)) {
-            plugin.sendTo(who,plugin.getLocalize().format("item_blacklisted", material));
+        if (plugin.getDataHandler().getBlacklist().containsKey(item)) {
+            plugin.sendTo(who,plugin.getLocalize().format("item_blacklisted", item));
             return true;
         }
 
-        ArrayList<ItemStack> items = getItems(material, qty);
+        ArrayList<ItemStack> items = getItems(item, qty);
 
-        if (items.isEmpty())
+        if (items == null || items.isEmpty())
             return true;
 
         Double price = getPrice(items, false);
@@ -314,23 +335,30 @@ public class CommandHandler extends Command {
 
         PlayerSellEvent event = new PlayerSellEvent(who, items, price);
 
-        confirmations.put(who.getUniqueId(), event);
+        double timeToConfirm = plugin.getConfig().getDouble("time_to_confirm", -1);
+        if (timeToConfirm > 0) {
+            confirmations.put(who.getUniqueId(), event);
 
-        plugin.sendTo(event.getPlayer(), plugin.getLocalize().format("confirm_sell_now", new Object[]{
-                material,
-                event.getQuantity(),
-                fn.toMoney(event.getPrice())
-        }));
+            plugin.sendTo(event.getPlayer(), plugin.getLocalize().format("confirm_sell_now", new Object[]{
+                    item,
+                    event.getQuantity(),
+                    fn.toMoney(event.getPrice())
+            }));
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (confirmations.containsKey(who.getUniqueId())) {
-                    confirmations.remove(event);
-                    plugin.sendTo(who,plugin.getLocalize().format("did_not_confirm"));
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (confirmations.containsKey(who.getUniqueId())) {
+                        confirmations.remove(who.getUniqueId());
+                        plugin.sendTo(who,plugin.getLocalize().format("did_not_confirm"));
+                    }
                 }
-            }
-        }.runTaskLater(plugin, 20 * 20); // 20 seconds to confirm before its cancelled
+            }.runTaskLater(plugin, 20 * 20); // 20 seconds to confirm before its cancelled
+
+        } else {
+            // Bukkit.getServer().getPluginManager().callEvent(event);
+            completeTransaction(event);
+        }
 
         return true;
     }
@@ -351,17 +379,17 @@ public class CommandHandler extends Command {
             return true;
         }
 
-        String material = args[0].toUpperCase();
+        String item = args[0].toUpperCase();
         int qty = fn.toInteger(args[1], -1);
 
-        if (plugin.getDataHandler().getBlacklist().containsKey(material)) {
-            plugin.sendTo(who, plugin.getLocalize().format("item_blacklisted", material));
+        if (plugin.getDataHandler().getBlacklist().containsKey(item)) {
+            plugin.sendTo(who, plugin.getLocalize().format("item_blacklisted", item));
             return true;
         }
 
-        ArrayList<ItemStack> items = getItems(material, qty);
+        ArrayList<ItemStack> items = getItems(item, qty);
 
-        if (items.isEmpty())
+        if (items == null || items.isEmpty())
             return true;
 
         Double price = getPrice(items, true);
@@ -370,59 +398,69 @@ public class CommandHandler extends Command {
             return true;
 
         if (!plugin.getEconHandler().get().hasEnough(who, price)) {
-            plugin.sendTo(who, "Insufficient founds");
+            plugin.sendTo(who, plugin.getLocalize().format("insufficient_funds", price));
             return true;
         }
 
         PlayerBuyEvent event = new PlayerBuyEvent(who, items, price);
 
-        confirmations.put(who.getUniqueId(), event);
+        double timeToConfirm = plugin.getConfig().getDouble("time_to_confirm", -1);
+        if (timeToConfirm > 0) {
+            confirmations.put(who.getUniqueId(), event);
 
-        plugin.sendTo(event.getPlayer(), plugin.getLocalize().format("confirm_purchase_now", new Object[]{
-                material,
-                event.getQuantity(),
-                fn.toMoney(event.getPrice())
-        }));
+            plugin.sendTo(event.getPlayer(), plugin.getLocalize().format("confirm_purchase_now", new Object[]{
+                    item,
+                    event.getQuantity(),
+                    fn.toMoney(event.getPrice())
+            }));
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (confirmations.containsKey(who.getUniqueId())) {
-                    confirmations.remove(who.getUniqueId());
-                    plugin.sendTo(who,plugin.getLocalize().format("did_not_confirm"));
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (confirmations.containsKey(who.getUniqueId())) {
+                        confirmations.remove(who.getUniqueId());
+                        plugin.sendTo(who,plugin.getLocalize().format("did_not_confirm"));
+                    }
                 }
-            }
-        }.runTaskLater(plugin, 20 * 20); // 20 seconds to confirm before its cancelled
+            }.runTaskLater(plugin, (long)timeToConfirm * 20); // 20 seconds to confirm before its cancelled
+        } else {
+            // Bukkit.getServer().getPluginManager().callEvent(event);
+            completeTransaction(event);
+        }
 
         return true;
     }
 
     /**
      * generate list of item stack based on material and quantity
-     * @param mat string material name
+     * @param name string material name
      * @param qty string quantity
      * @return item stacks
      */
-    private ArrayList<ItemStack> getItems(String mat, int qty) {
+    private ArrayList<ItemStack> getItems(String name, int qty) {
         ArrayList<ItemStack> items = new ArrayList<>();
 
         int quantity = qty;
 
-        if (quantity <= 0)
+        if (quantity <= 0 || fn.StringIsNullOrEmpty(name))
             return items;
 
-        Material materiel = Material.getMaterial(mat);
+        BankData data = plugin.getDataHandler().getSingle(name);
 
-        if (mat == null)
+        if (data == null)
             return items;
 
         while(quantity > 0) {
             int amount = quantity;
-            if (amount > materiel.getMaxStackSize())
-                amount = materiel.getMaxStackSize();
+            if (amount > data.getItemStack().getMaxStackSize())
+                amount = data.getItemStack().getMaxStackSize();
 
             quantity -= amount;
-            items.add(new ItemStack(materiel, amount));
+
+            ItemStack i = new ItemStack(data.getItemStack());
+            i.setAmount(amount);
+
+            items.add(i);
         }
 
         return items;
@@ -435,7 +473,7 @@ public class CommandHandler extends Command {
      */
     private Double getPrice(ArrayList<ItemStack> items, boolean isBuying) {
         double total = 0.0;
-        BankData data = plugin.getDataHandler().getSingle(items.get(0).getType().name());
+        BankData data = plugin.getDataHandler().getSingle(items.get(0));
 
         for (ItemStack item : items) {
             double m = !isBuying ? 1 - data.getProfit() : 1;
@@ -464,7 +502,7 @@ public class CommandHandler extends Command {
      * @param e PlayerSellEvent
      */
     private void completeSell(PlayerSellEvent e) {
-        BankData data = plugin.getDataHandler().getSingle(e.getItemStacks().get(0).getType().name());
+        BankData data = plugin.getDataHandler().getSingle(e.getItemStacks().get(0));
 
         int qty = e.getQuantity();
 
@@ -495,48 +533,37 @@ public class CommandHandler extends Command {
         int removed = 0;
         ItemStack itemSold = e.getItemStacks().get(0);
 
-        ItemMeta itemMeta = itemSold.getItemMeta();
-
-        String itemName = itemMeta != null ? itemMeta.getDisplayName() : null;
-
-        if (itemName != null && itemName.trim().length() != 0)
-            itemName = ChatColor.stripColor(itemName);
+        String name = DataHandler.getNameFrom(itemSold);
 
         // remove item from player's inventory
-        for (ItemStack itemStack : e.getPlayer().getInventory()) {
+        for (int i = 0; i < e.getPlayer().getInventory().getSize(); i++) {
+            ItemStack itemStack = e.getPlayer().getInventory().getItem(i);
 
             if (removed >= qty) // no need for further process
                 break;
 
-            if (itemStack.getType() != itemSold.getType())
+            // itemStack can be null if slot is empty
+            if (itemStack == null || itemStack.getType() != itemSold.getType())
                 continue;
 
             int c = 0;
 
-            if (itemName != null) { // check custom item
-                ItemMeta iMeta = itemStack.getItemMeta();
+            String compare = DataHandler.getNameFrom(itemStack);
 
-                String iName = iMeta != null ? iMeta.getDisplayName() : null;
-
-                if (iName != null && ChatColor.stripColor(iName) == itemName)
-                    c = itemStack.getAmount();
-
-            } else {
-                c = itemStack.getAmount();
-            }
-
-            if (c <= 0)
+            if (!name.equals(compare))
                 continue;
+
+            c = itemStack.getAmount();
 
             if (c > qty) {
                 c = qty;
                 itemStack.setAmount(itemStack.getAmount() - c);
             } else {
-                e.getPlayer().getInventory().remove(itemStack);
+                e.getPlayer().getInventory().setItem(i, null);
             }
-
             removed += c;
         }
+        e.getPlayer().updateInventory();
 
         PlayerCompleteTransactionEvent completed = new PlayerCompleteSellEvent(e);
 
@@ -549,7 +576,7 @@ public class CommandHandler extends Command {
      * @param e PlayerBuyEvent
      */
     private void completeBuy(PlayerBuyEvent e) {
-        BankData data = plugin.getDataHandler().getSingle(e.getItemStacks().get(0).getType().name());
+        BankData data = plugin.getDataHandler().getSingle(e.getItemStacks().get(0));
 
         int qty = e.getQuantity();
 
@@ -567,7 +594,6 @@ public class CommandHandler extends Command {
             plugin.sendTo(e.getPlayer(), plugin.getLocalize().format("transaction_cancelled"));
             return;
         }
-
 
         // update data
         data.increaseValueBy(qty * data.getPriceIncrease());

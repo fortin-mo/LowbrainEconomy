@@ -1,11 +1,17 @@
 package lowbrain.economy.bank;
 
+import lowbrain.economy.handlers.DataHandler;
 import lowbrain.economy.main.LowbrainEconomy;
 import lowbrain.library.config.YamlConfig;
 import lowbrain.library.fn;
+import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
+
 import java.util.Date;
 
 public class BankData {
@@ -43,20 +49,31 @@ public class BankData {
     private double priceIncrease;
     private int transactionLimit;
     private double profit;
+    private ItemStack itemStack;
+
+    private BankData() {}
+
+    public BankData(String name, ItemStack itemStack) {
+        if (fn.StringIsNullOrEmpty(name))
+            throw new NullArgumentException("name");
+        if (itemStack == null)
+            throw new NullArgumentException("itemStack");
+
+        this.name = name.toUpperCase();
+        this.itemStack = itemStack;
+        this.load();
+    }
 
     public BankData(Material material) {
-        this(material.name());
+        this(material == null ? null : material.name(), material == null ? null : new ItemStack(material, 1));
     }
 
-    public BankData(String name) {
-        this.name = name.toUpperCase();
-        load(false);
-    }
-
+    /*
     public BankData(String name, boolean minLoad) {
         this.name = name.toUpperCase();
         load(minLoad);
     }
+    */
 
     /**
      * save data to file
@@ -68,6 +85,9 @@ public class BankData {
     }
 
     public boolean save(boolean saveToFile) {
+        if (this.name == DEFAULT)
+            return true; // do not save DEFAULT to bank-data.yml
+
         YamlConfig bankFile = LowbrainEconomy.getInstance().getBankConfig();
 
         ConfigurationSection saveTo = bankFile.getConfigurationSection(this.name);
@@ -90,24 +110,16 @@ public class BankData {
         return true;
     }
 
-    /**
-     * load data from file
-     * @param minLoad load only minimum data (min, max, current, init)
-     */
-    private void load(boolean minLoad) {
-        FileConfiguration bankFile = LowbrainEconomy.getInstance().getBankConfig();
-        FileConfiguration configFile = LowbrainEconomy.getInstance().getConfig();
+    private void load() {
+        YamlConfig bankFile = LowbrainEconomy.getInstance().getBankConfig();
+        YamlConfig defaultFile = LowbrainEconomy.getInstance().getDefaultConfig();
+        YamlConfig configFile = LowbrainEconomy.getInstance().getConfig();
 
         ConfigurationSection itemSec = bankFile.getConfigurationSection(this.name);
-        ConfigurationSection defSec = bankFile.getConfigurationSection("DEFAULT");
-
-        Material mat = Material.getMaterial(this.name);
-
-        if (mat == null && this.name != DEFAULT)
-            throw new Error("Material does not exists !");
+        ConfigurationSection defSec = defaultFile.getConfigurationSection("DEFAULT");
 
         if (itemSec == null && defSec == null)
-                throw new Error("Item wasn't found in the bank file and no DEFAULT is set !!");
+            throw new Error("Item wasn't found in the bank file and no DEFAULT is set !!");
 
         if (itemSec == null)
             itemSec = defSec; // use default
@@ -125,9 +137,6 @@ public class BankData {
             maxValue = Double.MAX_VALUE; // set to infinite.. kind of
 
         profit = itemSec.getDouble(PROFIT, defSec.getDouble(PROFIT, configFile.getDouble(PROFIT, 0.10)));
-
-        if (minLoad)
-            return;
 
         currentQuantity = itemSec.getInt(CURRENT_QUANTITY, defSec.getInt(CURRENT_QUANTITY, 500));
         maxQuantity = itemSec.getInt(MAX_QUANTITY, defSec.getInt(MAX_QUANTITY, 100000));
@@ -302,5 +311,9 @@ public class BankData {
 
     public double getProfit() {
         return profit;
+    }
+
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 }

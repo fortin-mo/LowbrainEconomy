@@ -1,23 +1,23 @@
 # name used when creating Bank account in Craftconomy3
-name: LobrainBank
+name: LowbrainBank
 
 # profit determines the value at which the bank will buy an item.
 # for example, if the value of diamond is at  500$, the bank will only pay players 450$ for it
 # but players will pay full price.
-# this can be set for any specifics items in bank.yml
+# this can be set for any specifics items in bank-data.yml
 # set to 0 to disable.
 # default value = 0.10 = 10%
 profit: 0.10
 
 # time (seconds) to confirm and purchase or a sale
-# using command => /lbeconn confirm or cancel
-# settings this value to zero or bellow will use the default value (20)
+# using command => /lb econ confirm or cancel
+# settings this value to zero or bellow will disable confirmation delay
 # default value = 20
 time_to_confirm: 20
 
 # after the plugin is initialize for the first time, this value will be set automaticallly to false
 # if you want to reset, set this value to true and restart the server / plugin
-# you can also use the command => /lbeconn reset
+# you can also use the command => /lb econ reset
 startup_reset: true
 
 # the initial amount of currency in the bank at first initialisation
@@ -43,25 +43,25 @@ min_bank_balance: 0
 max_bank_balance: -1
 
 # the price of an item is dropped every time a players sells one
-# this value is used if it is not overriding in the bank.yml file for a specific item
+# this value is used if it is not overriding in the bank-data.yml file for a specific item
 # default value = 1
 default_price_drop: 0.01
 
 # the price of an item is increase every time a players buys one
-# this value is used if it is not overriding in the bank.yml file for a specific item
+# this value is used if it is not overriding in the bank-data.yml file for a specific item
 # default value = 1
 default_price_increase: 0.01
 
 # this is the minimum time difference between the current time and the last time an item was bought before
 # its start losing value
 # for example, if an item hasn't been bought for a long time, its value will start decreasing
-# this value can be overridden in the bank.yml file for a specific item
+# this value can be overridden in the bank-data.yml file for a specific item
 # this value is in minutes
 # default value = 1440 (24 hours)
 overtime_diff_drop: 1440
 
 # this is the amount by which the value of an item is decrease  overtime
-# this value can be overridden in the bank.yml file for a specific item
+# this value can be overridden in the bank-data.yml file for a specific item
 # default value = 0.01
 overtime_price_drop: 0.01
 
