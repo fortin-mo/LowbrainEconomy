@@ -45,3 +45,14 @@ item_not_available: 'This item is not available'
 
 # item, value, selling at, quantity left
 check_item_value: '§2{0} valued @ §6{1}$ §2[§6selling @ {2}§2] with §f{3} §2left in stock!'
+not_saleable: '§eThis item cannot be sold'
+
+insufficient_permission: '§eInsufficient permission'
+bank_balance_set_to: '§§eBank balance was set to {0}'
+invalid_deposit_amount: '§eInvalid deposit !'
+deposit_exceeds_max_balance: '§eDeposit exceeds maximum balance of {0}'
+deposit_complete: '§2Deposit of {0} completed'
+invalid_withdraw_amount: '§eInvalid withdraw !'
+withdraw_exceeds_min_balance: '§eWithdraw exceeds minimum balance of {0}'
+withdraw_complete: '§2Withdraw of {0} completed'
+bank_current_balance: '§2Bank balance is currently @ {0}'

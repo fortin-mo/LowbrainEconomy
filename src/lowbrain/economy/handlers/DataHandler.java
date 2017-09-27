@@ -8,16 +8,16 @@ import lowbrain.library.fn;
 import net.milkbowl.vault.chat.Chat;
 import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Tree;
-import org.bukkit.material.Wood;
-import org.bukkit.material.WoodenStep;
+import org.bukkit.material.*;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
+import java.util.Comparator;
 
 public class DataHandler {
     private LowbrainEconomy plugin;
@@ -104,40 +104,35 @@ public class DataHandler {
         data = new HashMap<>();
 
         for (Material mat : Material.values() ) {
+
+            // check for additional sub types
+            if (MATERIAL_TYPES.containsKey(mat.getId())) {
+                Object value = MATERIAL_TYPES.get(mat.getId());
+
+                if (value instanceof Integer)
+                    for (int i = 1; i <= (int)value; i++)
+                        addType(mat, mat.name() + ":" + i, (byte)i);
+                else  if (value instanceof int[])
+                    for (int _id : (int[])value)
+                        addType(mat, mat.name() + ":" + _id, (byte)_id);
+            }
+
             if (blacklist.containsKey(mat.name()))
                 continue;
 
             data.put(mat.name(), new BankData(mat));
         }
+    }
+    private void addType(Material mat, String name, byte type) {
+        if (blacklist.containsKey(name))
+            return;
 
-        for (TreeSpecies ts : TreeSpecies.values()) {
-            if (ts.equals(TreeSpecies.GENERIC))
-                continue;
-
-
-            String plankName = ts.name() + "_" + Material.WOOD.name();
-            String logName = ts.name() + "_" + Material.LOG.name();
-            String stepName = ts.name() + "_" + Material.WOOD_STEP.name();
-
-            Wood plank = new Wood(Material.WOOD, ts);
-            Tree log = new Tree(Material.LOG, ts);
-            WoodenStep step = new WoodenStep(ts);
-
-            ItemStack iPlank = new ItemStack(Material.WOOD, 1);
-            iPlank.setData(plank);
-            // iPlank.getItemMeta().setDisplayName(plankName);
-
-            ItemStack iLog = new ItemStack(Material.LOG, 1);
-            iLog.setData(log);
-
-            ItemStack iStep = new ItemStack(Material.WOOD_STEP, 1);
-            iStep.setData(step);
-            // iLog.getItemMeta().setDisplayName(logName);
-
-            this.add(plankName, iPlank);
-            this.add(logName, iLog);
-            this.add(stepName, iStep);
-        }
+        ItemStack i = new ItemStack(mat, 1, type);
+        MaterialData d = i.getData();
+        d.setData(type);
+        i.setData(d);
+        i.setDurability(type);
+        data.put(name, new BankData(name, i));
     }
 
     public void loadBank() {
@@ -156,7 +151,7 @@ public class DataHandler {
         return data;
     }
 
-    public BankData getSingle(ItemStack i) {
+    /*public BankData getSingle(ItemStack i) {
         if (i == null)
             return null;
 
@@ -165,7 +160,7 @@ public class DataHandler {
                 : i.getType().name();
 
         return getData().get(name);
-    }
+    }*/
 
     public BankData getSingle(String n) {
         n = ChatColor.stripColor(n);
@@ -187,6 +182,7 @@ public class DataHandler {
         getData().put(name, new BankData(name, itemStack));
     }
 
+
     @Contract(value = "null -> null", pure = true)
     public static String getNameFrom(ItemStack itemStack) {
         if (itemStack == null || itemStack.getType() == Material.AIR)
@@ -197,26 +193,97 @@ public class DataHandler {
         // try to use custom item name
         if (itemStack.hasItemMeta() && !fn.StringIsNullOrEmpty(itemStack.getItemMeta().getDisplayName())) {
             item = itemStack.getItemMeta().getDisplayName();
-        } else if (itemStack.getType() == Material.WOOD_STEP && itemStack.getData() instanceof WoodenStep) {
+        }
+
+        else if (itemStack.getType() == Material.WOOD_STEP && itemStack.getData() instanceof WoodenStep) {
             String suffix = ((Wood)itemStack.getData()).getItemType().name();
             String prefix = ((WoodenStep) itemStack.getData()).getSpecies() == TreeSpecies.GENERIC ? "" : ((Wood) itemStack.getData()).getSpecies().name();
             item = prefix + suffix;
-        } else if (itemStack.getType() == Material.WOOD_DOUBLE_STEP && itemStack.getData() instanceof WoodenStep) {
+        }
+
+        else if (itemStack.getType() == Material.WOOD_DOUBLE_STEP && itemStack.getData() instanceof WoodenStep) {
             String suffix = ((Wood)itemStack.getData()).getItemType().name();
             String prefix = ((WoodenStep) itemStack.getData()).getSpecies() == TreeSpecies.GENERIC ? "" : ((Wood) itemStack.getData()).getSpecies().name();
             item = prefix + suffix;
-        } else if (itemStack.getType() == Material.LOG && itemStack.getData() instanceof Tree) {
+        }
+
+        else if (itemStack.getType() == Material.LOG && itemStack.getData() instanceof Tree) {
             String suffix = ((Wood)itemStack.getData()).getItemType().name();
             String prefix = ((Tree) itemStack.getData()).getSpecies() == TreeSpecies.GENERIC ? "" : ((Wood) itemStack.getData()).getSpecies().name();
             item = prefix + suffix;
-        } else if (itemStack.getType() == Material.WOOD && itemStack.getData() instanceof Wood){
+        }
+
+        else if (itemStack.getType() == Material.WOOD && itemStack.getData() instanceof Wood){
             String suffix = ((Wood)itemStack.getData()).getItemType().name();
             String prefix = ((Wood)itemStack.getData()).getSpecies() == TreeSpecies.GENERIC ? "" : (((Wood) itemStack.getData()).getSpecies().name()) + "_";
             item = prefix + suffix;
-        } else { // regular item
+        }
+
+        else { // regular item
             item = itemStack.getType().name();
         }
 
         return ChatColor.stripColor(item.toUpperCase());
     }
+
+    public BankData getSingle(ItemStack i) {
+        if (i == null)
+            return null;
+
+        Material mat = i.getType();
+        int id = mat.getId();
+        String name = mat.name();
+
+        if (hasTypes(mat) && i.getData().getData() > 0)
+            name += ":" + i.getData().getData();
+
+        BankData d = getData().get(name);
+
+        return d;
+    }
+
+    public static boolean hasTypes(Material mat) {
+        return DataHandler.MATERIAL_TYPES.containsKey(mat.getId());
+    }
+
+    public final static HashMap<Integer, Object> MATERIAL_TYPES = new HashMap<Integer, Object>() {{
+        put(1,6);
+        put(3,2);
+        put(5,5);
+        put(6,5);
+        put(12,1);
+        put(17,3);
+        put(18,3);
+        put(19,1);
+        put(24,2);
+        put(31,2);
+        put(35,15);
+        put(38,8);
+        put(43,7);
+        put(44,7);
+        put(95,15);
+        put(97,5);
+        put(98,3);
+        put(125,5);
+        put(126,5);
+        put(139,1);
+        put(155,2);
+        put(159,15);
+        put(160,15);
+        put(161,1);
+        put(162,1);
+        put(168,2);
+        put(171,15);
+        put(175,5);
+        put(179,2);
+        put(251,15);
+        put(252,15);
+        put(263,1);
+        put(322,1);
+        put(349,3);
+        put(350,1);
+        put(351,15);
+        put(383,new int[]{4,5,6,23,27,28,29,31,32,34,35,36,50,51,52,54,55,56,57,58,59,60,61,62,65,66,67,68,69,90,91,92,93,94,95,96,98,100,101,102,103,120});
+        put(397,5);
+    }};
 }

@@ -27,13 +27,16 @@ permission:
  lb.econ.sell:
   description: sell items to the bank
   default: op
+ lb.econ.worth:
+  description: check item worth
+  default: op
  lb.econ.set-item:
   description: set price , min , max , etc of an items
   default: op
  lb.econ.bank.balance:
   description: check bank balance
   default: op
- lb.econ.bank.set-balance:
+ lb.econ.bank.balance.set:
   description: set bank balance
   default: op
  lb.econ.bank.deposit:

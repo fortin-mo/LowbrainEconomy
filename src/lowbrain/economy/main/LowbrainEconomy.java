@@ -7,6 +7,7 @@ import lowbrain.economy.handlers.economy.EconHandler;
 import lowbrain.library.config.YamlConfig;
 import lowbrain.library.config.YamlLocalize;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -96,7 +97,7 @@ public class LowbrainEconomy extends JavaPlugin {
         return localize;
     }
 
-    public void sendTo(Player who, String msg) {
+    public void sendTo(CommandSender who, String msg) {
         if (who == null || msg == null || msg.isEmpty())
             return;
 

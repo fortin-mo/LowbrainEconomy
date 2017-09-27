@@ -1,1 +1,123 @@
 # this files contains the saved data for the bank
+DIAMOND_ORE:
+  current_value: 5000
+  current_quantity: 5
+DIAMOND:
+  current_value: 2000
+  current_quantity: 5
+DIAMOND_BLOCK:
+  current_value: 16000
+  current_quantity: 5
+
+DIAMOND_SWORD:
+  current_value: 3000
+  current_quantity: 15
+DIAMOND_AXE:
+  current_value: 4500
+  current_quantity: 15
+DIAMOND_CHESTPLATE:
+  current_value: 15000
+  current_quantity: 15
+DIAMOND_LEGGINGS:
+  current_value: 13500
+  current_quantity: 15
+DIAMOND_BOOTS:
+  current_value: 7000
+  current_quantity: 15
+DIAMOND_HELMET:
+  current_value: 8000
+  current_quantity: 15
+DIAMOND_SPADE:
+  current_value: 1500
+  current_quantity: 15
+DIAMOND_HOE:
+  current_value: 1500
+  current_quantity: 15
+DIAMOND_PICKAXE:
+DIAMOND_LEGGINGS_PLUS:
+DIAMOND_SHIELD:
+DIAMOND_HELMET_PLUS:
+DIAMOND_FIRE_COMPOUND_BOW:
+DIAMOND_COMPOUND_BOW:
+DIAMOND_KATANA:
+DIAMOND_CHESTPLATE_PLUS:
+DIAMOND_BARDING:
+DIAMOND_BOOTS_PLUS:
+
+EMERALD:
+  current_value: 2500
+  current_quantity: 5
+EMERALD_ORE:
+  current_value: 5500
+  current_quantity: 5
+EMERALD_BLOCK:
+  current_value: 22000
+  current_quantity: 5
+EMERALD_SWORD:
+  current_value: 4000
+  current_quantity: 15
+EMERALD_AXE:
+  current_value: 5500
+  current_quantity: 15
+EMERALD_CHESTPLATE:
+  current_value: 17000
+  current_quantity: 15
+EMERALD_LEGGINGS:
+  current_value: 15500
+  current_quantity: 15
+EMERALD_BOOTS:
+  current_value: 8000
+  current_quantity: 15
+EMERALD_HELMET:
+  current_value: 9000
+  current_quantity: 15
+EMERALD_BOOTS_PLUS:
+EMERALD_SHIELD:
+EMERALD_KATANA:
+EMERALD_CHESTPLATE_PLUS:
+EMERALD_LEGGINGS_PLUS:
+EMERALD_HELMET_PLUS:
+
+
+GOLD_NUGGET:
+GOLD_INGOT:
+GOLD_ORE:
+GOLD_BLOCK:
+GOLD_SWORD:
+GOLD_AXE:
+GOLD_CHESTPLATE:
+GOLD_LEGGINGS:
+GOLD_BOOTS:
+GOLD_HELMET:
+GOLD_BOOTS_PLUS:
+GOLD_CHESTPLATE_PLUS:
+GOLD_LEGGINGS_PLUS:
+GOLD_HELMET_PLUS:
+GOLD_BARDING:
+
+IRON_NUGGET:
+IRON_INGOT:
+IRON_ORE:
+IRON_BLOCK:
+IRON_SWORD:
+IRON_AXE:
+IRON_CHESTPLATE:
+IRON_LEGGINGS:
+IRON_BOOTS:
+IRON_HELMET:
+IRON_BOOTS_PLUS:
+IRON_SHIELD:
+IRON_CHESTPLATE_PLUS:
+IRON_LEGGINGS_PLUS:
+IRON_HELMET_PLUS:
+IRON_KATANA:
+IRON_BARDING:
+
+STAFF_OF_FREEZING:
+STAFF_OF_FIREBALL_PLUS:
+STAFF_OF_TELEPORTATION_PLUS:
+STAFF_OF_FREEZING_PLUS:
+STAFF_OF_FIREBALL:
+STAFF_OF_TELEPORTATION:
+STAFF_OF_FIRE:
+STAFF_OF_FIRE_PLUS:

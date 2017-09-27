@@ -31,7 +31,7 @@ DEFAULT:
 
  # current quantity in the bank
  # default value = 500
- current_quantity: 500
+ current_quantity: 50
 
  # maximum quantity that the bank can hold
  # player won't be able to sell pass that

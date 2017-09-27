@@ -48,6 +48,7 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
             return isValid();
         }
 
+        /*
         if (!playerHasItems(this.getPlayer(), this.getItemStacks().get(0), qty)) {
             if (log)
                 LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("missing_from_inventory"));
@@ -55,6 +56,7 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
             this.status = TransactionStatus.PLAYER_MISSING_INVENTORY;
             return isValid();
         }
+        */
 
         return isValid();
     }
@@ -77,9 +79,12 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
             int c = 0;
 
-            String compare = DataHandler.getNameFrom(itemStack);
+            // String compare = DataHandler.getNameFrom(itemStack);
 
-            if (name.equals(compare))
+            // if (name.equals(compare))
+            //     pQty += itemStack.getAmount();
+
+            if (fn.same(itemSold, itemStack))
                 pQty += itemStack.getAmount();
         }
 
