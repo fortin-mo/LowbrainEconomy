@@ -1,0 +1,2341 @@
+STONE:
+  current_value: 2.1
+  current_quantity: 100
+STONE:1:
+  current_value: 19.39
+  current_quantity: 100
+STONE:2:
+  current_value: 20.35
+  current_quantity: 100
+STONE:3:
+  current_value: 19.43
+  current_quantity: 100
+STONE:4:
+  current_value: 20.40
+  current_quantity: 100
+STONE:5:
+  current_value: 10.72
+  current_quantity: 100
+STONE:6:
+  current_value: 11.26
+  current_quantity: 100
+GRASS:
+  current_value: 1.00
+  current_quantity: 100
+DIRT:
+  current_value: 0.50
+  current_quantity: 100
+DIRT:1:
+  current_value: 1.00
+  current_quantity: 100
+DIRT:2:
+  current_value: 2.50
+  current_quantity: 100
+COBBLESTONE:
+  current_value: 1.00
+  current_quantity: 100
+WOOD:
+  current_value: 2.63
+  current_quantity: 100
+WOOD:1:
+  current_value: 2.63
+  current_quantity: 100
+WOOD:2:
+  current_value: 2.63
+  current_quantity: 100
+WOOD:3:
+  current_value: 2.63
+  current_quantity: 100
+WOOD:4:
+  current_value: 2.63
+  current_quantity: 100
+WOOD:5:
+  current_value: 2.63
+  current_quantity: 100
+SAPLING:
+  current_value: 5
+  current_quantity: 100
+SAPLING:1:
+  current_value: 5
+  current_quantity: 100
+SAPLING:2:
+  current_value: 5
+  current_quantity: 100
+SAPLING:3:
+  current_value: 5
+  current_quantity: 100
+SAPLING:4:
+  current_value: 5
+  current_quantity: 100
+SAPLING:5:
+  current_value: 5
+  current_quantity: 100
+SAND:
+  current_value: 0.50
+  current_quantity: 100
+SAND:1:
+  current_value: 1.50
+  current_quantity: 100
+GRAVEL:
+  current_value: 0.50
+  current_quantity: 100
+GOLD_ORE:
+  current_value: 50.00
+  current_quantity: 100
+IRON_ORE:
+  current_value: 15.00
+  current_quantity: 100
+COAL_ORE:
+  current_value: 10.00
+  current_quantity: 100
+LOG:
+  current_value: 10.00
+  current_quantity: 100
+LOG:1:
+  current_value: 10.00
+  current_quantity: 100
+LOG:2:
+  current_value: 10.00
+  current_quantity: 100
+LOG:3:
+  current_value: 10.00
+  current_quantity: 100
+LEAVES:
+  current_value: 2.00
+  current_quantity: 100
+LEAVES:1:
+  current_value: 2.00
+  current_quantity: 100
+LEAVES:2:
+  current_value: 2.00
+  current_quantity: 100
+LEAVES:3:
+  current_value: 2.00
+  current_quantity: 100
+SPONGE:
+  current_value: 11.55
+  current_quantity: 100
+SPONGE:1:
+  current_value: 10
+  current_quantity: 100
+GLASS:
+  current_value: 1.58
+  current_quantity: 100
+LAPIS_ORE:
+  current_value: 20.00
+  current_quantity: 100
+LAPIS_BLOCK:
+  current_value: 28.35
+  current_quantity: 100
+DISPENSER:
+  current_value: 20.02
+  current_quantity: 100
+SANDSTONE:
+  current_value: 2.10
+  current_quantity: 100
+SANDSTONE:1:
+  current_value: 2.32
+  current_quantity: 100
+SANDSTONE:2:
+  current_value: 2.21
+  current_quantity: 100
+NOTE_BLOCK:
+  current_value: 25.20
+  current_quantity: 100
+POWERED_RAIL:
+  current_value: 56.99
+  current_quantity: 100
+DETECTOR_RAIL:
+  current_value: 18.94
+  current_quantity: 100
+PISTON_STICKY_BASE:
+  current_value: PISTON
+  current_quantity: 100
+WEB:
+  current_value: 2.25
+  current_quantity: 100
+PISTON_BASE:
+  current_value: 33.26
+  current_quantity: 100
+WOOL:
+  current_value: 5.00
+  current_quantity: 100
+WOOL:1:
+  current_value: 5.83
+  current_quantity: 100
+WOOL:2:
+  current_value: 6.93
+  current_quantity: 100
+WOOL:3:
+  current_value: 7.87
+  current_quantity: 100
+WOOL:4:
+  current_value: 5.80
+  current_quantity: 100
+WOOL:5:
+  current_value: 9.69
+  current_quantity: 100
+WOOL:6:
+  current_value: 6.50
+  current_quantity: 100
+WOOL:7:
+  current_value: 7.87
+  current_quantity: 100
+WOOL:8:
+  current_value: 7.52
+  current_quantity: 100
+WOOL:9:
+  current_value: 10.38
+  current_quantity: 100
+WOOL:10:
+  current_value: 7.19
+  current_quantity: 100
+WOOL:11:
+  current_value: 8.40
+  current_quantity: 100
+WOOL:12:
+  current_value: 10.50
+  current_quantity: 100
+WOOL:13:
+  current_value: 11.87
+  current_quantity: 100
+WOOL:14:
+  current_value: 5.80
+  current_quantity: 100
+WOOL:15:
+  current_value: 8.40
+  current_quantity: 100
+PISTON_MOVING_PIECE:
+  current_value: 5
+  current_quantity: 100
+YELLOW_FLOWER:
+  current_value: 1
+  current_quantity: 100
+RED_ROSE:
+  current_value: 1.00
+  current_quantity: 100
+RED_ROSE:1:
+  current_value: 2.50
+  current_quantity: 100
+RED_ROSE:2:
+  current_value: 5.00
+  current_quantity: 100
+RED_ROSE:3:
+  current_value: 1.75
+  current_quantity: 100
+RED_ROSE:4:
+  current_value: 1.75
+  current_quantity: 100
+RED_ROSE:5:
+  current_value: 1.75
+  current_quantity: 100
+RED_ROSE:6:
+  current_value: 1.75
+  current_quantity: 100
+RED_ROSE:7:
+  current_value: 1.75
+  current_quantity: 100
+RED_ROSE:8:
+  current_value: 1.75
+  current_quantity: 100
+BROWN_MUSHROOM:
+  current_value: 1.00
+  current_quantity: 100
+RED_MUSHROOM:
+  current_value: 1.00
+  current_quantity: 100
+GOLD_BLOCK:
+  current_value: 506.05
+  current_quantity: 100
+IRON_BLOCK:
+  current_value: 158.76
+  current_quantity: 100
+DOUBLE_STEP:
+  current_value: 1.10
+  current_quantity: 100
+DOUBLE_STEP:1:
+  current_value: 1.10
+  current_quantity: 100
+DOUBLE_STEP:2:
+  current_value: 1.10
+  current_quantity: 100
+DOUBLE_STEP:3:
+  current_value: 0.53
+  current_quantity: 100
+DOUBLE_STEP:4:
+  current_value: 9.26
+  current_quantity: 100
+DOUBLE_STEP:5:
+  current_value: 1.16
+  current_quantity: 100
+DOUBLE_STEP:6:
+  current_value: 13.89
+  current_quantity: 100
+DOUBLE_STEP:7:
+  current_value: 38.59
+  current_quantity: 100
+STEP:
+  current_value: 1.10
+  current_quantity: 100
+STEP:1:
+  current_value: 1.10
+  current_quantity: 100
+STEP:2:
+  current_value: 1.10
+  current_quantity: 100
+STEP:3:
+  current_value: 1.10
+  current_quantity: 100
+STEP:4:
+  current_value: 1.10
+  current_quantity: 100
+STEP:5:
+  current_value: 1.10
+  current_quantity: 100
+STEP:6:
+  current_value: 1.10
+  current_quantity: 100
+STEP:7:
+  current_value: 1.10
+  current_quantity: 100
+BRICK:
+  current_value: 17.64
+  current_quantity: 100
+TNT:
+  current_value: 54.60
+  current_quantity: 100
+BOOKSHELF:
+  current_value: 46.55
+  current_quantity: 100
+MOSSY_COBBLESTONE:
+  current_value: 6.30
+  current_quantity: 100
+OBSIDIAN:
+  current_value: 50.00
+  current_quantity: 100
+TORCH:
+  current_value: 2.46
+  current_quantity: 100
+WOOD_STAIRS:
+  current_value: 4.13
+  current_quantity: 100
+CHEST:
+  current_value: 22.05
+  current_quantity: 100
+DIAMOND_ORE:
+  current_value: 505.00
+  current_quantity: 100
+DIAMOND_BLOCK:
+  current_value: 4725.00
+  current_quantity: 100
+WORKBENCH:
+  current_value: 11.03
+  current_quantity: 100
+FURNACE:
+  current_value: 8.40
+  current_quantity: 100
+LADDER:
+  current_value: 3.38
+  current_quantity: 100
+RAILS:
+  current_value: 6.71
+  current_quantity: 100
+COBBLESTONE_STAIRS:
+  current_value: 1.58
+  current_quantity: 100
+LEVER:
+  current_value: 2.50
+  current_quantity: 100
+STONE_PLATE:
+  current_value: 4.41
+  current_quantity: 100
+WOOD_PLATE:
+  current_value: 5.51
+  current_quantity: 100
+REDSTONE_ORE:
+  current_value: 15.00
+  current_quantity: 100
+REDSTONE_TORCH_OFF:
+  current_value: 4.60
+  current_quantity: 100
+STONE_BUTTON:
+  current_value: 4.41
+  current_quantity: 100
+SNOW:
+  current_value: 4.20
+  current_quantity: 100
+ICE:
+  current_value: 7.00
+  current_quantity: 100
+SNOW_BLOCK:
+  current_value: 4.20
+  current_quantity: 100
+CACTUS:
+  current_value: 5.00
+  current_quantity: 100
+CLAY:
+  current_value: 12.60
+  current_quantity: 100
+JUKEBOX:
+  current_value: 547.05
+  current_quantity: 100
+FENCE:
+  current_value: 6.57
+  current_quantity: 100
+PUMPKIN:
+  current_value: 10.00
+  current_quantity: 100
+NETHERRACK:
+  current_value: 5.00
+  current_quantity: 100
+SOUL_SAND:
+  current_value: 10.00
+  current_quantity: 100
+GLOWSTONE:
+  current_value: 33.60
+  current_quantity: 100
+JACK_O_LANTERN:
+  current_value: 13.08
+  current_quantity: 100
+STAINED_GLASS:
+  current_value: 1.88
+  current_quantity: 100
+STAINED_GLASS:1:
+  current_value: 1.73
+  current_quantity: 100
+STAINED_GLASS:2:
+  current_value: 1.86
+  current_quantity: 100
+STAINED_GLASS:3:
+  current_value: 1.98
+  current_quantity: 100
+STAINED_GLASS:4:
+  current_value: 1.72
+  current_quantity: 100
+STAINED_GLASS:5:
+  current_value: 2.21
+  current_quantity: 100
+STAINED_GLASS:6:
+  current_value: 1.81
+  current_quantity: 100
+STAINED_GLASS:7:
+  current_value: 1.98
+  current_quantity: 100
+STAINED_GLASS:8:
+  current_value: 1.94
+  current_quantity: 100
+STAINED_GLASS:9:
+  current_value: 2.29
+  current_quantity: 100
+STAINED_GLASS:10:
+  current_value: 1.90
+  current_quantity: 100
+STAINED_GLASS:11:
+  current_value: 2.05
+  current_quantity: 100
+STAINED_GLASS:12:
+  current_value: 2.31
+  current_quantity: 100
+STAINED_GLASS:13:
+  current_value: 2.48
+  current_quantity: 100
+STAINED_GLASS:14:
+  current_value: 1.72
+  current_quantity: 100
+STAINED_GLASS:15:
+  current_value: 2.05
+  current_quantity: 100
+TRAP_DOOR:
+  current_value: 8.27
+  current_quantity: 100
+SMOOTH_BRICK:
+  current_value: 2.21
+  current_quantity: 100
+SMOOTH_BRICK:1:
+  current_value: 7.57
+  current_quantity: 100
+SMOOTH_BRICK:2:
+  current_value: 3.37
+  current_quantity: 100
+SMOOTH_BRICK:3:
+  current_value: 2.43
+  current_quantity: 100
+HUGE_MUSHROOM_1:
+  current_value: 2.00
+  current_quantity: 100
+HUGE_MUSHROOM_2:
+  current_value: 2.00
+  current_quantity: 100
+IRON_FENCE:
+  current_value: 6.62
+  current_quantity: 100
+THIN_GLASS:
+  current_value: 0.62
+  current_quantity: 100
+MELON_BLOCK:
+  current_value: 14.18
+  current_quantity: 100
+VINE:
+  current_value: 5
+  current_quantity: 100
+FENCE_GATE:
+  current_value: 11.30
+  current_quantity: 100
+BRICK_STAIRS:
+  current_value: 27.78
+  current_quantity: 100
+SMOOTH_STAIRS:
+  current_value: 3.47
+  current_quantity: 100
+MYCEL:
+  current_value: 10.00
+  current_quantity: 100
+WATER_LILY:
+  current_value: 3.00
+  current_quantity: 100
+NETHER_FENCE:
+  current_value: 41.67
+  current_quantity: 100
+NETHER_BRICK_STAIRS:
+  current_value: 41.67
+  current_quantity: 100
+NETHER_WARTS:
+  current_value: 1270.01
+  current_quantity: 100
+ENCHANTMENT_TABLE:
+  current_value: 1600
+  current_quantity: 5
+ENDER_STONE:
+  current_value: 10.00
+  current_quantity: 100
+DRAGON_EGG:
+  current_value: 1000.00
+  current_quantity: 100
+REDSTONE_LAMP_OFF:
+  current_value: 47.88
+  current_quantity: 100
+WOOD_STEP:
+  current_value: 1.38
+  current_quantity: 100
+WOOD_STEP:1:
+  current_value: 1.38
+  current_quantity: 100
+WOOD_STEP:2:
+  current_value: 1.38
+  current_quantity: 100
+WOOD_STEP:3:
+  current_value: 1.38
+  current_quantity: 100
+WOOD_STEP:4:
+  current_value: 1.38
+  current_quantity: 100
+WOOD_STEP:5:
+  current_value: 1.38
+  current_quantity: 100
+COCOA:
+  current_value: 5
+  current_quantity: 100
+SANDSTONE_STAIRS:
+  current_value: 0.79
+  current_quantity: 100
+EMERALD_ORE:
+  current_value: 625
+  current_quantity: 25
+ENDER_CHEST:
+  current_value: 390.08
+  current_quantity: 100
+TRIPWIRE_HOOK:
+  current_value: 10.92
+  current_quantity: 100
+EMERALD_BLOCK:
+  current_value: 5906.25
+  current_quantity: 25
+SPRUCE_WOOD_STAIRS:
+  current_value: 4.13
+  current_quantity: 100
+BIRCH_WOOD_STAIRS:
+  current_value: 4.13
+  current_quantity: 100
+JUNGLE_WOOD_STAIRS:
+  current_value: 4.13
+  current_quantity: 100
+BEACON:
+  current_value: 428.27
+  current_quantity: 100
+COBBLE_WALL:
+  current_value: 1.05
+  current_quantity: 100
+COBBLE_WALL:1:
+  current_value: 6.62
+  current_quantity: 100
+WOOD_BUTTON:
+  current_value: 2.76
+  current_quantity: 100
+ANVIL:
+  current_value: 570.65
+  current_quantity: 100
+TRAPPED_CHEST:
+  current_value: 34.62
+  current_quantity: 100
+GOLD_PLATE:
+  current_value: 112.46
+  current_quantity: 100
+IRON_PLATE:
+  current_value: 35.28
+  current_quantity: 100
+DAYLIGHT_DETECTOR:
+  current_value: 64.43
+  current_quantity: 100
+REDSTONE_BLOCK:
+  current_value: 28.35
+  current_quantity: 100
+QUARTZ_ORE:
+  current_value: 20.00
+  current_quantity: 100
+HOPPER:
+  current_value: 111.35
+  current_quantity: 100
+QUARTZ_BLOCK:
+  current_value: 73.50
+  current_quantity: 100
+QUARTZ_BLOCK:1:
+  current_value: 81.03
+  current_quantity: 100
+QUARTZ_BLOCK:2:
+  current_value: 77.18
+  current_quantity: 100
+QUARTZ_STAIRS:
+  current_value: 115.76
+  current_quantity: 100
+ACTIVATOR_RAIL:
+  current_value: 18.93
+  current_quantity: 100
+DROPPER:
+  current_value: 7.35
+  current_quantity: 100
+STAINED_CLAY:
+  current_value: 16.96
+  current_quantity: 100
+STAINED_CLAY:1:
+  current_value: 16.96
+  current_quantity: 100
+STAINED_CLAY:2:
+  current_value: 15.19
+  current_quantity: 100
+STAINED_CLAY:3:
+  current_value: 19.62
+  current_quantity: 100
+STAINED_CLAY:4:
+  current_value: 15.06
+  current_quantity: 100
+STAINED_CLAY:5:
+  current_value: 16.51
+  current_quantity: 100
+STAINED_CLAY:6:
+  current_value: 17.54
+  current_quantity: 100
+STAINED_CLAY:7:
+  current_value: 18.15
+  current_quantity: 100
+STAINED_CLAY:8:
+  current_value: 39.19
+  current_quantity: 100
+STAINED_CLAY:9:
+  current_value: 15.06
+  current_quantity: 100
+STAINED_CLAY:10:
+  current_value: 15.65
+  current_quantity: 100
+STAINED_CLAY:11:
+  current_value: 15.22
+  current_quantity: 100
+STAINED_CLAY:12:
+  current_value: 15.07
+  current_quantity: 100
+STAINED_CLAY:13:
+  current_value: 15.20
+  current_quantity: 100
+STAINED_CLAY:14:
+  current_value: 15.32
+  current_quantity: 100
+STAINED_CLAY:15:
+  current_value: 15.06
+  current_quantity: 100
+STAINED_GLASS_PANE:
+  current_value: 0.74
+  current_quantity: 100
+STAINED_GLASS_PANE:1:
+  current_value: 0.68
+  current_quantity: 100
+STAINED_GLASS_PANE:2:
+  current_value: 0.73
+  current_quantity: 100
+STAINED_GLASS_PANE:3:
+  current_value: 0.78
+  current_quantity: 100
+STAINED_GLASS_PANE:4:
+  current_value: 0.68
+  current_quantity: 100
+STAINED_GLASS_PANE:5:
+  current_value: 0.87
+  current_quantity: 100
+STAINED_GLASS_PANE:6:
+  current_value: 0.71
+  current_quantity: 100
+STAINED_GLASS_PANE:7:
+  current_value: 0.78
+  current_quantity: 100
+STAINED_GLASS_PANE:8:
+  current_value: 0.76
+  current_quantity: 100
+STAINED_GLASS_PANE:9:
+  current_value: 0.90
+  current_quantity: 100
+STAINED_GLASS_PANE:10:
+  current_value: 0.75
+  current_quantity: 100
+STAINED_GLASS_PANE:11:
+  current_value: 0.81
+  current_quantity: 100
+STAINED_GLASS_PANE:12:
+  current_value: 0.91
+  current_quantity: 100
+STAINED_GLASS_PANE:13:
+  current_value: 0.98
+  current_quantity: 100
+STAINED_GLASS_PANE:14:
+  current_value: 0.68
+  current_quantity: 100
+STAINED_GLASS_PANE:15:
+  current_value: 0.81
+  current_quantity: 100
+LEAVES_2:
+  current_value: 2.00
+  current_quantity: 100
+LEAVES_2:1:
+  current_value: 2.00
+  current_quantity: 100
+LOG_2:
+  current_value: 10.00
+  current_quantity: 100
+LOG_2:1:
+  current_value: 10.00
+  current_quantity: 100
+ACACIA_STAIRS:
+  current_value: 15.75
+  current_quantity: 100
+DARK_OAK_STAIRS:
+  current_value: 15.75
+  current_quantity: 100
+SLIME_BLOCK:
+  current_value: 94.50
+  current_quantity: 100
+IRON_TRAPDOOR:
+  current_value: 70.56
+  current_quantity: 100
+PRISMARINE:
+  current_value: 21.00
+  current_quantity: 100
+PRISMARINE:1:
+  current_value: 47.25
+  current_quantity: 100
+PRISMARINE:2:
+  current_value: 45.15
+  current_quantity: 100
+SEA_LANTERN:
+  current_value: 60.38
+  current_quantity: 100
+HAY_BLOCK:
+  current_value: 28.35
+  current_quantity: 100
+CARPET:
+  current_value: 10.50
+  current_quantity: 100
+CARPET:1:
+  current_value: 12.24
+  current_quantity: 100
+CARPET:2:
+  current_value: 14.5
+  current_quantity: 100
+CARPET:3:
+  current_value: 16.52
+  current_quantity: 100
+CARPET:4:
+  current_value: 12.18
+  current_quantity: 100
+CARPET:5:
+  current_value: 20.34
+  current_quantity: 100
+CARPET:6:
+  current_value: 13.66
+  current_quantity: 100
+CARPET:7:
+  current_value: 16.52
+  current_quantity: 100
+CARPET:8:
+  current_value: 15.80
+  current_quantity: 100
+CARPET:9:
+  current_value: 21.79
+  current_quantity: 100
+CARPET:10:
+  current_value: 15.11
+  current_quantity: 100
+CARPET:11:
+  current_value: 17.64
+  current_quantity: 100
+CARPET:12:
+  current_value: 22.05
+  current_quantity: 100
+CARPET:13:
+  current_value: 24.92
+  current_quantity: 100
+CARPET:14:
+  current_value: 12.18
+  current_quantity: 100
+CARPET:15:
+  current_value: 17.64
+  current_quantity: 100
+HARD_CLAY:
+  current_value: 14.28
+  current_quantity: 100
+COAL_BLOCK:
+  current_value: 75.60
+  current_quantity: 100
+PACKED_ICE:
+  current_value: 15.00
+  current_quantity: 100
+DOUBLE_PLANT:
+  current_value: 3.00
+  current_quantity: 100
+DOUBLE_PLANT:1:
+  current_value: 2.50
+  current_quantity: 100
+DOUBLE_PLANT:2:
+  current_value: 2.50
+  current_quantity: 100
+DOUBLE_PLANT:3:
+  current_value: 2.50
+  current_quantity: 100
+DOUBLE_PLANT:4:
+  current_value: 2.50
+  current_quantity: 100
+DOUBLE_PLANT:5:
+  current_value: 2.50
+  current_quantity: 100
+DAYLIGHT_DETECTOR_INVERTED:
+  current_value: 64.43
+  current_quantity: 100
+RED_SANDSTONE:
+  current_value: 6.30
+  current_quantity: 100
+RED_SANDSTONE:1:
+  current_value: 7.29
+  current_quantity: 100
+RED_SANDSTONE:2:
+  current_value: 6.62
+  current_quantity: 100
+RED_SANDSTONE_STAIRS:
+  current_value: 5
+  current_quantity: 100
+STONE_SLAB2:
+  current_value: 3.47
+  current_quantity: 100
+SPRUCE_FENCE_GATE:
+  current_value: 6.57
+  current_quantity: 100
+BIRCH_FENCE_GATE:
+  current_value: 6.57
+  current_quantity: 100
+JUNGLE_FENCE_GATE:
+  current_value: 6.57
+  current_quantity: 100
+DARK_OAK_FENCE_GATE:
+  current_value: 6.57
+  current_quantity: 100
+ACACIA_FENCE_GATE:
+  current_value: 6.57
+  current_quantity: 100
+SPRUCE_FENCE:
+  current_value: 6.57
+  current_quantity: 100
+BIRCH_FENCE:
+  current_value: 6.57
+  current_quantity: 100
+JUNGLE_FENCE:
+  current_value: 6.57
+  current_quantity: 100
+DARK_OAK_FENCE:
+  current_value: 6.57
+  current_quantity: 100
+ACACIA_FENCE:
+  current_value: 6.57
+  current_quantity: 100
+END_ROD:
+  current_value: 15
+  current_quantity: 100
+CHORUS_PLANT:
+  current_value: 5
+  current_quantity: 100
+CHORUS_FLOWER:
+  current_value: 7
+  current_quantity: 100
+PURPUR_BLOCK:
+  current_value: 17
+  current_quantity: 100
+PURPUR_PILLAR:
+  current_value: 17
+  current_quantity: 100
+PURPUR_STAIRS:
+  current_value: 15
+  current_quantity: 100
+PURPUR_DOUBLE_SLAB:
+  current_value: 15
+  current_quantity: 100
+PURPUR_SLAB:
+  current_value: 10
+  current_quantity: 100
+END_BRICKS:
+  current_value: 20
+  current_quantity: 100
+NETHER_WART_BLOCK:
+  current_value: 10000
+  current_quantity: 100
+RED_NETHER_BRICK:
+  current_value: 6.30
+  current_quantity: 100
+BONE_BLOCK:
+  current_value: 45
+  current_quantity: 100
+OBSERVER:
+  current_value: 20
+  current_quantity: 100
+WHITE_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+ORANGE_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+MAGENTA_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+LIGHT_BLUE_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+YELLOW_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+LIME_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+PINK_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+GRAY_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+SILVER_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+CYAN_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+PURPLE_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+BLUE_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+BROWN_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+GREEN_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+RED_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+BLACK_SHULKER_BOX:
+  current_value: 65
+  current_quantity: 100
+WHITE_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+ORANGE_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+MAGENTA_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+LIGHT_BLUE_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+YELLOW_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+LIME_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+PINK_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+GRAY_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+SILVER_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+CYAN_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+PURPLE_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+BLUE_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+BROWN_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+GREEN_GLAZED_TERRACOTTA:
+  current_value: 15
+  current_quantity: 100
+RED_GLAZED_TERRACOTTA:
+  current_value: 15.32
+  current_quantity: 100
+BLACK_GLAZED_TERRACOTTA:
+  current_value: 15.06
+  current_quantity: 100
+CONCRETE:
+  current_value: 1.75
+  current_quantity: 100
+CONCRETE:1:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:2:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:3:
+  current_value: 2
+  current_quantity2: 100
+CONCRETE:4:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:5:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:6:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:7:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:8:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:9:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:10:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:11:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:12:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:13:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:14:
+  current_value: 2
+  current_quantity: 100
+CONCRETE:15:
+  current_value: 2
+  current_quantity: 100
+CONCRETE_POWDER:
+  current_value: 1.35
+  current_quantity: 100
+CONCRETE_POWDER:1:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:2:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:3:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:4:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:5:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:6:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:7:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:8:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:9:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:10:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:11:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:12:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:13:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:14:
+  current_value: 1.5
+  current_quantity: 100
+CONCRETE_POWDER:15:
+  current_value: 1.5
+  current_quantity: 100
+IRON_SPADE:
+  current_value: 20.53
+  current_quantity: 100
+IRON_PICKAXE:
+  current_value: 55.81
+  current_quantity: 100
+IRON_AXE:
+  current_value: 55.81
+  current_quantity: 100
+FLINT_AND_STEEL:
+  current_value: 18.17
+  current_quantity: 100
+APPLE:
+  current_value: 3.00
+  current_quantity: 100
+BOW:
+  current_value: 9.07
+  current_quantity: 100
+ARROW:
+  current_value: 0.62
+  current_quantity: 500
+COAL:
+  current_value: 8.00
+  current_quantity: 100
+COAL:1:
+  current_value: 11.55
+  current_quantity: 100
+DIAMOND:
+  current_value: 500.00
+  current_quantity: 25
+IRON_INGOT:
+  current_value: 16.80
+  current_quantity: 100
+GOLD_INGOT:
+  current_value: 53.55
+  current_quantity: 100
+IRON_SWORD:
+  current_value: 36.73
+  current_quantity: 100
+WOOD_SWORD:
+  current_value: 6.96
+  current_quantity: 100
+WOOD_SPADE:
+  current_value: 5.65
+  current_quantity: 100
+WOOD_PICKAXE:
+  current_value: 11.16
+  current_quantity: 100
+WOOD_AXE:
+  current_value: 11.16
+  current_quantity: 100
+STONE_SWORD:
+  current_value: 3.55
+  current_quantity: 100
+STONE_SPADE:
+  current_value: 3.94
+  current_quantity: 100
+STONE_PICKAXE:
+  current_value: 6.04
+  current_quantity: 100
+STONE_AXE:
+  current_value: 6.04
+  current_quantity: 100
+DIAMOND_SWORD:
+  current_value: 1051.45
+  current_quantity: 35
+DIAMOND_SPADE:
+  current_value: 527.89
+  current_quantity: 35
+DIAMOND_PICKAXE:
+  current_value: 1577.89
+  current_quantity: 35
+DIAMOND_AXE:
+  current_value: 1577.89
+  current_quantity: 35
+STICK:
+  current_value: 1.38
+  current_quantity: 100
+BOWL:
+  current_value: 2.07
+  current_quantity: 100
+MUSHROOM_SOUP:
+  current_value: 4.27
+  current_quantity: 100
+GOLD_SWORD:
+  current_value: 113.90
+  current_quantity: 100
+GOLD_SPADE:
+  current_value: 59.12
+  current_quantity: 100
+GOLD_PICKAXE:
+  current_value: 171.58
+  current_quantity: 100
+GOLD_AXE:
+  current_value: 171.58
+  current_quantity: 100
+STRING:
+  current_value: 1.50
+  current_quantity: 100
+FEATHER:
+  current_value: 0.50
+  current_quantity: 100
+SULPHUR:
+  current_value: 10.00
+  current_quantity: 100
+WOOD_HOE:
+  current_value: 8.41
+  current_quantity: 100
+STONE_HOE:
+  current_value: 4.99
+  current_quantity: 100
+IRON_HOE:
+  current_value: 38.17
+  current_quantity: 100
+DIAMOND_HOE:
+  current_value: 1052.89
+  current_quantity: 100
+GOLD_HOE:
+  current_value: 115.35
+  current_quantity: 100
+SEEDS:
+  current_value: 1.00
+  current_quantity: 100
+WHEAT:
+  current_value: 3.00
+  current_quantity: 100
+BREAD:
+  current_value: 9.45
+  current_quantity: 100
+LEATHER_HELMET:
+  current_value: 39.38
+  current_quantity: 100
+LEATHER_CHESTPLATE:
+  current_value: 63.00
+  current_quantity: 100
+LEATHER_LEGGINGS:
+  current_value: 55.13
+  current_quantity: 100
+LEATHER_BOOTS:
+  current_value: 31.50
+  current_quantity: 100
+CHAINMAIL_HELMET:
+  current_value: 75
+  current_quantity: 100
+CHAINMAIL_CHESTPLATE:
+  current_value: 120
+  current_quantity: 100
+CHAINMAIL_LEGGINGS:
+  current_value: 100
+  current_quantity: 100
+CHAINMAIL_BOOTS:
+  current_value: 55
+  current_quantity: 100
+IRON_HELMET:
+  current_value: 88.20
+  current_quantity: 75
+IRON_CHESTPLATE:
+  current_value: 141.12
+  current_quantity: 75
+IRON_LEGGINGS:
+  current_value: 123.48
+  current_quantity: 75
+IRON_BOOTS:
+  current_value: 70.56
+  current_quantity: 100
+DIAMOND_HELMET:
+  current_value: 2625.00
+  current_quantity: 15
+DIAMOND_CHESTPLATE:
+  current_value: 4200.00
+  current_quantity: 15
+DIAMOND_LEGGINGS:
+  current_value: 3675.00
+  current_quantity: 15
+DIAMOND_BOOTS:
+  current_value: 2100.00
+  current_quantity: 15
+GOLD_HELMET:
+  current_value: 281.14
+  current_quantity: 100
+GOLD_CHESTPLATE:
+  current_value: 449.82
+  current_quantity: 100
+GOLD_LEGGINGS:
+  current_value: 393.59
+  current_quantity: 100
+GOLD_BOOTS:
+  current_value: 224.91
+  current_quantity: 100
+FLINT:
+  current_value: 0.50
+  current_quantity: 100
+PORK:
+  current_value: 4.00
+  current_quantity: 100
+GRILLED_PORK:
+  current_value: 5.25
+  current_quantity: 100
+PAINTING:
+  current_value: 16.83
+  current_quantity: 100
+GOLDEN_APPLE:
+  current_value: 55.63
+  current_quantity: 100
+GOLDEN_APPLE:1:
+  current_value: 4253.95
+  current_quantity: 100
+SIGN:
+  current_value: 5.99
+  current_quantity: 100
+WOOD_DOOR:
+  current_value: 5.51
+  current_quantity: 100
+BUCKET:
+  current_value: 52.92
+  current_quantity: 100
+WATER_BUCKET:
+  current_value: 55.00
+  current_quantity: 100
+LAVA_BUCKET:
+  current_value: 128.00
+  current_quantity: 100
+MINECART:
+  current_value: 88.20
+  current_quantity: 100
+SADDLE:
+  current_value: 100.00
+  current_quantity: 100
+IRON_DOOR:
+  current_value: 35.28
+  current_quantity: 100
+REDSTONE:
+  current_value: 3.00
+  current_quantity: 100
+SNOW_BALL:
+  current_value: 1.00
+  current_quantity: 100
+BOAT:
+  current_value: 13.78
+  current_quantity: 100
+LEATHER:
+  current_value: 7.50
+  current_quantity: 100
+MILK_BUCKET:
+  current_value: 55.00
+  current_quantity: 100
+CLAY_BRICK:
+  current_value: 4.20
+  current_quantity: 100
+CLAY_BALL:
+  current_value: 3.00
+  current_quantity: 100
+SUGAR_CANE:
+  current_value: 0.50
+  current_quantity: 100
+PAPER:
+  current_value: 0.53
+  current_quantity: 100
+BOOK:
+  current_value: 9.53
+  current_quantity: 100
+SLIME_BALL:
+  current_value: 10.00
+  current_quantity: 100
+STORAGE_MINECART:
+  current_value: 115.76
+  current_quantity: 100
+POWERED_MINECART:
+  current_value: 101.43
+  current_quantity: 100
+EGG:
+  current_value: 0.50
+  current_quantity: 100
+COMPASS:
+  current_value: 144.27
+  current_quantity: 100
+FISHING_ROD:
+  current_value: 7.49
+  current_quantity: 100
+WATCH:
+  current_value: 228.06
+  current_quantity: 100
+GLOWSTONE_DUST:
+  current_value: 8.00
+  current_quantity: 100
+RAW_FISH:
+  current_value: 3.00
+  current_quantity: 100
+RAW_FISH:1:
+  current_value: 3.25
+  current_quantity: 100
+RAW_FISH:2:
+  current_value: 1.50
+  current_quantity: 100
+RAW_FISH:3:
+  current_value: 5.00
+  current_quantity: 100
+COOKED_FISH:
+  current_value: 4.20
+  current_quantity: 100
+COOKED_FISH:1:
+  current_value: 4.46
+  current_quantity: 100
+INK_SACK:
+  current_value: 3.00
+  current_quantity: 100
+INK_SACK:1:
+  current_value: 0.53
+  current_quantity: 100
+INK_SACK:2:
+  current_value: 6.30
+  current_quantity: 100
+INK_SACK:3:
+  current_value: 5.00
+  current_quantity: 100
+INK_SACK:4:
+  current_value: 3.00
+  current_quantity: 100
+INK_SACK:5:
+  current_value: 1.85
+  current_quantity: 100
+INK_SACK:6:
+  current_value: 4.88
+  current_quantity: 100
+INK_SACK:7:
+  current_value: 2.17
+  current_quantity: 100
+INK_SACK:8:
+  current_value: 2.49
+  current_quantity: 100
+INK_SACK:9:
+  current_value: 1.19
+  current_quantity: 100
+INK_SACK:10:
+  current_value: 4.23
+  current_quantity: 100
+INK_SACK:11:
+  current_value: 0.53
+  current_quantity: 100
+INK_SACK:12:
+  current_value: 2.49
+  current_quantity: 100
+INK_SACK:13:
+  current_value: 1.60
+  current_quantity: 100
+INK_SACK:14:
+  current_value: 0.55
+  current_quantity: 100
+INK_SACK:15:
+  current_value: 1.75
+  current_quantity: 100
+BONE:
+  current_value: 5
+  current_quantity: 100
+SUGAR:
+  current_value: 0.53
+  current_quantity: 100
+CAKE:
+  current_value: 184.33
+  current_quantity: 100
+BED:
+  current_value: 25
+  current_quantity: 20
+DIODE:
+  current_value: 19.42
+  current_quantity: 100
+COOKIE:
+  current_value: 11.55
+  current_quantity: 100
+SHEARS:
+  current_value: 35.28
+  current_quantity: 100
+MELON:
+  current_value: 1.50
+  current_quantity: 100
+PUMPKIN_SEEDS:
+  current_value: 15.00
+  current_quantity: 100
+MELON_SEEDS:
+  current_value: 15.00
+  current_quantity: 100
+RAW_BEEF:
+  current_value: 5.00
+  current_quantity: 100
+COOKED_BEEF:
+  current_value: 6.30
+  current_quantity: 100
+RAW_CHICKEN:
+  current_value: 2.50
+  current_quantity: 100
+COOKED_CHICKEN:
+  current_value: 3.68
+  current_quantity: 100
+ROTTEN_FLESH:
+  current_value: 1.00
+  current_quantity: 100
+ENDER_PEARL:
+  current_value: 50.00
+  current_quantity: 100
+BLAZE_ROD:
+  current_value: 100.00
+  current_quantity: 100
+GHAST_TEAR:
+  current_value: 75.00
+  current_quantity: 100
+GOLD_NUGGET:
+  current_value: 6.25
+  current_quantity: 100
+POTION:
+  current_value: 1.74
+  current_quantity: 100
+# Awkward Potion
+'POTION:16':
+  current_value: 17.57
+  current_quantity: 15
+# Thick Potion
+'POTION:32':
+  current_value: 10.22
+  current_quantity: 15
+# Mundane Potion
+'POTION:64':
+  current_value: 4.97
+  current_quantity: 15
+# Potion of Regeneration (0:45)
+'POTION:8193':
+  current_value: 97.20
+  current_quantity: 15
+# Potion of Swiftness (3:00)
+'POTION:8194':
+  current_value: 19.00
+  current_quantity: 15
+# Potion of Fire Resistance (3:00)
+'POTION:8195':
+  current_value: 41.42
+  current_quantity: 15
+# Potion of Poison (0:45)
+'POTION:8196':
+  current_value: 21.60
+  current_quantity: 15
+# Potion of Healing
+'POTION:8197':
+  current_value: 26.99
+  current_quantity: 15
+# Potion of Night Vision (3:00)
+'POTION:8198':
+  current_value: 74.38
+  current_quantity: 15
+# Potion of Weakness (1:30)
+'POTION:8200':
+  current_value: 6.81
+  current_quantity: 15
+# Potion Strength (3:00)
+'POTION:8201':
+  current_value: 73.58
+  current_quantity: 15
+# Potion of Slowness (1:30)
+'POTION:8202':
+  current_value: 48.48
+  current_quantity: 15
+# Potion of Leaping (3:00)
+'POTION:8203':
+  current_value: 385.95
+  current_quantity: 15
+# Potion of Harming
+'POTION:8204':
+  current_value: 27.67
+  current_quantity: 15
+# Potion of Water Breathing (3:00)
+'POTION:8205':
+  current_value: 23.70
+  current_quantity: 15
+# Potion of Invisibility (3:00)
+'POTION:8206':
+  current_value: 83.09
+  current_quantity: 15
+# Potion of Regeneration (II, 0:22)
+'POTION:8225':
+  current_value: 110.46
+  current_quantity: 15
+# Potion of Swiftness (II, 1:30)
+'POTION:8226':
+  current_value: 28.35
+  current_quantity: 15
+# Potion of Poison (II, 0:22)
+'POTION:8228':
+  current_value: 31.08
+  current_quantity: 15
+# Potion of Healing (II)
+'POTION:8229':
+  current_value: 36.74
+  current_quantity: 15
+# Potion of Strength (II, 1:30)
+'POTION:8233':
+  current_value: 85.66
+  current_quantity: 15
+# Potion of Leaping (II, 1:30)
+'POTION:8235':
+  current_value: 413.65
+  current_quantity: 15
+# Potion of Harming (II)
+'POTION:8236':
+  current_value: 37.45
+  current_quantity: 15
+# Potion of Regeneration (2:00)
+'POTION:8257':
+  current_value: 105.21
+  current_quantity: 15
+# Potion of Swiftness (8:00)
+'POTION:8258':
+  current_value: 23.10
+  current_quantity: 15
+# Potion of Fire Resistance (8:00)
+'POTION:8259':
+  current_value: 46.64
+  current_quantity: 15
+# Potion of Poison (2:00)
+'POTION:8260':
+  current_value: 25.83
+  current_quantity: 15
+# Potion of Night Vision (8:00)
+'POTION:8262':
+  current_value: 81.25
+  current_quantity: 15
+# Potion of Weakness (4:00)
+'POTION:8264':
+  current_value: 10.21
+  current_quantity: 15
+# Potion of Strength (8:00)
+'POTION:8265':
+  current_value: 80.41
+  current_quantity: 15
+# Potion of Slowness (4:00)
+'POTION:8266':
+  current_value: 53.96
+  current_quantity: 15
+# Potion of Water Breathing (8:00)
+'POTION:8269':
+  current_value: 28.04
+  current_quantity: 15
+# Potion of Invisibility (8:00)
+'POTION:8270':
+  current_value: 90.39
+  current_quantity: 15
+# Splash Potion of Regeneration (0:33)
+'POTION:16385':
+  current_value: 112.56
+  current_quantity: 15
+# Splash Potion of Swiftness (2:15)
+'POTION:16386':
+  current_value: 30.45
+  current_quantity: 15
+# Splash Potion of Fire Resistance (2:15)
+'POTION:16387':
+  current_value: 53.99
+  current_quantity: 15
+# Splash Potion of Poison (0:33)
+'POTION:16388':
+  current_value: 33.18
+  current_quantity: 15
+# Splash Potion of Healing
+'POTION:16389': 
+  current_value: 38.84
+  current_quantity: 15
+# Splash Potion of Night Vision (2:15)
+'POTION:16390': 
+  current_value: 88.60
+  current_quantity: 15
+# Splash Potion of Weakness (1:07)
+'POTION:16392': 
+  current_value: 17.65
+  current_quantity: 15
+# Splash Potion of Strength (2:15)
+'POTION:16393': 
+  current_value: 87.76
+  current_quantity: 15
+# Splash Potion of Slowness (1:07)
+'POTION:16394': 
+  current_value: 61.40
+  current_quantity: 15
+# Splash Potion of Leaping (2:15)
+'POTION:16395': 
+  current_value: 415.75
+  current_quantity: 15
+# Splash Potion of Harming
+'POTION:16396': 
+  current_value: 39.55
+  current_quantity: 15
+# Splash Potion of Water Breathing (2:15)
+'POTION:16397': 
+  current_value: 35.39
+  current_quantity: 15
+# Splash Potion of Invisibility (2:15)
+'POTION:16398': 
+  current_value: 97.74
+  current_quantity: 15
+# Splash Potion of Regeneration (II, 0:16)
+'POTION:16417': 
+  current_value: 126.49
+  current_quantity: 15
+# Splash Potion of Swiftness (II, 1:07)
+'POTION:16418': 
+  current_value: 40.27
+  current_quantity: 15
+# Splash Potion of Poison (II, 0:16)
+'POTION:16420': 
+  current_value: 43.14
+  current_quantity: 15
+# Splash Potion of Healing (II)
+'POTION:16421': 
+  current_value: 49.08
+  current_quantity: 15
+# Splash Potion of Strength (II, 1:07)
+'POTION:16425': 
+  current_value: 100.44
+  current_quantity: 15
+# Splash Potion of Leaping (II, 1:07)
+'POTION:16427': 
+  current_value: 444.83
+  current_quantity: 15
+# Splash Potion of Harming (II)
+'POTION:16428': 
+  current_value: 49.83
+  current_quantity: 15
+# Splash Potion of Regeneration (1:30)
+'POTION:16449': 
+  current_value: 120.97
+  current_quantity: 15
+# Splash Potion of Swiftness (6:00)
+'POTION:16450': 
+  current_value: 34.76
+  current_quantity: 15
+# Splash Potion of Fire Resistance (6:00)
+'POTION:16451': 
+  current_value: 59.47
+  current_quantity: 15
+# Splash Potion of Poison (1:30)
+'POTION:16452': 
+  current_value: 37.62
+  current_quantity: 15
+# Splash Potion of Night Vision (6:00)
+'POTION:16454': 
+  current_value: 95.81
+  current_quantity: 15
+# Splash Potion of Weakness (3:00)
+'POTION:16456': 
+  current_value: 21.22
+  current_quantity: 15
+# Splash Potion of Strenght (6:00)
+'POTION:16457': 
+  current_value: 94.93
+  current_quantity: 15
+# Splash Potion of Slowness (3:00)
+'POTION:16458': 
+  current_value: 67.16
+  current_quantity: 15
+# Splash Potion of Water Breathing (6:00)
+'POTION:16461': 
+  current_value: 35.39
+  current_quantity: 15
+# Splash Potion of Invisibility (6:00)
+'POTION:16462': 
+  current_value: 105.41
+  current_quantity: 15
+GLASS_BOTTLE:
+  current_value: 1.65
+  current_quantity: 100
+SPIDER_EYE:
+  current_value: 3.00
+  current_quantity: 100
+FERMENTED_SPIDER_EYE:
+  current_value: 4.75
+  current_quantity: 100
+BLAZE_POWDER:
+  current_value: 52.50
+  current_quantity: 100
+MAGMA_CREAM:
+  current_value: 21.88
+  current_quantity: 100
+BREWING_STAND_ITEM:
+  current_value: 108.15
+  current_quantity: 100
+CAULDRON_ITEM:
+  current_value: 123.48
+  current_quantity: 100
+EYE_OF_ENDER:
+  current_value: 107.63
+  current_quantity: 100
+SPECKLED_MELON:
+  current_value: 8.13
+  current_quantity: 100
+MONSTER_EGG:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:4:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:5:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:6:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:23:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:27:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:28:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:29:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:31:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:32:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:34:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:35:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:36:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:50:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:51:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:52:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:54:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:55:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:56:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:57:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:58:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:59:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:60:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:61:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:62:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:65:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:66:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:67:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:68:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:69:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:90:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:91:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:92:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:93:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:94:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:95:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:96:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:98:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:100:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:101:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:102:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:103:
+  current_value: 75
+  current_quantity: 100
+MONSTER_EGG:120:
+  current_value: 75
+  current_quantity: 100
+EXP_BOTTLE:
+  current_value: 150
+  current_quantity: 100
+BOOK_AND_QUILL:
+  current_value: 13.68
+  current_quantity: 100
+EMERALD:
+  current_value: 50.00
+  current_quantity: 100
+ITEM_FRAME:
+  current_value: 19.45
+  current_quantity: 100
+FLOWER_POT_ITEM:
+  current_value: 13.23
+  current_quantity: 100
+CARROT_ITEM:
+  current_value: 0.75
+  current_quantity: 100
+POTATO_ITEM:
+  current_value: 0.50
+  current_quantity: 100
+BAKED_POTATO:
+  current_value: 1.58
+  current_quantity: 100
+POISONOUS_POTATO:
+  current_value: 0.25
+  current_quantity: 100
+EMPTY_MAP:
+  current_value: 155.89
+  current_quantity: 100
+GOLDEN_CARROT:
+  current_value: 53.27
+  current_quantity: 100
+SKULL_ITEM:
+  current_value: 40
+  current_quantity: 100
+SKULL_ITEM:1:
+  current_value: 75.00
+  current_quantity: 100
+SKULL_ITEM:2:
+  current_value: 35.00
+  current_quantity: 100
+SKULL_ITEM:3:
+  current_value: 65.00
+  current_quantity: 100
+SKULL_ITEM:4:
+  current_value: 55.00
+  current_quantity: 100
+SKULL_ITEM:5:
+  current_value: 200.00
+  current_quantity: 100
+CARROT_STICK:
+  current_value: 8.65
+  current_quantity: 100
+NETHER_STAR:
+  current_value: 250.00
+  current_quantity: 100
+PUMPKIN_PIE:
+  current_value: 11.58
+  current_quantity: 100
+FIREWORK:
+  current_value: 200
+  current_quantity: 10
+FIREWORK_CHARGE:
+  current_value: 150
+  current_quantity: 10
+REDSTONE_COMPARATOR:
+  current_value: 272.70
+  current_quantity: 100
+NETHER_BRICK_ITEM:
+  current_value: 6.30
+  current_quantity: 100
+QUARTZ:
+  current_value: 17.50
+  current_quantity: 100
+EXPLOSIVE_MINECART:
+  current_value: 149.94
+  current_quantity: 100
+HOPPER_MINECART:
+  current_value: 209.53
+  current_quantity: 100
+PRISMARINE_SHARD:
+  current_value: 5.00
+  current_quantity: 100
+PRISMARINE_CRYSTALS:
+  current_value: 7.50
+  current_quantity: 100
+RABBIT:
+  current_value: 1.50
+  current_quantity: 100
+COOKED_RABBIT:
+  current_value: 2.63
+  current_quantity: 100
+RABBIT_STEW:
+  current_value: 8.42
+  current_quantity: 100
+RABBIT_FOOT:
+  current_value: 20.00
+  current_quantity: 100
+RABBIT_HIDE:
+  current_value: 1.50
+  current_quantity: 100
+ARMOR_STAND:
+  current_value: 9.23
+  current_quantity: 100
+IRON_BARDING:
+  current_value: 120.00
+  current_quantity: 100
+GOLD_BARDING:
+  current_value: 350.00
+  current_quantity: 50
+DIAMOND_BARDING:
+  current_value: 3000.00
+  current_quantity: 25
+LEASH:
+  current_value: 8.40
+  current_quantity: 100
+NAME_TAG:
+  current_value: 50.00
+  current_quantity: 100
+MUTTON:
+  current_value: 1.00
+  current_quantity: 100
+COOKED_MUTTON:
+  current_value: 2.10
+  current_quantity: 100
+BANNER:
+  current_value: 54.37
+  current_quantity: 100
+BANNER:1:
+  current_value: 37.99
+  current_quantity: 100
+BANNER:2:
+  current_value: 76.20
+  current_quantity: 100
+BANNER:3:
+  current_value: 67.60
+  current_quantity: 100
+BANNER:4:
+  current_value: 54.37
+  current_quantity: 100
+BANNER:5:
+  current_value: 46.76
+  current_quantity: 100
+BANNER:6:
+  current_value: 66.82
+  current_quantity: 100
+BANNER:7:
+  current_value: 48.85
+  current_quantity: 100
+BANNER:8:
+  current_value: 51.02
+  current_quantity: 100
+BANNER:9:
+  current_value: 42.42
+  current_quantity: 100
+BANNER:10:
+  current_value: 62.48
+  current_quantity: 100
+BANNER:11:
+  current_value: 37.99
+  current_quantity: 100
+BANNER:12:
+  current_value: 51.02
+  current_quantity: 100
+BANNER:13:
+  current_value: 45.10
+  current_quantity: 100
+BANNER:14:
+  current_value: 38.17
+  current_quantity: 100
+BANNER:15:
+  current_value: 32.95
+  current_quantity: 100
+END_CRYSTAL:
+  current_value: 95
+  current_quantity: 100
+SPRUCE_DOOR_ITEM:
+  current_value: 5.51
+  current_quantity: 100
+BIRCH_DOOR_ITEM:
+  current_value: 5.51
+  current_quantity: 100
+JUNGLE_DOOR_ITEM:
+  current_value: 5.51
+  current_quantity: 100
+ACACIA_DOOR_ITEM:
+  current_value: 5.51
+  current_quantity: 100
+DARK_OAK_DOOR_ITEM:
+  current_value: 5.51
+  current_quantity: 100
+CHORUS_FRUIT:
+  current_value: 5
+  current_quantity: 100
+CHORUS_FRUIT_POPPED:
+  current_value: 5
+  current_quantity: 100
+BEETROOT:
+  current_value: 1
+  current_quantity: 100
+BEETROOT_SEEDS:
+  current_value: 15.00
+  current_quantity: 100
+BEETROOT_SOUP:
+  current_value: 4.27
+  current_quantity: 100
+DRAGONS_BREATH:
+  current_value: 1200
+  current_quantity: 10
+SPECTRAL_ARROW:
+  current_value: 1.5
+  current_quantity: 250
+SHIELD:
+  current_value: 65
+  current_quantity: 100
+ELYTRA:
+  current_value: 175000
+  current_quantity: 5
+BOAT_SPRUCE:
+  current_value: 13.78
+  current_quantity: 100
+BOAT_BIRCH:
+  current_value: 13.78
+  current_quantity: 100
+BOAT_JUNGLE:
+  current_value: 13.78
+  current_quantity: 100
+BOAT_ACACIA:
+  current_value: 13.78
+  current_quantity: 100
+BOAT_DARK_OAK:
+  current_value: 13.78
+  current_quantity: 100
+TOTEM:
+  current_value: 175000
+  current_quantity: 100
+SHULKER_SHELL:
+  current_value: 25
+  current_quantity: 100
+IRON_NUGGET:
+  current_value: 1.5
+  current_quantity: 100
+KNOWLEDGE_BOOK:
+  current_value: 150
+  current_quantity: 50
+GOLD_RECORD:
+  current_value: 100
+  current_quantity: 2
+GREEN_RECORD:
+  current_value: 100
+  current_quantity: 2
+RECORD_3:
+  current_value: 100
+  current_quantity: 2
+RECORD_4:
+  current_value: 100
+  current_quantity: 2
+RECORD_5:
+  current_value: 100
+  current_quantity: 2
+RECORD_6:
+  current_value: 100
+  current_quantity: 2
+RECORD_7:
+  current_value: 100
+  current_quantity: 2
+RECORD_8:
+  current_value: 100
+  current_quantity: 2
+RECORD_9:
+  current_value: 100
+  current_quantity: 2
+RECORD_10:
+  current_value: 100
+  current_quantity: 2
+RECORD_11:
+  current_value: 100
+  current_quantity: 2
+RECORD_12:
+  current_value: 100
+  current_quantity: 2
+
+
+####### custom items section ##########
+
+## emerald
+EMERALD_SWORD:
+  current_value: 1250
+  current_quantity: 15
+EMERALD_AXE:
+  current_value: 1750
+  current_quantity: 15
+EMERALD_CHESTPLATE:
+  current_value: 5000
+  current_quantity: 15
+EMERALD_LEGGINGS:
+  current_value: 4500
+  current_quantity: 15
+EMERALD_BOOTS:
+  current_value: 2700
+  current_quantity: 15
+EMERALD_HELMET:
+  current_value: 3500
+  current_quantity: 15
+EMERALD_BOOTS_PLUS:
+  current_value: 2700
+  current_quantity: 15
+EMERALD_SHIELD:
+  current_value: 14500
+  current_quantity: 15
+EMERALD_KATANA:
+  current_value: 1500
+  current_quantity: 15
+EMERALD_CHESTPLATE_PLUS:
+  current_value: 1500
+  current_quantity: 15
+EMERALD_LEGGINGS_PLUS:
+  current_value: 13500
+  current_quantity: 15
+EMERALD_HELMET_PLUS:
+  current_value: 10500
+  current_quantity: 15
+
+## diamond
+DIAMOND_SHIELD:
+  current_value: 12500
+  current_quantity: 15
+DIAMOND_LEGGINGS_PLUS:
+  current_value: 11025
+  current_quantity: 15
+DIAMOND_HELMET_PLUS:
+  current_value: 7875
+  current_quantity: 15
+DIAMOND_KATANA:
+  current_value: 1300
+  current_quantity: 15
+DIAMOND_CHESTPLATE_PLUS:
+  current_value: 12600
+  current_quantity: 15
+DIAMOND_BOOTS_PLUS:
+  current_value: 6300
+  current_quantity: 15
+
+## gold
+GOLD_BOOTS_PLUS:
+  current_value: 675
+  current_quantity: 50
+GOLD_CHESTPLATE_PLUS:
+  current_value: 1300
+  current_quantity: 50
+GOLD_LEGGINGS_PLUS:
+  current_value: 1250
+  current_quantity: 50
+GOLD_HELMET_PLUS:
+  current_value: 700
+  current_quantity: 50
+  
+
+## iron
+IRON_BOOTS_PLUS:
+  current_value: 210
+  current_quantity: 50
+IRON_SHIELD:
+  current_value: 4500
+  current_quantity: 15
+IRON_CHESTPLATE_PLUS:
+  current_value: 450
+  current_quantity: 50
+IRON_LEGGINGS_PLUS:
+  current_value: 390
+  current_quantity: 50
+IRON_HELMET_PLUS:
+  current_value: 270
+  current_quantity: 50
+IRON_KATANA:
+  current_value: 70.56
+  current_quantity: 50
+
+
+STAFF_OF_FREEZING:
+  current_value: 2500
+  current_quantity: 25
+STAFF_OF_FIREBALL_PLUS:
+  current_value: 3500
+  current_quantity: 25
+STAFF_OF_TELEPORTATION_PLUS:
+  current_value: 4250
+  current_quantity: 25
+STAFF_OF_FREEZING_PLUS:
+  current_value: 4750
+  current_quantity: 25
+STAFF_OF_FIREBALL:
+  current_value: 3500
+  current_quantity: 25
+STAFF_OF_TELEPORTATION:
+  current_value: 3000
+  current_quantity: 25
+STAFF_OF_FIRE:
+  current_value: 2500
+  current_quantity: 25
+STAFF_OF_FIRE_PLUS:
+  current_value: 3500
+  current_quantity: 25
+  
+## bows
+COMPOUND_BOW:
+  current_value: 575
+  current_quantity: 25
+FIRE_COMPOUND_BOW:
+  current_value: 750
+  current_quantity: 25
+DIAMOND_FIRE_COMPOUND_BOW:
+  current_value: 3950
+  current_quantity: 15
+DIAMOND_COMPOUND_BOW:
+  current_value: 3500
+  current_quantity: 15

@@ -11,11 +11,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.*;
 import org.jetbrains.annotations.Contract;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.Comparator;
 
@@ -230,6 +237,13 @@ public class DataHandler {
         if (i == null)
             return null;
 
+        return getData().get(this.nameFrom(i));
+    }
+
+    public String nameFrom(ItemStack i) {
+        if (i == null || i.getType() == Material.AIR)
+            return "";
+
         Material mat = i.getType();
         int id = mat.getId();
         String name = mat.name();
@@ -237,9 +251,58 @@ public class DataHandler {
         if (hasTypes(mat) && i.getData().getData() > 0)
             name += ":" + i.getData().getData();
 
-        BankData d = getData().get(name);
+        return name;
+    }
 
-        return d;
+    public void generateOrderedData() throws IOException, InvalidConfigurationException {
+        File file = new File(plugin.getDataFolder(), "generated-data.yml");
+
+        if (!file.exists()) {
+            file.getParentFile().mkdir();
+            file.createNewFile();
+        }
+
+        FileConfiguration yml = new YamlConfiguration();
+        yml.load(file);
+
+        Comparator<Material> comparator = new Comparator<Material>() {
+            @Override
+            public int compare(Material a, Material b) {
+                double va = a.getId();
+                double vb = b.getId();
+
+                return va == vb ? 0 : va < vb ? -1 : 1;
+            }
+        };
+
+        Material[] values = Material.values();
+        Arrays.sort(values, comparator);
+
+        for (Material mat : values ) {
+
+            ConfigurationSection sec = yml.createSection(mat.name());
+            sec.set("current_value", 5);
+            sec.set("current_quantity", 100);
+
+            // check for additional sub types
+            if (MATERIAL_TYPES.containsKey(mat.getId())) {
+                Object value = MATERIAL_TYPES.get(mat.getId());
+
+                if (value instanceof Integer)
+                    for (int i = 1; i <= (int)value; i++) {
+                        ConfigurationSection subsec= yml.createSection(mat.name() + ":" + i);
+                        subsec.set("current_value", 5);
+                        subsec.set("current_quantity", 100);
+                    }
+                else  if (value instanceof int[])
+                    for (int _id : (int[])value) {
+                        ConfigurationSection subsec= yml.createSection(mat.name() + ":" + _id);
+                        subsec.set("current_value", 5);
+                        subsec.set("current_quantity", 100);
+                    }
+            }
+        }
+        yml.save(file);
     }
 
     public static boolean hasTypes(Material mat) {
@@ -285,5 +348,13 @@ public class DataHandler {
         put(351,15);
         put(383,new int[]{4,5,6,23,27,28,29,31,32,34,35,36,50,51,52,54,55,56,57,58,59,60,61,62,65,66,67,68,69,90,91,92,93,94,95,96,98,100,101,102,103,120});
         put(397,5);
+        put(373, new int[]{16,32,64,8193,8194,8195,8196,8197,8198,8200,8201
+                ,8202,8203,8204,8205,8206,8225,8226,8228,8229,8233,8235
+                ,8236,8257,8258,8259,8260,8262,8264,8265,8266,8269,8270
+                ,16385,16386,16387,16388,16389,16390,16392,16393,16934
+                ,16395,16396,16397,16398,16417,16418,16420,16421,16425
+                ,16427,16428,16449,16450,16451,16452,16454,16456,16457
+                ,16458,16461,16462,});
+        put(425, 15);
     }};
 }

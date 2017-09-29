@@ -9,11 +9,13 @@ import lowbrain.library.fn;
 import lowbrain.library.main.LowbrainLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -26,7 +28,6 @@ public class CommandHandler extends Command {
 
     private final LowbrainEconomy plugin;
     private HashMap<UUID, PlayerBeginTransactionEvent> confirmations;
-    private HashMap<UUID, ItemStack> onHold;
     // commands
     private Command onPricey;
     private Command onCheapest;
@@ -52,15 +53,23 @@ public class CommandHandler extends Command {
         LowbrainLibrary.getInstance().getBaseCmdHandler().register("econ", this);
         this.subbing();
 
-        /*this.listener = new Listener() {
-            @EventHandler
+        this.listener = new Listener() {
+            /*@EventHandler
             public void onPlayerItemHeldEvent(PlayerItemHeldEvent e) {
                 if (confirmations.containsKey(e.getPlayer().getUniqueId())) {
                     plugin.sendTo(e.getPlayer(), plugin.getLocalize().format("cannot_switch_hand"));
                     onCancel(e.getPlayer());
                 }
+            }*/
+
+            public void onPlayerDisconnect(PlayerQuitEvent e) {
+                if (confirmations.containsKey(e.getPlayer().getUniqueId())) {
+                    PlayerBeginTransactionEvent event = confirmations.get(e.getPlayer().getUniqueId());
+                    if (event instanceof PlayerSellEvent)
+                        hasCancelled((PlayerSellEvent)event);
+                }
             }
-        };*/
+        };
     }
 
     @Override
@@ -364,10 +373,18 @@ public class CommandHandler extends Command {
      * @return true if succeed
      */
     private boolean onWorth(Player who, String[] args) {
-        if (args.length < 1)
-            return false;
+        String item = "";
 
-        String item = args[0].toUpperCase();
+        if (args.length == 0) {
+            ItemStack inHand = who.getInventory().getItemInMainHand();
+            if (inHand == null || inHand.getType() == Material.AIR) {
+                plugin.sendTo(who, plugin.getLocalize().format("no_item_in_hand"));
+                return true;
+            }
+            item = plugin.getDataHandler().nameFrom(inHand);
+        } else {
+            item = args[0].toUpperCase();
+        }
 
         if (plugin.getDataHandler().getBlacklist().containsKey(item)) {
             plugin.sendTo(who, plugin.getLocalize().format("item_blacklisted", item));
@@ -402,7 +419,7 @@ public class CommandHandler extends Command {
         int qty = -1;
         ItemStack inHand = who.getInventory().getItemInMainHand();
 
-        if (inHand == null) {
+        if (inHand == null || inHand.getType() == Material.AIR) {
             plugin.sendTo(who, plugin.getLocalize().format("no_item_in_hand"));
             return true;
         }
@@ -449,7 +466,21 @@ public class CommandHandler extends Command {
             return true;
         }
 
-        double price = iData.getCurrentValue() * qty;
+        double devaluation = 1; // none for now
+
+        if (plugin.getConfig().getBoolean("allow_damaged_item", true)) {
+            devaluation = plugin.getConfig().getBoolean("devalue_damaged_item", true)
+                    && inHand.getType().getMaxDurability() > 0
+                    && inHand.getDurability() != 0
+                        ? (inHand.getType().getMaxDurability() - inHand.getDurability()) / inHand.getType().getMaxDurability()
+                        : 1;
+        } else if (inHand.getType().getMaxDurability() > 0
+                && inHand.getDurability() != 0) { // 0 = never used
+            plugin.sendTo(who, plugin.getLocalize().format("cannot_sell_damaged_item"));
+            return true;
+        }
+
+        double price = iData.getCurrentValue() * qty * devaluation;
 
         /*
         Double price = getPrice(items, false);
@@ -522,16 +553,38 @@ public class CommandHandler extends Command {
      * @return true if succeed
      */
     private boolean onBuy(Player who, String[] args) {
-        if (args.length < 2)
-            return false; // /lb econ buy material amount
-
         if (confirmations.containsKey(who.getUniqueId())) {
             plugin.sendTo(who, plugin.getLocalize().format("confirm_cancel_first"));
             return true;
         }
 
         String item = args[0].toUpperCase();
-        int qty = fn.toInteger(args[1], -1);
+
+        if (fn.isInt(item)) {
+            int id = Integer.parseInt(item);
+            Material mat = Material.getMaterial(id);
+            if (mat != null)
+                item = mat.name();
+        } else if (item.indexOf(":") > 0) {
+            String[] s =  item.split(":");
+            if (fn.isInt(s[0])) {
+                int id = Integer.parseInt(s[0]);
+                Material mat = Material.getMaterial(id);
+                if (mat != null) {
+                    item = mat.name();
+                    for (int i = 1; i < s.length; i++)
+                        item += !s[i].isEmpty() ? (":" + s[i]) : "";
+                }
+            }
+        }
+
+        // get quantity from second arguments, if not, default to 1
+        int qty = args.length > 1 ? fn.toInteger(args[1], -1) : 1;
+
+        if (qty < 1) {
+            plugin.sendTo(who, plugin.getLocalize().format("invalid_quantity"));
+            return true;
+        }
 
         if (plugin.getDataHandler().getBlacklist().containsKey(item)) {
             plugin.sendTo(who, plugin.getLocalize().format("item_blacklisted", item));

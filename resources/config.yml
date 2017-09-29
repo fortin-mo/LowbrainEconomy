@@ -1,6 +1,15 @@
 # name used when creating Bank account in Craftconomy3
 name: LowbrainBank
 
+# allow player to sell damaged (used) item
+allow_damaged_item: true
+
+# if allow_damaged_item is set to true
+# this will devalue the damaged item by the percentage of use
+# like so : value = current_value / max_durability * durability
+# so, if a item as 10 / 60 durability ( highly used ) and is worth 100 $, it will be sold @ 16.666 $
+devalue_damaged_item: true
+
 # profit determines the value at which the bank will buy an item.
 # for example, if the value of diamond is at  500$, the bank will only pay players 450$ for it
 # but players will pay full price.
@@ -75,6 +84,114 @@ overtime_drop_interval: 720
 
 # list of items that cannot be sold or bought through the bank system
 blacklisted:
-  # - DIAMOND
-  # - EMERALD
-  # - ETC
+  - BEDROCK
+  - WATER
+  - FLOWING_WATER
+  - AIR
+  - LAVA
+  - FLOWING_LAVA
+  - LONG_GRASS
+  - 'LONG_GRASS:1'
+  - 'LONG_GRASS:2'
+  - DEAD_BUSH
+  - PISTON_HEAD
+  - FIRE
+  - MOB_SPAWNER
+  - REDSTONE_WIRE
+  - WHEAT
+  - FARMLAND
+  - LIT_FURNACE
+  - STANDING_SIGN
+  - WALL_SIGN
+  - WOODEN_DOOR
+  - IRON_DOOR
+  - UNLIT_REDSTONE_TORCH
+  - SNOW_LAYER
+  - PORTAL
+  - UNPOWERED_REPEATER
+  - MONSTER_EGG
+  - 'MONSTER_EGG:1'
+  - 'MONSTER_EGG:2'
+  - 'MONSTER_EGG:3'
+  - 'MONSTER_EGG:4'
+  - 'MONSTER_EGG:5'
+  - PUMPKIN_STEM
+  - MELON_STEM
+  - END_PORTAL
+  - END_PORTAL_FRAME
+  - LIT_REDSTONE_LAMP
+  - WOOD_DOUBLE_STEP
+  - 'WOOD_DOUBLE_STEP:1'
+  - 'WOOD_DOUBLE_STEP:2'
+  - 'WOOD_DOUBLE_STEP:3'
+  - 'WOOD_DOUBLE_STEP:4'
+  - 'WOOD_DOUBLE_STEP:5'
+  - COCOA
+  - CARROTS
+  - POTATOES
+  - 'ANVIL:1'
+  - 'ANVIL:2'
+  - UNPOWERED_COMPARATOR
+  - POWERED_COMPARATOR
+  - BARRIER
+  - STANDING_BANNER
+  - WALL_BANNER
+  - ENCHANTED_BOOK
+  - WRITTEN_BOOK
+  - BED_BLOCK
+  - PISTON_EXTENSION
+  - PISTON_MOVING_PIECE
+  - CROPS
+  - SOIL
+  - BURNING_FURNACE
+  - SIGN_POST
+  - IRON_DOOR_BLOCK
+  - GLOWING_REDSTONE_ORE
+  - REDSTONE_TORCH_ON
+  - BREWING_STAND
+  - CAULDRON
+  - ENDER_PORTAL
+  - ENDER_PORTAL_FRAME
+  - REDSTONE_LAMP_ON
+  - COMMAND
+  - FLOWER_POT
+  - CARROT
+  - POTATO
+  - REDSTONE_COMPARATOR_OFF
+  - REDSTONE_COMPARATOR_ON
+  - STANDING_BANNER
+  - WALL_BANNER
+  - DOUBLE_STONE_SLAB2
+  - SPRUCE_DOOR
+  - BIRCH_DOOR
+  - JUNGLE_DOOR
+  - ACACIA_DOOR
+  - DARK_OAK_DOOR
+  - COMMAND_MINECART
+  - SKULL
+  - FIREBALL
+  - NETHER_STALK
+  - MAP
+  - STRUCTURE_BLOCK
+  - TIPPED_ARROW
+  - SPLASH_POTION
+  - LINGERING_POTION
+  - BEETROOT_BLOCK
+  - GRASS_PATH
+  - MAGMA
+  - NETHER_BRICK
+  - STRUCTURE_VOID
+  - SUGAR_CANE_BLOCK
+  - COMMAND_CHAIN
+  - COMMAND_REPEATING
+  - FROSTED_ICE
+  - END_GATEWAY
+  - CAKE_BLOCK
+  - DIODE_BLOCK_ON
+  - DIODE_BLOCK_OFF
+  - THE_BUTCHER
+  - EXCALIBUR
+  - OP
+  - LEGOLAS_BOW
+ 
+  
