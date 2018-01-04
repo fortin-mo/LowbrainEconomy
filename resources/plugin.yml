@@ -30,7 +30,7 @@ permission:
  lb.econ.worth:
   description: check item worth
   default: op
- lb.econ.set-item:
+ lb.econ.setvalue:
   description: set price , min , max , etc of an items
   default: op
  lb.econ.bank.balance:

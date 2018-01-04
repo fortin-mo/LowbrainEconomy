@@ -3,6 +3,7 @@ package lowbrain.economy.handlers;
 import lowbrain.economy.bank.BankData;
 import lowbrain.economy.bank.BankInfo;
 import lowbrain.economy.events.*;
+import lowbrain.economy.main.Helper;
 import lowbrain.economy.main.LowbrainEconomy;
 import lowbrain.library.command.Command;
 import lowbrain.library.fn;
@@ -19,10 +20,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class CommandHandler extends Command {
 
@@ -37,6 +35,7 @@ public class CommandHandler extends Command {
     private Command onSell;
     private Command onBuy;
     private Command onSave;
+    private Command onSetValue;
     private Command onBank;
     private Listener listener;
 
@@ -112,7 +111,6 @@ public class CommandHandler extends Command {
                 return onConfirm((Player)who) ? CommandStatus.VALID : CommandStatus.INVALID;
             }
         });
-        onConfirm.addPermission("lb.econ.confirm");
 
         // register cancel command
         this.register("cancel", onCancel = new Command("cancel") {
@@ -121,7 +119,6 @@ public class CommandHandler extends Command {
                 return onCancel((Player)who) ? CommandStatus.VALID : CommandStatus.INVALID;
             }
         });
-        onCancel.addPermission("lb.econ.cancel");
 
         // register check command
         this.register("worth", onWorth = new Command("worth") {
@@ -158,6 +155,52 @@ public class CommandHandler extends Command {
             }
         });
         onSave.addPermission("lb.econ.save");
+
+        this.register("setvalue", onSetValue = new Command("setvalue") {
+            @Override
+            public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+                plugin.getDataHandler().save();
+
+                if (args.length != 2)
+                    return CommandStatus.INVALID;
+
+                String item = args[0].toUpperCase();
+
+                item = Helper.getItemFullName(item);
+
+                if (item.isEmpty()) {
+                    plugin.sendTo(who, plugin.getLocalize().format("invalid_item_name"));
+                    return CommandStatus.VALID;
+                }
+
+                BankData data = plugin.getDataHandler().getSingle(item);
+
+                if (data == null) {
+                    plugin.sendTo(who, plugin.getLocalize().format("item_not_available"));
+                    return CommandStatus.VALID;
+                }
+
+                double value = fn.toDouble(args[1], -1);
+
+                if (value < 0) {
+                    plugin.sendTo(who, plugin.getLocalize().format("invalid_value"));
+                    who.sendMessage("invalid value");
+                    return CommandStatus.VALID;
+                }
+
+                if (value < data.getMinValue() || value > data.getMaxValue()) {
+                    plugin.sendTo(who, plugin.getLocalize().format("value_out_of_range", new Object[] {data.getMinValue(), data.getMaxValue()}));
+                    return CommandStatus.VALID;
+                }
+
+                data.setCurrentValue(value);
+
+                plugin.sendTo(who, plugin.getLocalize().format("value_set_to", new Object[] {data.getName(), data.getCurrentValue()}));
+
+                return CommandStatus.VALID;
+            }
+        });
+        onSetValue.addPermission("lb.econ.setvalue");
 
         this.register("bank", onBank = new Command("bank") {
             private Command onBalance;
@@ -277,14 +320,23 @@ public class CommandHandler extends Command {
         List<BankData> list = plugin.getDataHandler().pricey();
 
         plugin.sendTo(who, plugin.getLocalize().format("pricey_list_header", limit));
-        list.forEach(d -> {
+
+        int index = 0;
+        for (BankData d :
+                list) {
+
+            if (index == limit)
+                break;
+
             plugin.sendTo(who, plugin.getLocalize().format("pricey_list_item", new Object[]{
                     d.getName(),
                     fn.toMoney(d.getCurrentValue()),
                     fn.toMoney(d.getCurrentValue() * (1 - d.getProfit())),
                     d.getCurrentQuantity(),
             }));
-        });
+            index++;
+        }
+
         plugin.sendTo(who, plugin.getLocalize().format("pricey_list_footer"));
 
         return true;
@@ -305,14 +357,23 @@ public class CommandHandler extends Command {
         List<BankData> list = plugin.getDataHandler().cheapest();
 
         plugin.sendTo(who, plugin.getLocalize().format("cheapest_list_header", limit));
-        list.forEach(d -> {
+
+        int index = 0;
+        for (BankData d :
+                list) {
+
+            if (index == limit)
+                break;
+
             plugin.sendTo(who, plugin.getLocalize().format("cheapest_list_item", new Object[]{
                     d.getName(),
                     fn.toMoney(d.getCurrentValue()),
                     fn.toMoney(d.getCurrentValue() * (1 - d.getProfit())),
                     d.getCurrentQuantity(),
             }));
-        });
+            index++;
+        }
+
         plugin.sendTo(who, plugin.getLocalize().format("cheapest_list_footer"));
 
         return true;
@@ -383,7 +444,7 @@ public class CommandHandler extends Command {
             }
             item = plugin.getDataHandler().nameFrom(inHand);
         } else {
-            item = args[0].toUpperCase();
+            item = Helper.getItemFullName(args[0].toUpperCase());
         }
 
         if (plugin.getDataHandler().getBlacklist().containsKey(item)) {
@@ -560,23 +621,7 @@ public class CommandHandler extends Command {
 
         String item = args[0].toUpperCase();
 
-        if (fn.isInt(item)) {
-            int id = Integer.parseInt(item);
-            Material mat = Material.getMaterial(id);
-            if (mat != null)
-                item = mat.name();
-        } else if (item.indexOf(":") > 0) {
-            String[] s =  item.split(":");
-            if (fn.isInt(s[0])) {
-                int id = Integer.parseInt(s[0]);
-                Material mat = Material.getMaterial(id);
-                if (mat != null) {
-                    item = mat.name();
-                    for (int i = 1; i < s.length; i++)
-                        item += !s[i].isEmpty() ? (":" + s[i]) : "";
-                }
-            }
-        }
+        item = Helper.getItemFullName(item);
 
         // get quantity from second arguments, if not, default to 1
         int qty = args.length > 1 ? fn.toInteger(args[1], -1) : 1;
@@ -731,6 +776,7 @@ public class CommandHandler extends Command {
         // update data
         data.setCurrentQuantity(data.getCurrentQuantity() + e.getQuantity());
         data.decreaseValueBy(qty * data.getPriceDrop());
+        data.setLastSold(new Date());
         bank.withdraw(e.getPrice());
 
         // save data
@@ -811,6 +857,7 @@ public class CommandHandler extends Command {
         // update data
         data.increaseValueBy(qty * data.getPriceIncrease());
         data.setCurrentQuantity(data.getCurrentQuantity() + qty);
+        data.setLastBought(new Date());
         bank.deposit(e.getPrice());
 
         // save data

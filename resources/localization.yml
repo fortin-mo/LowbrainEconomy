@@ -41,7 +41,7 @@ bank_cant_buy_item: '§eThe bank can no longer purchase this item !'
 bank_topped_balance: '§eThe bank as reach is maximum capacity of coin !'
 # money needed for transaction
 insuficient_funds: '§eInsufficient funds ! requires {0}$'
-item_not_available: 'This item is not available'
+item_not_available: '§eThis item is not available'
 
 # item, value, selling at, quantity left
 check_item_value: '§2{0} valued @ §6{1}$ §2[§6selling @ {2}§2] with §f{3} §2left in stock!'
@@ -58,3 +58,8 @@ withdraw_complete: '§2Withdraw of {0} completed'
 bank_current_balance: '§2Bank balance is currently @ {0}'
 cannot_sell_damaged_item: '§eSelling damaged item is prohibited !'
 invalid_quantity: '§eInvalid quantity ! Must be a number (int) above zero'
+
+value_out_of_range: '§eValue is out of range (min: {0}, max: {1}) !'
+invalid_value: '§eInvalid value !'
+invalid_item_name: '§eInvalid item name !'
+value_set_to: '§2{0} value set to {1}'
