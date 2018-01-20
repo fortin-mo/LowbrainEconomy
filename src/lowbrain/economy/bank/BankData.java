@@ -228,6 +228,14 @@ public class BankData {
             this.currentQuantity = this.maxQuantity;
     }
 
+    public void increaseQuantityBy(int qty) {
+        this.setCurrentQuantity(this.currentQuantity + Math.abs(qty));
+    }
+
+    public void decreaseQuantityBy(int qty) {
+        this.setCurrentQuantity(this.currentQuantity - Math.abs(qty));
+    }
+
     public int getMaxQuantity() {
         return maxQuantity;
     }

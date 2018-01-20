@@ -32,7 +32,7 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
         if (data.getCurrentQuantity() + qty > data.getMaxQuantity()) {
             if (log)
-                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("bank_cant_buy"));
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("bank_cant_buy_item"));
 
             this.status = TransactionStatus.BANK_STOCK_MAXED;
             return isValid();
@@ -42,7 +42,7 @@ public final class PlayerSellEvent extends PlayerBeginTransactionEvent {
 
         if (bank.getCurrentBalance() - this.getPrice() < bank.getMinBalance()) {
             if (log)
-                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("bank_topped_balance"));
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("bank_insufficient_funds"));
 
             this.status = TransactionStatus.BANK_BALANCE_LOW;
             return isValid();

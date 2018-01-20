@@ -29,7 +29,7 @@ public final class PlayerBuyEvent extends PlayerBeginTransactionEvent {
 
         if (data.getCurrentQuantity() - qty < data.getMinQuantity()) {
             if (log)
-                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("bank_cant_sell"));
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("bank_cant_sell_item"));
 
             this.status = TransactionStatus.BANK_STOCK_LOW;
             return isValid();
@@ -48,7 +48,7 @@ public final class PlayerBuyEvent extends PlayerBeginTransactionEvent {
 
         if (!LowbrainEconomy.getInstance().getEconHandler().get().hasEnough(this.getPlayer(), price)) {
             if (log)
-                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("insufficient_funds"));
+                LowbrainEconomy.getInstance().sendTo(this.getPlayer(), LowbrainEconomy.getInstance().getLocalize().format("insufficient_funds", price));
 
             this.status = TransactionStatus.PLAYER_INSUFFICIENT_FUNDS;
             return isValid();

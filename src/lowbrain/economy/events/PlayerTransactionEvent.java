@@ -5,6 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,8 @@ public abstract class PlayerTransactionEvent  extends PlayerEvent implements Can
     protected ArrayList<ItemStack> itemStacks = new ArrayList<>();
     protected TransactionType type;
     protected TransactionStatus status = TransactionStatus.VALID;
+    protected BukkitRunnable task;
+
 
     /**
      * constructor for PlayerBeginTransactionEvent
@@ -41,6 +44,9 @@ public abstract class PlayerTransactionEvent  extends PlayerEvent implements Can
     @Override
     public void setCancelled(boolean b) {
         cancel = true;
+
+        if (task != null)
+            task.cancel();
     }
 
     @Override
@@ -105,4 +111,12 @@ public abstract class PlayerTransactionEvent  extends PlayerEvent implements Can
     public boolean isBypass() {
         return bypass;
     }
+
+    public BukkitRunnable getTask() { return this.task; }
+    public void setTask(BukkitRunnable t) { this.task = t; }
+    public void cancelTask() {
+        if (this.task != null)
+            this.task.cancel();
+    }
+
 }

@@ -33,6 +33,12 @@ permission:
  lb.econ.setvalue:
   description: set price , min , max , etc of an items
   default: op
+ lb.econ.setqty:
+  description: set quantity of an items
+  default: op
+ lb.econ.bank:
+  description: access to bank command
+  default: op
  lb.econ.bank.balance:
   description: check bank balance
   default: op

@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 
 public class LowbrainEconomy extends JavaPlugin {
 
-    public final static DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy mm:ss");
+    public final static DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     public final static NumberFormat DECIMAL_FORMAT = new DecimalFormat("#0.00");
 
     private static LowbrainEconomy instance;

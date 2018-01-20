@@ -36,6 +36,7 @@ public class CommandHandler extends Command {
     private Command onBuy;
     private Command onSave;
     private Command onSetValue;
+    private Command onSetQty;
     private Command onBank;
     private Listener listener;
 
@@ -48,7 +49,7 @@ public class CommandHandler extends Command {
         super("econ");
         this.plugin = plugin;
         this.confirmations = new HashMap<>();
-        this.onlyPlayer(true);
+        this.onlyPlayer(false);
         LowbrainLibrary.getInstance().getBaseCmdHandler().register("econ", this);
         this.subbing();
 
@@ -94,6 +95,7 @@ public class CommandHandler extends Command {
             }
         });
         onPricey.addPermission("lb.econ.cheapest");
+        onPricey.onlyPlayer(true);
 
         // register cheapest command
         this.register("cheapest", onCheapest = new Command("cheapest") {
@@ -103,6 +105,7 @@ public class CommandHandler extends Command {
             }
         });
         onCheapest.addPermission("lb.econ.cheapest");
+        onCheapest.onlyPlayer(true);
 
         // register confirm command
         this.register("confirm", onConfirm = new Command("confirm") {
@@ -111,6 +114,7 @@ public class CommandHandler extends Command {
                 return onConfirm((Player)who) ? CommandStatus.VALID : CommandStatus.INVALID;
             }
         });
+        onConfirm.onlyPlayer(true);
 
         // register cancel command
         this.register("cancel", onCancel = new Command("cancel") {
@@ -119,6 +123,7 @@ public class CommandHandler extends Command {
                 return onCancel((Player)who) ? CommandStatus.VALID : CommandStatus.INVALID;
             }
         });
+        onCancel.onlyPlayer(true);
 
         // register check command
         this.register("worth", onWorth = new Command("worth") {
@@ -136,6 +141,7 @@ public class CommandHandler extends Command {
                 return onSell((Player)who, args) ? CommandStatus.VALID : CommandStatus.INVALID;
             }
         });
+        onSell.onlyPlayer(true);
         onSell.addPermission("lb.econ.sell");
 
         // register buy command
@@ -145,6 +151,7 @@ public class CommandHandler extends Command {
                 return onBuy((Player)who, args) ? CommandStatus.VALID : CommandStatus.INVALID;
             }
         });
+        onBuy.onlyPlayer(true);
         onBuy.addPermission("lb.econ.buy");
 
         this.register("save", onSave = new Command("save") {
@@ -202,6 +209,52 @@ public class CommandHandler extends Command {
         });
         onSetValue.addPermission("lb.econ.setvalue");
 
+        this.register("setqty", onSetQty = new Command("setqty") {
+            @Override
+            public CommandStatus execute(CommandSender who, String[] args, String cmd) {
+                plugin.getDataHandler().save();
+
+                if (args.length != 2)
+                    return CommandStatus.INVALID;
+
+                String item = args[0].toUpperCase();
+
+                item = Helper.getItemFullName(item);
+
+                if (item.isEmpty()) {
+                    plugin.sendTo(who, plugin.getLocalize().format("invalid_item_name"));
+                    return CommandStatus.VALID;
+                }
+
+                BankData data = plugin.getDataHandler().getSingle(item);
+
+                if (data == null) {
+                    plugin.sendTo(who, plugin.getLocalize().format("item_not_available"));
+                    return CommandStatus.VALID;
+                }
+
+                int qty = fn.toInteger(args[1], -1);
+
+                if (qty < 0) {
+                    plugin.sendTo(who, plugin.getLocalize().format("invalid_quantity"));
+                    who.sendMessage("invalid value");
+                    return CommandStatus.VALID;
+                }
+
+                if (qty < data.getMinQuantity() || qty > data.getMaxQuantity()) {
+                    plugin.sendTo(who, plugin.getLocalize().format("quantity_out_of_range", new Object[] {data.getMinQuantity(), data.getMaxQuantity()}));
+                    return CommandStatus.VALID;
+                }
+
+                data.setCurrentQuantity(qty);
+
+                plugin.sendTo(who, plugin.getLocalize().format("quantity_set_to", new Object[] {data.getName(), data.getCurrentValue()}));
+
+                return CommandStatus.VALID;
+            }
+        });
+        onSetQty.addPermission("lb.econ.setqty");
+
         this.register("bank", onBank = new Command("bank") {
             private Command onBalance;
             private Command onDeposit;
@@ -240,6 +293,7 @@ public class CommandHandler extends Command {
                         return CommandStatus.VALID;
                     }
                 });
+                onBalance.addPermission("lb.core.bank.balance");
 
                 this.register("deposit", onDeposit = new Command("deposit") {
                     @Override
@@ -303,6 +357,7 @@ public class CommandHandler extends Command {
                 return CommandStatus.VALID;
             }
         });
+        onBank.addPermission("lb.core.bank");
     }
 
     /**
@@ -391,6 +446,7 @@ public class CommandHandler extends Command {
         }
 
         PlayerBeginTransactionEvent event = confirmations.get(who.getUniqueId());
+        event.cancelTask(); // cancel task from running
         confirmations.remove(who.getUniqueId()); // remove from confirmation
 
         // Bukkit.getServer().getPluginManager().callEvent(event);
@@ -416,6 +472,7 @@ public class CommandHandler extends Command {
         }
 
         PlayerBeginTransactionEvent event = confirmations.get(who.getUniqueId());
+        event.cancelTask(); // cancel task from running
         confirmations.remove(who.getUniqueId()); // remove from confirmation
 
         plugin.sendTo(who, plugin.getLocalize().format("transaction_cancelled"));
@@ -574,7 +631,6 @@ public class CommandHandler extends Command {
             else
                 who.getInventory().getItemInMainHand().setAmount(inHand.getAmount() - qty);
 
-            confirmations.put(who.getUniqueId(), event);
 
             plugin.sendTo(event.getPlayer(), plugin.getLocalize().format("confirm_sell_now", new Object[]{
                     inHand.getType().name(),
@@ -582,9 +638,12 @@ public class CommandHandler extends Command {
                     fn.toMoney(event.getPrice())
             }));
 
-            new BukkitRunnable() {
+            BukkitRunnable task = new BukkitRunnable() {
                 @Override
                 public void run() {
+                    if (this.isCancelled())
+                        return;
+
                     if (confirmations.containsKey(who.getUniqueId())) {
                         PlayerSellEvent e = (PlayerSellEvent) confirmations.get(who.getUniqueId());
                         confirmations.remove(who.getUniqueId());
@@ -592,7 +651,12 @@ public class CommandHandler extends Command {
                         plugin.sendTo(who,plugin.getLocalize().format("did_not_confirm"));
                     }
                 }
-            }.runTaskLater(plugin, 20 * 20); // 20 seconds to confirm before its cancelled
+            };
+
+            task.runTaskLater(plugin, 20 * 20); // 20 seconds to confirm before its cancelled
+
+            event.setTask(task);
+            confirmations.put(who.getUniqueId(), event);
 
         } else {
             if (qty == inHand.getAmount())
@@ -636,7 +700,14 @@ public class CommandHandler extends Command {
             return true;
         }
 
-        ArrayList<ItemStack> items = getItems(item, qty);
+        BankData data = plugin.getDataHandler().getSingle(item);
+
+        if (data == null) {
+            plugin.sendTo(who, plugin.getLocalize().format("item_not_available"));
+            return true;
+        }
+
+        ArrayList<ItemStack> items = getItems(data, qty);
 
         if (items == null || items.isEmpty())
             return true;
@@ -655,7 +726,6 @@ public class CommandHandler extends Command {
 
         double timeToConfirm = plugin.getConfig().getDouble("time_to_confirm", -1);
         if (timeToConfirm > 0) {
-            confirmations.put(who.getUniqueId(), event);
 
             plugin.sendTo(event.getPlayer(), plugin.getLocalize().format("confirm_purchase_now", new Object[]{
                     item,
@@ -663,15 +733,23 @@ public class CommandHandler extends Command {
                     fn.toMoney(event.getPrice())
             }));
 
-            new BukkitRunnable() {
+            BukkitRunnable task = new BukkitRunnable() {
                 @Override
                 public void run() {
+                    if (this.isCancelled())
+                        return;
+
                     if (confirmations.containsKey(who.getUniqueId())) {
                         confirmations.remove(who.getUniqueId());
                         plugin.sendTo(who,plugin.getLocalize().format("did_not_confirm"));
                     }
                 }
-            }.runTaskLater(plugin, (long)timeToConfirm * 20); // 20 seconds to confirm before its cancelled
+            };
+
+            event.setTask(task);
+            confirmations.put(who.getUniqueId(), event);
+
+            task.runTaskLater(plugin, (long)timeToConfirm * 20); // 20 seconds to confirm before its cancelled
         } else {
             // Bukkit.getServer().getPluginManager().callEvent(event);
             completeTransaction(event);
@@ -682,19 +760,17 @@ public class CommandHandler extends Command {
 
     /**
      * generate list of item stack based on material and quantity
-     * @param name string material name
+     * @param data Bankdata data
      * @param qty string quantity
      * @return item stacks
      */
-    private ArrayList<ItemStack> getItems(String name, int qty) {
+    private ArrayList<ItemStack> getItems(BankData data, int qty) {
         ArrayList<ItemStack> items = new ArrayList<>();
 
         int quantity = qty;
 
-        if (quantity <= 0 || fn.StringIsNullOrEmpty(name))
+        if (quantity <= 0)
             return items;
-
-        BankData data = plugin.getDataHandler().getSingle(name);
 
         if (data == null)
             return items;
@@ -774,7 +850,7 @@ public class CommandHandler extends Command {
         }
 
         // update data
-        data.setCurrentQuantity(data.getCurrentQuantity() + e.getQuantity());
+        data.increaseQuantityBy(qty);
         data.decreaseValueBy(qty * data.getPriceDrop());
         data.setLastSold(new Date());
         bank.withdraw(e.getPrice());
@@ -856,7 +932,7 @@ public class CommandHandler extends Command {
 
         // update data
         data.increaseValueBy(qty * data.getPriceIncrease());
-        data.setCurrentQuantity(data.getCurrentQuantity() + qty);
+        data.decreaseQuantityBy(qty);
         data.setLastBought(new Date());
         bank.deposit(e.getPrice());
 
